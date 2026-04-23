@@ -27,3 +27,12 @@
     line: '[[ -s "$HOME/.sdkman/bin/sdkman-init.sh" ]] && source "$HOME/.sdkman/bin/sdkman-init.sh"'
     state: present
   become: false
+
+- name: Install Java 25
+  shell: |
+    bash -c "source {{ ansible_env.HOME }}/.sdkman/bin/sdkman-init.sh && sdk install java {{ java_version }} && sdk default java {{ java_version }}"
+  args:
+    executable: /bin/bash
+  become: false
+  register: sdk_output
+  changed_when: "'Installing:' in sdk_output.stdout"
