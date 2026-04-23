@@ -1,0 +1,21 @@
+---
+- name: Install pipx
+  apt:
+    name: pipx
+    state: present
+  become: true
+
+- name: Ensure pipx is in PATH
+  shell: pipx ensurepath
+  become: false
+  register: pipx_path
+  changed_when: "'already' not in pipx_path.stdout"
+
+- name: Install Harlequin via pipx
+  shell: pipx install "harlequin[postgres,duckdb,sqlite]"
+  become: false
+  register: harlequin_install
+  failed_when: 
+    - harlequin_install.rc != 0
+    - "'already installed' not in harlequin_install.stderr"
+  changed_when: "'installed package harlequin' in harlequin_install.stdout"
