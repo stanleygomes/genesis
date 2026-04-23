@@ -3,6 +3,7 @@
   hosts: localhost
   become: true
   roles:
+    - git
     - google-chrome
     - mongodb-compass
     - docker
