@@ -1,0 +1,9 @@
+[Desktop Entry]
+Type=Application
+Name={{ item.name }}
+Comment={{ item.comment }}
+Exec={{ item.exec }}
+Icon={{ item.icon | default('utilities-terminal') }}
+Terminal=true
+Categories=Development;System;
+Keywords=terminal;tui;{{ item.name.lower() }};
