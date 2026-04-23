@@ -5,6 +5,7 @@
   roles:
     - git
     - google-chrome
+    - gnome-setup
     - mongodb-compass
     - docker
     - dbeaver

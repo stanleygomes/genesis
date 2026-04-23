@@ -1,0 +1,19 @@
+---
+- name: Install GNOME Tweaks and Extension Manager
+  apt:
+    name:
+      - gnome-tweaks
+      - gnome-shell-extension-manager
+      - gnome-shell-extensions
+    state: present
+    update_cache: yes
+  become: true
+
+- name: Install some common GNOME extensions via apt
+  apt:
+    name:
+      - gnome-shell-extension-dash-to-panel
+      - gnome-shell-extension-appindicator
+      - gnome-shell-extension-arc-menu
+    state: present
+  become: true
