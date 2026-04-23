@@ -1,0 +1,9 @@
+---
+- name: Install GitHub Copilot CLI globally
+  shell: |
+    bash -c "source {{ ansible_env.HOME }}/.nvm/nvm.sh && npm install -g @github/copilot"
+  args:
+    executable: /bin/bash
+  become: false
+  register: copilot_install
+  changed_when: "'added' in copilot_install.stdout or 'changed' in copilot_install.stdout or 'removed' in copilot_install.stdout"
