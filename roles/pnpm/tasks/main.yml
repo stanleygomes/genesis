@@ -1,0 +1,29 @@
+---
+- name: Install pnpm globally
+  shell: |
+    bash -c "source {{ ansible_env.HOME }}/.nvm/nvm.sh && npm install -g pnpm"
+  args:
+    executable: /bin/bash
+  become: false
+  register: pnpm_install
+  changed_when: "'added' in pnpm_install.stdout or 'changed' in pnpm_install.stdout"
+
+- name: Ensure pnpm home directory exists
+  file:
+    path: "{{ ansible_env.HOME }}/.local/share/pnpm"
+    state: directory
+    mode: '0755'
+  become: false
+
+- name: Configure pnpm in bashrc
+  blockinfile:
+    path: "{{ ansible_env.HOME }}/.bashrc"
+    marker: "# {mark} PNPM CONFIGURATION"
+    block: |
+      export PNPM_HOME="$HOME/.local/share/pnpm"
+      case ":$PATH:" in
+        *":$PNPM_HOME:"*) ;;
+        *) export PATH="$PNPM_HOME:$PATH" ;;
+      esac
+    state: present
+  become: false

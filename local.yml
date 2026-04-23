@@ -10,6 +10,7 @@
     - dbeaver
     - sdkman
     - nvm
+    - pnpm
     - harlequin
     - python-uv
     - lazysql
