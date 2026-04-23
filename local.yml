@@ -12,3 +12,4 @@
     - nvm
     - harlequin
     - python-uv
+    - lazysql
