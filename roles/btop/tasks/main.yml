@@ -1,0 +1,7 @@
+---
+- name: Install Btop
+  apt:
+    name: btop
+    state: present
+    update_cache: yes
+  become: true

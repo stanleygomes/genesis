@@ -1,0 +1,13 @@
+---
+- name: Add LazyGit PPA
+  apt_repository:
+    repo: ppa:lazygit-team/release
+    state: present
+  become: true
+
+- name: Install LazyGit
+  apt:
+    name: lazygit
+    state: present
+    update_cache: yes
+  become: true

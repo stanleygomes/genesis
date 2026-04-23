@@ -1,0 +1,35 @@
+---
+- name: Get latest LazyDocker version
+  shell: |
+    curl -s https://api.github.com/repos/jesseduffield/lazydocker/releases/latest | grep '"tag_name":' | sed -E 's/.*"([^"]+)".*/\1/'
+  register: lazydocker_version
+  changed_when: false
+  become: false
+
+- name: Download LazyDocker binary
+  get_url:
+    url: "https://github.com/jesseduffield/lazydocker/releases/download/{{ lazydocker_version.stdout }}/lazydocker_{{ lazydocker_version.stdout | regex_replace('^v', '') }}_Linux_x86_64.tar.gz"
+    dest: "/tmp/lazydocker.tar.gz"
+    mode: '0644'
+  become: false
+
+- name: Create directory for LazyDocker
+  file:
+    path: /tmp/lazydocker_extracted
+    state: directory
+  become: false
+
+- name: Unarchive LazyDocker
+  unarchive:
+    src: "/tmp/lazydocker.tar.gz"
+    dest: "/tmp/lazydocker_extracted"
+    remote_src: yes
+  become: false
+
+- name: Install LazyDocker binary to /usr/local/bin
+  copy:
+    src: "/tmp/lazydocker_extracted/lazydocker"
+    dest: "/usr/local/bin/lazydocker"
+    mode: '0755'
+    remote_src: yes
+  become: true

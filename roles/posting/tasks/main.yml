@@ -1,0 +1,9 @@
+---
+- name: Install Posting via pipx
+  shell: pipx install posting
+  become: false
+  register: posting_install
+  failed_when: 
+    - posting_install.rc != 0
+    - "'already installed' not in posting_install.stderr"
+  changed_when: "'installed package posting' in posting_install.stdout"
