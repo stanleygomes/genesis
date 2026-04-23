@@ -1,0 +1,29 @@
+---
+- name: Install dependencies for SDKMAN
+  apt:
+    name:
+      - curl
+      - zip
+      - unzip
+    state: present
+  become: true
+
+- name: Check if SDKMAN is installed
+  stat:
+    path: "{{ ansible_env.HOME }}/.sdkman"
+  register: sdkman_stat
+  become: false
+
+- name: Download and install SDKMAN
+  shell: curl -s "https://get.sdkman.io" | bash
+  when: not sdkman_stat.stat.exists
+  args:
+    executable: /bin/bash
+  become: false
+
+- name: Source SDKMAN in bashrc
+  lineinfile:
+    path: "{{ ansible_env.HOME }}/.bashrc"
+    line: '[[ -s "$HOME/.sdkman/bin/sdkman-init.sh" ]] && source "$HOME/.sdkman/bin/sdkman-init.sh"'
+    state: present
+  become: false
