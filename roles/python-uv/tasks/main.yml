@@ -1,0 +1,27 @@
+---
+- name: Check if uv is installed
+  stat:
+    path: "{{ ansible_env.HOME }}/.cargo/bin/uv"
+  register: uv_stat
+  become: false
+
+- name: Install uv via official script
+  shell: curl -LsSf https://astral.sh/uv/install.sh | sh
+  when: not uv_stat.stat.exists
+  become: false
+  args:
+    executable: /bin/bash
+
+- name: Ensure uv is in bashrc
+  lineinfile:
+    path: "{{ ansible_env.HOME }}/.bashrc"
+    line: 'export PATH="$HOME/.cargo/bin:$PATH"'
+    state: present
+  become: false
+
+- name: Install recommended Python version (3.14)
+  shell: |
+    bash -c 'export PATH="$HOME/.cargo/bin:$PATH" && uv python install 3.14'
+  become: false
+  register: python_install
+  changed_when: "'Installed' in python_install.stdout"
