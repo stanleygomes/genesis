@@ -14,3 +14,4 @@
     - python-uv
     - lazysql
     - antigravity
+    - postman
