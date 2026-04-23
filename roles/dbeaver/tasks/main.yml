@@ -1,0 +1,24 @@
+---
+- name: Install dependencies for DBeaver
+  apt:
+    name:
+      - wget
+      - gnupg
+    state: present
+
+- name: Add DBeaver GPG key
+  apt_key:
+    url: https://dbeaver.io/debs/dbeaver.gpg.key
+    state: present
+
+- name: Add DBeaver repository
+  apt_repository:
+    repo: "deb https://dbeaver.io/debs/dbeaver-ce /"
+    state: present
+    filename: dbeaver
+
+- name: Install DBeaver Community Edition
+  apt:
+    name: dbeaver-ce
+    state: present
+    update_cache: yes
