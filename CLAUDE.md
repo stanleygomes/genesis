@@ -25,6 +25,7 @@ This document contains guidelines and useful commands for working with this Ansi
 - **Idempotency**: Ensure all roles are idempotent (can be run multiple times without side effects).
 - **Variables**: Keep specific variables in the `vars/` directory and secrets (if any) in Ansible Vault.
 - **Roles**: Organize logic into modular roles for easier maintenance.
+- **Environment**: For tools requiring Node.js (via NVM) or Java (via SDKMAN), always source the appropriate init script in `shell` tasks.
 
 ## Recommended Structure
 - `group_vars`: Global variables.

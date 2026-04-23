@@ -6,9 +6,11 @@ This repository contains the **Ansible** configuration to automate the setup and
 
 ### What does this project do?
 - Manages system packages (Apt, Flatpak, Snap).
-- Configures dotfiles and application preferences.
-- Installs development tools (Docker, Node.js, Python, etc.).
-- Customizes the user interface (Gnome, Themes, Fonts).
+- Configures development environments (Node.js/NVM, Java/SDKMAN, Python/UV, pnpm).
+- Installs and configures AI tools (Gemini CLI, GitHub Copilot CLI, Antigravity IDE).
+- Setups CLI/TUI tools with desktop shortcuts (LazyGit, LazyDocker, Harlequin, etc.).
+- Customizes the shell (Bash prompt with git status, aliases).
+- Manages GNOME settings and extensions (Tweaks, Extension Manager).
 
 ### Prerequisites
 
@@ -54,5 +56,13 @@ python3 -m pip install --user ansible
 
 - `local.yml`: Main playbook.
 - `inventory`: Host definition (usually just localhost).
-- `roles/`: Different configuration categories (system, apps, dev-tools, etc.).
+- `roles/`: Different configuration categories.
 - `vars/`: Configuration variables.
+
+## 📦 Roles Included
+
+- **AI Tools**: `antigravity`, `gemini-cli`, `github-copilot`.
+- **Development**: `docker`, `nvm`, `pnpm`, `sdkman`, `python-uv`.
+- **GUI Apps**: `google-chrome`, `mongodb-compass`, `dbeaver`, `postman`.
+- **CLI/TUI**: `btop`, `harlequin`, `lazydocker`, `lazygit`, `lazysql`, `posting`.
+- **System/UI**: `gnome-setup`, `bash-config`, `desktop-entries`.
