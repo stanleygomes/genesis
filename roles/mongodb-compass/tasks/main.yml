@@ -1,0 +1,11 @@
+---
+- name: Download MongoDB Compass .deb package
+  get_url:
+    url: https://compass.mongodb.com/api/v2/download/latest/compass/stable/linux_deb
+    dest: /tmp/mongodb-compass.deb
+    mode: '0644'
+
+- name: Install MongoDB Compass
+  apt:
+    deb: /tmp/mongodb-compass.deb
+    state: present
