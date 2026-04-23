@@ -1,0 +1,6 @@
+---
+- name: Workstation Setup
+  hosts: localhost
+  become: true
+  roles:
+    - google-chrome
