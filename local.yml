@@ -15,6 +15,7 @@
     - lazysql
     - antigravity
     - postman
+    - gemini-cli
     - lazygit
     - lazydocker
     - posting
