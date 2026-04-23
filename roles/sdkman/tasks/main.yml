@@ -21,12 +21,6 @@
     executable: /bin/bash
   become: false
 
-- name: Source SDKMAN in bashrc
-  lineinfile:
-    path: "{{ ansible_env.HOME }}/.bashrc"
-    line: '[[ -s "$HOME/.sdkman/bin/sdkman-init.sh" ]] && source "$HOME/.sdkman/bin/sdkman-init.sh"'
-    state: present
-  become: false
 
 - name: Install Java 25
   shell: |

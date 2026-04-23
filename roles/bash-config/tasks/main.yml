@@ -1,0 +1,35 @@
+---
+- name: Add personal aliases
+  blockinfile:
+    path: "{{ ansible_env.HOME }}/.bashrc"
+    marker: "# {mark} PERSONAL ALIASES"
+    block: |
+      # Alias para abrir um novo terminal no diretório atual
+      alias terminal='gnome-terminal --working-directory="$(pwd)" &'
+    state: present
+  become: false
+
+- name: Add git branch parser and custom PS1
+  blockinfile:
+    path: "{{ ansible_env.HOME }}/.bashrc"
+    marker: "# {mark} CUSTOM PROMPT (PS1)"
+    block: |
+      parse_git_branch() {
+        git rev-parse --abbrev-ref HEAD 2>/dev/null | grep -v HEAD
+      }
+
+      export PS1="🚀  \[\033[01;32m\]\u@\h\[\033[00m\]:\[\033[01;34m\]\w\[\033[00m\]\$(branch=\$(parse_git_branch); [ -n \"\$branch\" ] && echo \" (\[\033[01;33m\]\$branch\[\033[00m\])\") \$ "
+    state: present
+  become: false
+
+- name: Ensure SDKMAN is at the end of bashrc
+  blockinfile:
+    path: "{{ ansible_env.HOME }}/.bashrc"
+    marker: "# {mark} SDKMAN CONFIGURATION"
+    insertafter: EOF
+    block: |
+      #THIS MUST BE AT THE END OF THE FILE FOR SDKMAN TO WORK!!!
+      export SDKMAN_DIR="$HOME/.sdkman"
+      [[ -s "$HOME/.sdkman/bin/sdkman-init.sh" ]] && source "$HOME/.sdkman/bin/sdkman-init.sh"
+    state: present
+  become: false
