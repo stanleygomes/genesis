@@ -1,0 +1,83 @@
+// Empty
+[
+  {
+    "key": "ctrl+shift+d",
+    "command": "editor.action.addSelectionToNextFindMatch",
+    "when": "editorFocus",
+  },
+  {
+    "key": "ctrl+d",
+    "command": "-editor.action.addSelectionToNextFindMatch",
+    "when": "editorFocus",
+  },
+  {
+    "key": "ctrl+d",
+    "command": "editor.action.deleteLines",
+    "when": "editorFocus",
+  },
+  {
+    "key": "ctrl+shift+k",
+    "command": "-editor.action.deleteLines",
+    "when": "editorFocus",
+  },
+  {
+    "key": "ctrl+alt+f",
+    "command": "editor.action.formatSelection",
+    "when": "editorTextFocus && !editorReadonly",
+  },
+  {
+    "key": "ctrl+k ctrl+f",
+    "command": "-editor.action.formatSelection",
+    "when": "editorTextFocus && !editorReadonly",
+  },
+  {
+    "key": "ctrl+p",
+    "command": "workbench.action.quickOpen",
+  },
+  {
+    "key": "ctrl+p",
+    "command": "-workbench.action.quickOpen",
+  },
+  {
+    "key": "ctrl+enter",
+    "command": "SQLTools.executeQuery",
+    "when": "editorTextFocus",
+  },
+  {
+    "key": "ctrl+e ctrl+e",
+    "command": "-SQLTools.executeQuery",
+    "when": "editorTextFocus",
+  },
+  {
+    "key": "ctrl+shift+r",
+    "command": "workbench.action.openRecent",
+  },
+  {
+    "key": "ctrl+r",
+    "command": "-workbench.action.openRecent",
+  },
+  {
+    "key": "ctrl+i",
+    "command": "antigravity.toggleChatFocus",
+    "when": "!terminalFocus",
+  },
+  {
+    "key": "ctrl+l",
+    "command": "-antigravity.toggleChatFocus",
+    "when": "!terminalFocus",
+  },
+  {
+    "key": "ctrl+p",
+    "command": "workbench.action.quickOpenWithModes",
+  },
+  {
+    "key": "ctrl+shift+o",
+    "command": "editor.action.organizeImports",
+    "when": "textInputFocus && !editorReadonly && supportedCodeAction =~ /(\\s|^)source\\.organizeImports\\b/",
+  },
+  {
+    "key": "shift+alt+o",
+    "command": "-editor.action.organizeImports",
+    "when": "textInputFocus && !editorReadonly && supportedCodeAction =~ /(\\s|^)source\\.organizeImports\\b/",
+  },
+]

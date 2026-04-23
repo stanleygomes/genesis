@@ -1,0 +1,60 @@
+---
+- name: Ensure keyrings directory exists
+  file:
+    path: /etc/apt/keyrings
+    state: directory
+    mode: '0755'
+  become: true
+
+- name: Download Antigravity GPG key
+  shell: curl -fsSL https://us-central1-apt.pkg.dev/doc/repo-signing-key.gpg | gpg --dearmor --yes -o /etc/apt/keyrings/antigravity-repo-key.gpg
+  become: true
+  args:
+    creates: /etc/apt/keyrings/antigravity-repo-key.gpg
+
+- name: Add Antigravity repository
+  apt_repository:
+    repo: "deb [signed-by=/etc/apt/keyrings/antigravity-repo-key.gpg] https://us-central1-apt.pkg.dev/projects/antigravity-auto-updater-dev/ antigravity-debian main"
+    state: present
+    filename: antigravity
+  become: true
+
+- name: Install Antigravity IDE
+  apt:
+    name: antigravity
+    state: present
+    update_cache: yes
+  become: true
+
+- name: Create User config directory
+  file:
+    path: "{{ ansible_env.HOME }}/.config/Antigravity/User"
+    state: directory
+    mode: '0755'
+  become: false
+
+- name: Sync Antigravity settings
+  copy:
+    src: configs/antigravity/settings.json
+    dest: "{{ ansible_env.HOME }}/.config/Antigravity/User/settings.json"
+    mode: '0644'
+  become: false
+
+- name: Sync Antigravity keybindings
+  copy:
+    src: configs/antigravity/keybindings.json
+    dest: "{{ ansible_env.HOME }}/.config/Antigravity/User/keybindings.json"
+    mode: '0644'
+  become: false
+
+- name: Read extensions list
+  set_fact:
+    extensions: "{{ lookup('file', 'configs/antigravity/extensions.txt').splitlines() }}"
+  become: false
+
+- name: Install Antigravity extensions
+  shell: antigravity --install-extension {{ item }}
+  loop: "{{ extensions }}"
+  become: false
+  register: ext_install
+  changed_when: "'is already installed' not in ext_install.stdout"
