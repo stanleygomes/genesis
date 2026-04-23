@@ -5,3 +5,4 @@
   roles:
     - google-chrome
     - mongodb-compass
+    - docker
