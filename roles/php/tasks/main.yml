@@ -1,0 +1,25 @@
+---
+- name: Add Ondrej PHP PPA
+  apt_repository:
+    repo: ppa:ondrej/php
+    state: present
+  become: true
+
+- name: Install PHP and extensions
+  apt:
+    name: "{{ php_extensions }}"
+    state: present
+    update_cache: yes
+  become: true
+
+- name: Check if Composer is installed
+  stat:
+    path: /usr/local/bin/composer
+  register: composer_stat
+  become: false
+
+- name: Download and install Composer
+  shell: |
+    curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
+  when: not composer_stat.stat.exists
+  become: true

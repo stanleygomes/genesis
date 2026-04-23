@@ -62,7 +62,7 @@ python3 -m pip install --user ansible
 ## 📦 Roles Included
 
 - **AI Tools**: `antigravity`, `gemini-cli`, `github-copilot`.
-- **Development**: `docker`, `nvm`, `pnpm`, `sdkman`, `python-uv`.
+- **Development**: `docker`, `nvm`, `pnpm`, `sdkman`, `python-uv`, `php`.
 - **GUI Apps**: `google-chrome`, `mongodb-compass`, `dbeaver`, `postman`.
 - **CLI/TUI**: `btop`, `harlequin`, `lazydocker`, `lazygit`, `lazysql`, `posting`.
 - **System/UI**: `gnome-setup`, `bash-config`, `desktop-entries`.
