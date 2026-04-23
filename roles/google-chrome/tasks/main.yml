@@ -1,0 +1,18 @@
+---
+- name: Install dependencies
+  apt:
+    name:
+      - wget
+      - gnupg
+    state: present
+
+- name: Download Google Chrome .deb package
+  get_url:
+    url: https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb
+    dest: /tmp/google-chrome-stable_current_amd64.deb
+    mode: '0644'
+
+- name: Install Google Chrome
+  apt:
+    deb: /tmp/google-chrome-stable_current_amd64.deb
+    state: present
