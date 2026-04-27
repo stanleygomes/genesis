@@ -2,7 +2,20 @@
 
 This repository contains the **Ansible** configuration to automate the setup and maintenance of my personal computer. The goal is to turn my machine configuration into "Infrastructure as Code" (IaC), allowing me to rebuild or sync my environment quickly and consistently.
 
-## 🚀 Getting Started
+## 🚀 Quick Start (One-Liner)
+
+To set up a fresh machine, just run:
+
+```bash
+curl -sSL https://raw.githubusercontent.com/stanleygomes/genesis/main/bootstrap.sh | bash
+```
+
+This command will install `git`, `ansible`, clone this repository, and run the setup.
+
+---
+
+## 🚀 Manual Getting Started
+
 
 ### What does this project do?
 - Manages system packages (Apt, Flatpak, Snap).
