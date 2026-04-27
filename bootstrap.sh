@@ -12,9 +12,9 @@ TARGET_DIR="$HOME/projects/genesis"
 echo "🚀 Starting Genesis Workstation Setup..."
 
 # 1. Update and install dependencies
-echo "📦 Installing prerequisites (git, curl, software-properties-common)..."
+echo "📦 Installing prerequisites (git, curl, make, software-properties-common)..."
 sudo apt update
-sudo apt install -y git curl software-properties-common
+sudo apt install -y git curl make software-properties-common
 
 # 2. Install Ansible
 if ! command -v ansible &> /dev/null; then

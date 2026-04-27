@@ -7,7 +7,7 @@ This repository contains the **Ansible** configuration to automate the setup and
 To set up a fresh machine, just run:
 
 ```bash
-curl -sSL https://dub.sh/start-genesis | bash
+curl -sSL https://raw.githubusercontent.com/stanleygomes/genesis/refs/heads/master/bootstrap.sh | bash
 ```
 
 This command will install `git`, `ansible`, clone this repository, and run the setup.
@@ -16,8 +16,8 @@ This command will install `git`, `ansible`, clone this repository, and run the s
 
 ## 🚀 Manual Getting Started
 
-
 ### What does this project do?
+
 - Manages system packages (Apt, Flatpak, Snap).
 - Configures development environments (Node.js/NVM, Java/SDKMAN, Python/UV, pnpm).
 - Installs and configures AI tools (Gemini CLI, GitHub Copilot CLI, Antigravity IDE).
@@ -30,6 +30,7 @@ This command will install `git`, `ansible`, clone this repository, and run the s
 Before running the playbooks, you need to have **Ansible** installed on your machine.
 
 #### Installation on Ubuntu/Debian:
+
 ```bash
 sudo apt update
 sudo apt install software-properties-common
@@ -38,16 +39,19 @@ sudo apt install ansible
 ```
 
 #### Installation on Fedora:
+
 ```bash
 sudo dnf install ansible
 ```
 
 #### Installation on Arch Linux:
+
 ```bash
 sudo pacman -S ansible
 ```
 
 #### Via Pip (Generic):
+
 ```bash
 python3 -m pip install --user ansible
 ```
@@ -55,6 +59,7 @@ python3 -m pip install --user ansible
 ## 🛠️ Usage
 
 1. Clone the repository:
+
    ```bash
    git clone https://github.com/stanleygomes/genesis.git
    cd genesis
