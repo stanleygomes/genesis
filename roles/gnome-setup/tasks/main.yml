@@ -9,17 +9,6 @@
     update_cache: yes
   become: true
 
-- name: Install some common GNOME extensions via apt
-  apt:
-    name: "{{ item }}"
-    state: present
-  loop:
-    - gnome-shell-extension-dash-to-panel
-    - gnome-shell-extension-appindicator
-    - gnome-shell-extension-arc-menu
-  become: true
-  ignore_errors: true
-
 - name: Install JetBrains Mono font
   apt:
     name: fonts-jetbrains-mono
