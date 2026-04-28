@@ -19,7 +19,6 @@ sudo apt install -y git curl make software-properties-common
 # 2. Install Ansible
 if ! command -v ansible &> /dev/null; then
     echo "🤖 Installing Ansible..."
-    sudo add-apt-repository --yes --update ppa:ansible/ansible
     sudo apt install -y ansible
 else
     echo "✅ Ansible is already installed."
