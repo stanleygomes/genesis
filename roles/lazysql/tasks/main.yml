@@ -1,14 +1,7 @@
 ---
-- name: Get latest LazySQL version
-  shell: |
-    curl -s https://api.github.com/repos/jorgerojas26/lazysql/releases/latest | grep '"tag_name":' | sed -E 's/.*"([^"]+)".*/\1/'
-  register: lazysql_version
-  changed_when: false
-  become: false
-
 - name: Download LazySQL binary
   get_url:
-    url: "https://github.com/jorgerojas26/lazysql/releases/download/{{ lazysql_version.stdout }}/lazysql_Linux_x86_64.tar.gz"
+    url: "https://github.com/jorgerojas26/lazysql/releases/latest/download/lazysql_Linux_x86_64.tar.gz"
     dest: "/tmp/lazysql.tar.gz"
     mode: '0644'
   become: false
