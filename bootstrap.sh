@@ -35,15 +35,24 @@ else
     git pull
 fi
 
-# 4. Run the setup
+# 4. Set up temporary passwordless sudo for the session
+# This avoids "become" prompt detection issues on newer Ubuntu versions
+echo "🔐 Setting up temporary passwordless sudo..."
+echo "$USER ALL=(ALL) NOPASSWD:ALL" | sudo tee /etc/sudoers.d/genesis-temporary > /dev/null
+
+# 5. Run the setup
 echo "🛠️ Running Ansible playbook..."
 cd "$TARGET_DIR"
 
 # Check if Makefile exists to use 'make run', otherwise run ansible-playbook directly
 if [ -f "Makefile" ]; then
-    LC_ALL=en_US.UTF-8 LANG=en_US.UTF-8 PYTHONUTF8=1 make run < /dev/tty
+    LC_ALL=en_US.UTF-8 LANG=en_US.UTF-8 PYTHONUTF8=1 make run EXTRA_ARGS=""
 else
-    LC_ALL=en_US.UTF-8 LANG=en_US.UTF-8 PYTHONUTF8=1 ansible-playbook -i inventory local.yml --ask-become-pass < /dev/tty
+    LC_ALL=en_US.UTF-8 LANG=en_US.UTF-8 PYTHONUTF8=1 ansible-playbook -i inventory local.yml
 fi
+
+# 6. Cleanup
+echo "🧹 Cleaning up..."
+sudo rm /etc/sudoers.d/genesis-temporary
 
 echo "✨ Setup complete!"

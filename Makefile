@@ -13,11 +13,13 @@ help:
 	@echo "make list     - List all tasks that would be executed"
 	@echo "make explain  - Show hosts and mapped variables"
 
+EXTRA_ARGS ?= --ask-become-pass
+
 run:
-	ansible-playbook -i $(INVENTORY) $(PLAYBOOK) --ask-become-pass
+	ansible-playbook -i $(INVENTORY) $(PLAYBOOK) $(EXTRA_ARGS)
 
 check:
-	ansible-playbook -i $(INVENTORY) $(PLAYBOOK) --check --ask-become-pass
+	ansible-playbook -i $(INVENTORY) $(PLAYBOOK) --check $(EXTRA_ARGS)
 
 syntax:
 	ansible-playbook -i $(INVENTORY) $(PLAYBOOK) --syntax-check
