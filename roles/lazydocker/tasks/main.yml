@@ -1,30 +1,17 @@
 ---
-- name: Download LazyDocker binary
-  get_url:
-    url: "https://github.com/jesseduffield/lazydocker/releases/latest/download/lazydocker_Linux_x86_64.tar.gz"
-    dest: "/tmp/lazydocker.tar.gz"
-    mode: '0644'
-  become: false
-
-- name: Create directory for LazyDocker
-  file:
-    path: /tmp/lazydocker_extracted
-    state: directory
-  become: false
-
-- name: Unarchive LazyDocker
-  unarchive:
-    src: "/tmp/lazydocker.tar.gz"
-    dest: "/tmp/lazydocker_extracted"
-    remote_src: yes
-  become: false
-  ignore_errors: "{{ ansible_check_mode }}"
-
-- name: Install LazyDocker binary to /usr/local/bin
-  copy:
-    src: "/tmp/lazydocker_extracted/lazydocker"
-    dest: "/usr/local/bin/lazydocker"
-    mode: '0755'
-    remote_src: yes
+- name: Install LazyDocker binary
+  shell: |
+    LAZYDOCKER_VERSION=$(curl -s "https://api.github.com/repos/jesseduffield/lazydocker/releases/latest" | grep -Po '"tag_name": "v\K[^"]*')
+    if [ -z "$LAZYDOCKER_VERSION" ]; then
+      echo "Failed to get lazydocker version (API limit?). Retrying with fallback version 0.25.2"
+      LAZYDOCKER_VERSION="0.25.2"
+    fi
+    curl -sLo /tmp/lazydocker.tar.gz "https://github.com/jesseduffield/lazydocker/releases/download/v${LAZYDOCKER_VERSION}/lazydocker_${LAZYDOCKER_VERSION}_Linux_x86_64.tar.gz"
+    cd /tmp
+    tar xf lazydocker.tar.gz lazydocker
+    install lazydocker /usr/local/bin
+  args:
+    executable: /bin/bash
+    creates: /usr/local/bin/lazydocker
   become: true
   ignore_errors: "{{ ansible_check_mode }}"
