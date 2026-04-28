@@ -19,3 +19,13 @@
     - gnome-shell-extension-arc-menu
   become: true
   ignore_errors: true
+
+- name: Install JetBrains Mono font
+  apt:
+    name: fonts-jetbrains-mono
+    state: present
+  become: true
+
+- name: Set JetBrains Mono as the default monospace font
+  command: gsettings set org.gnome.desktop.interface monospace-font-name 'JetBrains Mono 13'
+  become: false
