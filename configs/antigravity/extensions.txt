@@ -6,7 +6,6 @@ dbaeumer.vscode-eslint
 dotjoshjohnson.xml
 eamodio.gitlens
 editorconfig.editorconfig
-emilast.logfilehighlighter
 esbenp.prettier-vscode
 fabiospampinato.vscode-diff
 formulahendry.auto-close-tag
