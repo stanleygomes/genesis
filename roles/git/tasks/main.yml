@@ -18,3 +18,17 @@
     value: "{{ git_user_email }}"
     scope: global
   become: false
+
+- name: Create .ssh directory
+  file:
+    path: ~/.ssh
+    state: directory
+    mode: "0700"
+  become: false
+
+- name: Generate SSH key
+  openssh_keypair:
+    path: ~/.ssh/id_git
+    type: ed25519
+    force: false
+  become: false
