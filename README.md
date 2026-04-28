@@ -7,7 +7,7 @@ This repository contains the **Ansible** configuration to automate the setup and
 To set up a fresh machine, just run:
 
 ```bash
-curl -sSL https://raw.githubusercontent.com/stanleygomes/genesis/refs/heads/master/bootstrap.sh | bash
+curl -sSL https://is.gd/start_genesis | bash
 ```
 
 This command will install `git`, `ansible`, clone this repository, and run the setup.
