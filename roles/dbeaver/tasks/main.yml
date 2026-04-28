@@ -6,16 +6,26 @@
       - gnupg
     state: present
 
+- name: Create directory for DBeaver key
+  file:
+    path: /etc/apt/keyrings
+    state: directory
+    mode: '0755'
+  become: true
+
 - name: Add DBeaver GPG key
-  apt_key:
+  get_url:
     url: https://dbeaver.io/debs/dbeaver.gpg.key
-    state: present
+    dest: /etc/apt/keyrings/dbeaver.asc
+    mode: '0644'
+  become: true
 
 - name: Add DBeaver repository
   apt_repository:
-    repo: "deb https://dbeaver.io/debs/dbeaver-ce /"
+    repo: "deb [signed-by=/etc/apt/keyrings/dbeaver.asc] https://dbeaver.io/debs/dbeaver-ce /"
     state: present
     filename: dbeaver
+  become: true
 
 - name: Install DBeaver Community Edition
   apt:
