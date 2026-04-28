@@ -36,15 +36,26 @@ Before running the playbooks, you need to have **Ansible** installed on your mac
 
 1. Clone the repository:
 
-   ```bash
-   git clone https://github.com/stanleygomes/genesis.git
-   cd genesis
-   ```
+```bash
+git clone https://github.com/stanleygomes/genesis.git
+cd genesis
+```
 
 2. Run the main playbook:
-   ```
-   make run
-   ```
+
+This command will run the main playbook and ask for sudo password.
+
+```
+make run
+```
+
+### Run in dry-run mode:
+
+This command will run the main playbook in check mode and ask for sudo password.
+
+```
+make check
+```
 
 ## 📂 Project Structure
 

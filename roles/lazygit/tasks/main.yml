@@ -1,13 +1,17 @@
 ---
-- name: Add LazyGit PPA
-  apt_repository:
-    repo: ppa:lazygit-team/release
-    state: present
+- name: Install LazyGit binary
+  shell: |
+    LAZYGIT_VERSION=$(curl -s "https://api.github.com/repos/jesseduffield/lazygit/releases/latest" | grep -Po '"tag_name": "v\K[^"]*')
+    if [ -z "$LAZYGIT_VERSION" ]; then
+      echo "Failed to get lazygit version (API limit?). Retrying with fallback version 0.44.1"
+      LAZYGIT_VERSION="0.44.1"
+    fi
+    curl -sLo /tmp/lazygit.tar.gz "https://github.com/jesseduffield/lazygit/releases/download/v${LAZYGIT_VERSION}/lazygit_${LAZYGIT_VERSION}_Linux_x86_64.tar.gz"
+    cd /tmp
+    tar xf lazygit.tar.gz lazygit
+    install lazygit /usr/local/bin
+  args:
+    executable: /bin/bash
+    creates: /usr/local/bin/lazygit
   become: true
-
-- name: Install LazyGit
-  apt:
-    name: lazygit
-    state: present
-    update_cache: yes
-  become: true
+  ignore_errors: "{{ ansible_check_mode }}"
