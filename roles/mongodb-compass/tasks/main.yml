@@ -9,3 +9,4 @@
   apt:
     deb: /tmp/mongodb-compass.deb
     state: present
+  ignore_errors: "{{ ansible_check_mode }}"

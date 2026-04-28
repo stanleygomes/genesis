@@ -11,9 +11,11 @@
 
 - name: Install some common GNOME extensions via apt
   apt:
-    name:
-      - gnome-shell-extension-dash-to-panel
-      - gnome-shell-extension-appindicator
-      - gnome-shell-extension-arc-menu
+    name: "{{ item }}"
     state: present
+  loop:
+    - gnome-shell-extension-dash-to-panel
+    - gnome-shell-extension-appindicator
+    - gnome-shell-extension-arc-menu
   become: true
+  ignore_errors: true
