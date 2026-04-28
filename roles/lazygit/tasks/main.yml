@@ -6,7 +6,7 @@
       echo "Failed to get lazygit version (API limit?). Retrying with fallback version 0.44.1"
       LAZYGIT_VERSION="0.44.1"
     fi
-    curl -sLo /tmp/lazygit.tar.gz "https://github.com/jesseduffield/lazygit/releases/download/v${LAZYGIT_VERSION}/lazygit_${LAZYGIT_VERSION}_Linux_x86_64.tar.gz"
+    curl -sLo /tmp/lazygit.tar.gz "https://github.com/jesseduffield/lazygit/releases/download/v${LAZYGIT_VERSION}/lazygit_${LAZYGIT_VERSION}_linux_x86_64.tar.gz"
     cd /tmp
     tar xf lazygit.tar.gz lazygit
     install lazygit /usr/local/bin
