@@ -1,14 +1,7 @@
 ---
-- name: Get latest LazyDocker version
-  shell: |
-    curl -s https://api.github.com/repos/jesseduffield/lazydocker/releases/latest | grep '"tag_name":' | sed -E 's/.*"([^"]+)".*/\1/'
-  register: lazydocker_version
-  changed_when: false
-  become: false
-
 - name: Download LazyDocker binary
   get_url:
-    url: "https://github.com/jesseduffield/lazydocker/releases/download/{{ lazydocker_version.stdout }}/lazydocker_{{ lazydocker_version.stdout | regex_replace('^v', '') }}_Linux_x86_64.tar.gz"
+    url: "https://github.com/jesseduffield/lazydocker/releases/latest/download/lazydocker_Linux_x86_64.tar.gz"
     dest: "/tmp/lazydocker.tar.gz"
     mode: '0644'
   become: false
@@ -25,6 +18,7 @@
     dest: "/tmp/lazydocker_extracted"
     remote_src: yes
   become: false
+  ignore_errors: "{{ ansible_check_mode }}"
 
 - name: Install LazyDocker binary to /usr/local/bin
   copy:
@@ -33,3 +27,4 @@
     mode: '0755'
     remote_src: yes
   become: true
+  ignore_errors: "{{ ansible_check_mode }}"
