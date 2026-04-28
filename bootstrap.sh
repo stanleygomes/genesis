@@ -40,7 +40,8 @@ echo "🛠️ Running Ansible playbook..."
 cd "$TARGET_DIR"
 
 # Check if Makefile exists to use 'make run', otherwise run ansible-playbook directly
-export LC_ALL=C.UTF-8
+export LANG=en_US.UTF-8
+export LC_ALL=en_US.UTF-8
 if [ -f "Makefile" ]; then
     make run < /dev/tty
 else
