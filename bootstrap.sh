@@ -47,7 +47,7 @@ export LC_ALL=C
 if [ -f "Makefile" ]; then
     make run
 else
-    ansible-playbook local.yml --ask-become-pass
+    ansible-playbook -i inventory local.yml --ask-become-pass
 fi
 
 echo "✨ Setup complete!"

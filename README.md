@@ -29,31 +29,8 @@ This command will install `git`, `ansible`, clone this repository, and run the s
 
 Before running the playbooks, you need to have **Ansible** installed on your machine.
 
-#### Installation on Ubuntu/Debian:
-
-```bash
-sudo apt update
-sudo apt install software-properties-common
-sudo apt install ansible
-```
-
-#### Installation on Fedora:
-
-```bash
-sudo dnf install ansible
-```
-
-#### Installation on Arch Linux:
-
-```bash
-sudo pacman -S ansible
-```
-
-#### Via Pip (Generic):
-
-```bash
-python3 -m pip install --user ansible
-```
+> [!NOTE]
+> How to install: https://docs.ansible.com/projects/ansible/latest/installation_guide/intro_installation.html
 
 ## 🛠️ Usage
 
@@ -65,8 +42,7 @@ python3 -m pip install --user ansible
    ```
 
 2. Run the main playbook:
-   ```bash
-   ansible-playbook local.yml --ask-become-pass
+   ```make run
    ```
 
 ## 📂 Project Structure

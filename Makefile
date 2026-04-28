@@ -14,16 +14,16 @@ help:
 	@echo "make explain  - Show hosts and mapped variables"
 
 run:
-	ansible-playbook $(PLAYBOOK) --ask-become-pass
+	ansible-playbook -i $(INVENTORY) $(PLAYBOOK) --ask-become-pass
 
 check:
-	ansible-playbook $(PLAYBOOK) --check --ask-become-pass
+	ansible-playbook -i $(INVENTORY) $(PLAYBOOK) --check --ask-become-pass
 
 syntax:
-	ansible-playbook $(PLAYBOOK) --syntax-check
+	ansible-playbook -i $(INVENTORY) $(PLAYBOOK) --syntax-check
 
 list:
-	ansible-playbook $(PLAYBOOK) --list-tasks
+	ansible-playbook -i $(INVENTORY) $(PLAYBOOK) --list-tasks
 
 explain:
 	ansible-inventory --list -y

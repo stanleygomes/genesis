@@ -1,6 +1,7 @@
 ---
 - name: Workstation Setup
   hosts: localhost
+  connection: local
   become: true
   roles:
     - git
