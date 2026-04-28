@@ -25,6 +25,7 @@
     - lazysql
     - antigravity
     - postman
+    # - bruno
     - gemini-cli
     - github-copilot
     - lazygit

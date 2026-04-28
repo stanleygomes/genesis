@@ -1,0 +1,27 @@
+---
+- name: Ensure /etc/apt/keyrings exists
+  file:
+    path: /etc/apt/keyrings
+    state: directory
+    mode: '0755'
+  become: true
+
+- name: Add Bruno GPG key
+  command: gpg --no-default-keyring --keyring /etc/apt/keyrings/bruno.gpg --keyserver keyserver.ubuntu.com --recv-keys 9FA6017ECABE0266
+  args:
+    creates: /etc/apt/keyrings/bruno.gpg
+  become: true
+
+- name: Add Bruno APT repository
+  apt_repository:
+    repo: "deb [signed-by=/etc/apt/keyrings/bruno.gpg] http://debian.usebruno.com/ bruno stable"
+    state: present
+    filename: bruno
+  become: true
+
+- name: Install Bruno
+  apt:
+    name: bruno
+    state: present
+    update_cache: yes
+  become: true
