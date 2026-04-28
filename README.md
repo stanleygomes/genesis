@@ -42,7 +42,8 @@ Before running the playbooks, you need to have **Ansible** installed on your mac
    ```
 
 2. Run the main playbook:
-   ```make run
+   ```
+   make run
    ```
 
 ## 📂 Project Structure

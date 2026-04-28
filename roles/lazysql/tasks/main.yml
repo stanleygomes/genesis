@@ -18,6 +18,7 @@
     dest: "/tmp/lazysql_extracted"
     remote_src: yes
   become: false
+  ignore_errors: "{{ ansible_check_mode }}"
 
 - name: Install LazySQL binary to /usr/local/bin
   copy:
@@ -26,3 +27,4 @@
     mode: '0755'
     remote_src: yes
   become: true
+  ignore_errors: "{{ ansible_check_mode }}"
