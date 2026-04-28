@@ -39,15 +39,11 @@ fi
 echo "🛠️ Running Ansible playbook..."
 cd "$TARGET_DIR"
 
-# Fix for "curl | bash" losing TTY and breaking sudo prompt
-exec < /dev/tty
-export LC_ALL=C
-
 # Check if Makefile exists to use 'make run', otherwise run ansible-playbook directly
 if [ -f "Makefile" ]; then
-    make run
+    make run < /dev/tty
 else
-    ansible-playbook -i inventory local.yml --ask-become-pass
+    ansible-playbook -i inventory local.yml --ask-become-pass < /dev/tty
 fi
 
 echo "✨ Setup complete!"
