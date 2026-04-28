@@ -41,9 +41,9 @@ cd "$TARGET_DIR"
 
 # Check if Makefile exists to use 'make run', otherwise run ansible-playbook directly
 if [ -f "Makefile" ]; then
-    LC_ALL=en_US.UTF-8 LANG=en_US.UTF-8 make run < /dev/tty
+    LC_ALL=en_US.UTF-8 LANG=en_US.UTF-8 PYTHONUTF8=1 make run < /dev/tty
 else
-    LC_ALL=en_US.UTF-8 LANG=en_US.UTF-8 ansible-playbook -i inventory local.yml --ask-become-pass < /dev/tty
+    LC_ALL=en_US.UTF-8 LANG=en_US.UTF-8 PYTHONUTF8=1 ansible-playbook -i inventory local.yml --ask-become-pass < /dev/tty
 fi
 
 echo "✨ Setup complete!"
