@@ -58,3 +58,4 @@
   become: false
   register: ext_install
   changed_when: "'is already installed' not in ext_install.stdout"
+  ignore_errors: true
