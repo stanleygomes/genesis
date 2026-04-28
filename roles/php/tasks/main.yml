@@ -1,10 +1,4 @@
 ---
-- name: Add Ondrej PHP PPA
-  apt_repository:
-    repo: ppa:ondrej/php
-    state: present
-  become: true
-
 - name: Install PHP and extensions
   apt:
     name: "{{ php_extensions }}"
