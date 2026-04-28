@@ -32,3 +32,16 @@
     type: ed25519
     force: false
   become: false
+
+- name: Configure SSH to use id_git for GitHub
+  blockinfile:
+    path: ~/.ssh/config
+    create: yes
+    mode: '0600'
+    marker: "# {mark} ANSIBLE MANAGED BLOCK - GITHUB"
+    block: |
+      Host github.com
+        HostName github.com
+        User git
+        IdentityFile ~/.ssh/id_git
+  become: false
