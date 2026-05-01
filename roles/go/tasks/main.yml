@@ -19,14 +19,14 @@
   get_url:
     url: "https://go.dev/dl/go{{ go_version }}.linux-amd64.tar.gz"
     dest: "/tmp/go.tar.gz"
-  when: go_installed.rc != 0
+  when: go_installed.rc != 0 or go_version not in go_installed.stdout
   become: false
 
 - name: Remove old Go installation
   file:
     path: "{{ ansible_env.HOME }}/.local/go"
     state: absent
-  when: go_installed.rc != 0
+  when: go_installed.rc != 0 or go_version not in go_installed.stdout
   become: false
 
 - name: Extract Go
@@ -34,7 +34,7 @@
     src: "/tmp/go.tar.gz"
     dest: "{{ ansible_env.HOME }}/.local"
     remote_src: yes
-  when: go_installed.rc != 0
+  when: go_installed.rc != 0 or go_version not in go_installed.stdout
   become: false
 
 - name: Ensure Go bin is in PATH via bashrc
@@ -48,7 +48,7 @@
   file:
     path: "/tmp/go.tar.gz"
     state: absent
-  when: go_installed.rc != 0
+  when: go_installed.rc != 0 or go_version not in go_installed.stdout
   become: false
 
 - name: Check if golangci-lint is installed
@@ -67,7 +67,7 @@
     if [ -z "$BIN_DIR" ] || [ "$BIN_DIR" = "/bin" ]; then BIN_DIR={{ ansible_env.HOME }}/go/bin; fi
     mkdir -p $BIN_DIR
     curl -sSfL https://raw.githubusercontent.com/golangci/golangci-lint/master/install.sh | sh -s -- -b $BIN_DIR {{ golangci_lint_version }}
-  when: lint_installed.rc != 0
+  when: lint_installed.rc != 0 or golangci_lint_version not in lint_installed.stdout
   become: false
   args:
     executable: /bin/bash
