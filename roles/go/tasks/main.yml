@@ -1,0 +1,70 @@
+---
+- name: Check if Go is installed
+  shell: |
+    export PATH=$PATH:{{ ansible_env.HOME }}/.local/go/bin:{{ ansible_env.HOME }}/go/bin
+    go version
+  register: go_installed
+  ignore_errors: true
+  changed_when: false
+  become: false
+
+- name: Ensure .local directory exists
+  file:
+    path: "{{ ansible_env.HOME }}/.local"
+    state: directory
+    mode: '0755'
+  become: false
+
+- name: Download Go
+  get_url:
+    url: "https://go.dev/dl/go{{ go_version }}.linux-amd64.tar.gz"
+    dest: "/tmp/go.tar.gz"
+  when: go_installed.rc != 0
+  become: false
+
+- name: Remove old Go installation
+  file:
+    path: "{{ ansible_env.HOME }}/.local/go"
+    state: absent
+  when: go_installed.rc != 0
+  become: false
+
+- name: Extract Go
+  unarchive:
+    src: "/tmp/go.tar.gz"
+    dest: "{{ ansible_env.HOME }}/.local"
+    remote_src: yes
+  when: go_installed.rc != 0
+  become: false
+
+- name: Ensure Go bin is in PATH via bashrc
+  lineinfile:
+    path: "{{ ansible_env.HOME }}/.bashrc"
+    line: 'export PATH=$PATH:{{ ansible_env.HOME }}/.local/go/bin:{{ ansible_env.HOME }}/go/bin'
+    state: present
+  become: false
+
+- name: Clean up Go tarball
+  file:
+    path: "/tmp/go.tar.gz"
+    state: absent
+  when: go_installed.rc != 0
+  become: false
+
+- name: Check if golangci-lint is installed
+  shell: |
+    export PATH=$PATH:{{ ansible_env.HOME }}/.local/go/bin:{{ ansible_env.HOME }}/go/bin
+    golangci-lint --version
+  register: lint_installed
+  ignore_errors: true
+  changed_when: false
+  become: false
+
+- name: Install golangci-lint
+  shell: |
+    export PATH=$PATH:{{ ansible_env.HOME }}/.local/go/bin:{{ ansible_env.HOME }}/go/bin
+    curl -sSfL https://raw.githubusercontent.com/golangci/golangci-lint/master/install.sh | sh -s -- -b $(go env GOPATH | default(ansible_env.HOME + '/go'))/bin
+  when: lint_installed.rc != 0
+  become: false
+  args:
+    executable: /bin/bash
