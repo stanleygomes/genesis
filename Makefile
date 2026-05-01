@@ -12,8 +12,13 @@ help:
 	@echo "make syntax   - Check playbook syntax"
 	@echo "make list     - List all tasks that would be executed"
 	@echo "make explain  - Show hosts and mapped variables"
+	@echo "make bootstrap - Run the bootstrap script"
 
 EXTRA_ARGS ?= --ask-become-pass
+
+bootstrap:
+	chmod +x bootstrap.sh
+	./bootstrap.sh
 
 run:
 	ansible-playbook -i $(INVENTORY) $(PLAYBOOK) $(EXTRA_ARGS)

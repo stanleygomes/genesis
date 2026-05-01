@@ -63,7 +63,10 @@
 - name: Install golangci-lint
   shell: |
     export PATH=$PATH:{{ ansible_env.HOME }}/.local/go/bin:{{ ansible_env.HOME }}/go/bin
-    curl -sSfL https://raw.githubusercontent.com/golangci/golangci-lint/master/install.sh | sh -s -- -b $(go env GOPATH | default(ansible_env.HOME + '/go'))/bin
+    BIN_DIR=$(go env GOPATH)/bin
+    if [ -z "$BIN_DIR" ] || [ "$BIN_DIR" = "/bin" ]; then BIN_DIR={{ ansible_env.HOME }}/go/bin; fi
+    mkdir -p $BIN_DIR
+    curl -sSfL https://raw.githubusercontent.com/golangci/golangci-lint/master/install.sh | sh -s -- -b $BIN_DIR {{ golangci_lint_version }}
   when: lint_installed.rc != 0
   become: false
   args:

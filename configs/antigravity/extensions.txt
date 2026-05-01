@@ -11,7 +11,6 @@ fabiospampinato.vscode-diff
 formulahendry.auto-close-tag
 formulahendry.auto-rename-tag
 jebbs.plantuml
-lukasz-wronski.ftp-sync
 mechatroner.rainbow-csv
 miguelsolorio.fluent-icons
 ms-vscode-remote.remote-containers
