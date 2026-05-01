@@ -1,19 +1,29 @@
 ---
+- name: Check if Google Chrome is installed
+  command: google-chrome --version
+  register: chrome_check
+  ignore_errors: true
+  changed_when: false
+  become: false
+
 - name: Install dependencies
   apt:
     name:
       - wget
       - gnupg
     state: present
+  when: chrome_check.rc != 0
 
 - name: Download Google Chrome .deb package
   get_url:
     url: https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb
     dest: /tmp/google-chrome-stable_current_amd64.deb
     mode: '0644'
+  when: chrome_check.rc != 0
 
 - name: Install Google Chrome
   apt:
     deb: /tmp/google-chrome-stable_current_amd64.deb
     state: present
+  when: chrome_check.rc != 0
   ignore_errors: "{{ ansible_check_mode }}"

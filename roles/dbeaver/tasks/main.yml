@@ -1,10 +1,18 @@
 ---
+- name: Check if DBeaver is installed
+  command: dbeaver -version
+  register: dbeaver_check
+  ignore_errors: true
+  changed_when: false
+  become: false
+
 - name: Install dependencies for DBeaver
   apt:
     name:
       - wget
       - gnupg
     state: present
+  when: dbeaver_check.rc != 0
 
 - name: Create directory for DBeaver key
   file:
@@ -12,6 +20,7 @@
     state: directory
     mode: '0755'
   become: true
+  when: dbeaver_check.rc != 0
 
 - name: Add DBeaver GPG key
   get_url:
@@ -19,6 +28,7 @@
     dest: /etc/apt/keyrings/dbeaver.asc
     mode: '0644'
   become: true
+  when: dbeaver_check.rc != 0
 
 - name: Add DBeaver repository
   apt_repository:
@@ -26,9 +36,11 @@
     state: present
     filename: dbeaver
   become: true
+  when: dbeaver_check.rc != 0
 
 - name: Install DBeaver Community Edition
   apt:
     name: dbeaver-ce
     state: present
     update_cache: yes
+  when: dbeaver_check.rc != 0

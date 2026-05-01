@@ -1,9 +1,17 @@
 ---
+- name: Check if Git is installed
+  command: git --version
+  register: git_check
+  ignore_errors: true
+  changed_when: false
+  become: false
+
 - name: Install Git
   apt:
     name: git
     state: present
   become: true
+  when: git_check.rc != 0
 
 - name: Configure Git User Name
   git_config:
