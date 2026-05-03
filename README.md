@@ -2,7 +2,7 @@
 
 This repository contains the **Ansible** configuration to automate the setup and maintenance of my personal computer. The goal is to turn my machine configuration into "Infrastructure as Code" (IaC), allowing me to rebuild or sync my environment quickly and consistently.
 
-## 🚀 Quick Start (One-Liner)
+## Quick Start (One-Liner)
 
 To set up a fresh machine, just run:
 
@@ -14,7 +14,7 @@ This command will install `git`, `ansible`, clone this repository, and run the s
 
 ---
 
-## 🚀 Manual Getting Started
+## Manual Getting Started
 
 ### What does this project do?
 
@@ -32,7 +32,7 @@ Before running the playbooks, you need to have **Ansible** installed on your mac
 > [!NOTE]
 > How to install: https://docs.ansible.com/projects/ansible/latest/installation_guide/intro_installation.html
 
-## 🛠️ Usage
+## Usage
 
 1. Clone the repository:
 
@@ -57,14 +57,14 @@ This command will run the main playbook in check mode and ask for sudo password.
 make check
 ```
 
-## 📂 Project Structure
+## Project Structure
 
 - `local.yml`: Main playbook.
 - `inventory`: Host definition (usually just localhost).
 - `roles/`: Different configuration categories.
 - `vars/`: Configuration variables.
 
-## 📦 Roles Included
+## Roles Included
 
 - **AI Tools**: `antigravity`, `gemini-cli`, `github-copilot`.
 - **Development**: `docker`, `nvm`, `pnpm`, `sdkman`, `python-uv`, `php`.
