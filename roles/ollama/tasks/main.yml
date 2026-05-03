@@ -1,0 +1,20 @@
+---
+- name: Check if Ollama is installed
+  command: which ollama
+  register: ollama_check
+  ignore_errors: true
+  changed_when: false
+  become: false
+
+- name: Install Ollama
+  shell: curl -fsSL https://ollama.com/install.sh | sh
+  when: ollama_check.rc != 0
+  become: true
+
+- name: Ensure Ollama service is running and enabled
+  service:
+    name: ollama
+    state: started
+    enabled: yes
+  become: true
+  when: ollama_check.rc != 0

@@ -24,6 +24,7 @@
     - php
     - go
     - lazysql
+    - ollama
     - antigravity
     - postman
     # - bruno
