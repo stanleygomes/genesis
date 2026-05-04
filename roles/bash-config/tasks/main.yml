@@ -41,6 +41,23 @@
     update_cache: yes
   become: true
 
+- name: Install Dust binary
+  shell: |
+    DUST_VERSION=$(curl -s "https://api.github.com/repos/bootandy/dust/releases/latest" | grep -Po '"tag_name": "v\K[^"]*')
+    if [ -z "$DUST_VERSION" ]; then
+      echo "Failed to get dust version. Retrying with fallback version 1.2.4"
+      DUST_VERSION="1.2.4"
+    fi
+    curl -sLo /tmp/dust.tar.gz "https://github.com/bootandy/dust/releases/download/v${DUST_VERSION}/dust-v${DUST_VERSION}-x86_64-unknown-linux-gnu.tar.gz"
+    cd /tmp
+    tar xf dust.tar.gz
+    install dust-v${DUST_VERSION}-x86_64-unknown-linux-gnu/dust /usr/local/bin
+  args:
+    executable: /bin/bash
+    creates: /usr/local/bin/dust
+  become: true
+  ignore_errors: "{{ ansible_check_mode }}"
+
 - name: Add personal aliases
   blockinfile:
     path: "{{ ansible_env.HOME }}/.bashrc"
@@ -58,6 +75,9 @@
       alias ll='eza -lh --icons --grid --group-directories-first'
       alias la='eza -a --icons'
       alias lt='eza --tree --icons'
+
+      # Alias para o dust (substituto moderno do du)
+      alias du='dust'
     state: present
   become: false
 
