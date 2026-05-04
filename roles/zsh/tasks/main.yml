@@ -23,6 +23,13 @@
     shell: /usr/bin/zsh
   become: true
 
+- name: Set Oh My Zsh theme
+  lineinfile:
+    path: "{{ ansible_env.HOME }}/.zshrc"
+    regexp: '^ZSH_THEME='
+    line: 'ZSH_THEME="robbyrussell"'
+  become: false
+
 - name: Add aliases to .zshrc
   blockinfile:
     path: "{{ ansible_env.HOME }}/.zshrc"
