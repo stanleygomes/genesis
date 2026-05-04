@@ -19,14 +19,14 @@
 
 - name: Set zsh as default shell
   user:
-    name: "{{ ansible_env.USER }}"
+    name: "{{ ansible_user_id }}"
     shell: /usr/bin/zsh
   become: true
 
 - name: Set Oh My Zsh theme
   lineinfile:
     path: "{{ ansible_env.HOME }}/.zshrc"
-    regexp: '^ZSH_THEME='
+    regexp: "^ZSH_THEME="
     line: 'ZSH_THEME="robbyrussell"'
   become: false
 
