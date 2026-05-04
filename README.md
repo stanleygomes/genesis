@@ -49,7 +49,7 @@ This command will run the main playbook and ask for sudo password.
 make run
 ```
 
-To run a specific configuration (e.g., `essential` or `full`):
+To run a specific configuration (e.g., `essential` or `desktop`):
 
 ```bash
 make run CONFIG=bash
@@ -65,7 +65,7 @@ make check
 
 ## Project Structure
 
-- `playbooks/`: Folder containing multiple setup configurations (e.g., `full.yml`, `bash.yml`).
+- `playbooks/`: Folder containing multiple setup configurations (e.g., `desktop.yml`, `bash.yml`).
 - `inventory`: Host definition (usually just localhost).
 - `roles/`: Different configuration categories.
 - `configs/`: Specific tool configurations (VS Code, etc.).

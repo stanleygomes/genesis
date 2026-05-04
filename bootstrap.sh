@@ -59,8 +59,8 @@ INDEX=$((selection-1))
 CONFIG=${PLAYBOOKS[$INDEX]}
 
 if [ -z "$CONFIG" ]; then
-    echo "⚠️  Invalid selection, defaulting to 'full'"
-    CONFIG="full"
+    echo "⚠️  Invalid selection, defaulting to 'desktop'"
+    CONFIG="desktop"
 fi
 
 # 6. Run the setup
