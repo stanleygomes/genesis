@@ -65,6 +65,13 @@
     update_cache: yes
   become: true
 
+- name: Install fd-find
+  apt:
+    name: fd-find
+    state: present
+    update_cache: yes
+  become: true
+
 - name: Add personal aliases
   blockinfile:
     path: "{{ ansible_env.HOME }}/.bashrc"
@@ -88,6 +95,10 @@
 
       # Inicialização do zoxide (substituto inteligente para o cd)
       eval "$(zoxide init bash --cmd cd)"
+
+      # Alias para o fd (substituto moderno do find)
+      alias fd='fdfind'
+      alias find='fdfind'
     state: present
   become: false
 
