@@ -56,15 +56,37 @@ for i in "${!PLAYBOOKS[@]}"; do
     echo "  $((i+1))) ${PLAYBOOKS[$i]}"
 done
 
-read -p "Select a configuration [1-${#PLAYBOOKS[@]}] (default: 1): " selection
-selection=${selection:-1}
-INDEX=$((selection-1))
-CONFIG=${PLAYBOOKS[$INDEX]}
+# Explicit selection loop
+CONFIG=""
+while [ -z "$CONFIG" ]; do
+    if [ -t 0 ]; then
+        read -p "Select a configuration [1-${#PLAYBOOKS[@]}]: " selection
+    else
+        if [ -c /dev/tty ]; then
+            read -p "Select a configuration [1-${#PLAYBOOKS[@]}]: " selection < /dev/tty
+        else
+            echo "❌ Headless environment detected without /dev/tty. Please run the script interactively."
+            exit 1
+        fi
+    fi
 
-if [ -z "$CONFIG" ]; then
-    echo "⚠️  Invalid selection, defaulting to 'desktop'"
-    CONFIG="desktop"
-fi
+    # Validate if selection is a number
+    case "$selection" in
+        ''|*[!0-9]*) selection="" ;;
+        *) ;;
+    esac
+
+    if [ -n "$selection" ]; then
+        INDEX=$((selection-1))
+        if [ $INDEX -ge 0 ] && [ $INDEX -lt ${#PLAYBOOKS[@]} ]; then
+            CONFIG=${PLAYBOOKS[$INDEX]}
+        fi
+    fi
+
+    if [ -z "$CONFIG" ]; then
+        echo "⚠️  Invalid selection. Please choose a number between 1 and ${#PLAYBOOKS[@]}."
+    fi
+done
 
 # 6. Run the setup
 echo "🛠️ Running Ansible playbook ($CONFIG)..."
