@@ -79,7 +79,6 @@
 
       # Alias para o bat (no Ubuntu o comando é batcat)
       alias bat='batcat'
-      alias cat='batcat'
 
       # Alias para o eza (substituto moderno do ls)
       alias ls='eza --icons'
@@ -95,7 +94,6 @@
 
       # Alias para o fd (substituto moderno do find)
       alias fd='fdfind'
-      alias find='fdfind'
     state: present
   become: false
 

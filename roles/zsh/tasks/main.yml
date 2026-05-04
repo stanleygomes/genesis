@@ -40,7 +40,6 @@
 
       # Alias para o bat (no Ubuntu o comando é batcat)
       alias bat='batcat'
-      alias cat='batcat'
 
       # Alias para o eza (substituto moderno do ls)
       alias ls='eza --icons'
@@ -56,6 +55,34 @@
 
       # Alias para o fd (substituto moderno do find)
       alias fd='fdfind'
-      alias find='fdfind'
     state: present
+  become: false
+
+- name: Add tool initializations to .zshrc
+  blockinfile:
+    path: "{{ ansible_env.HOME }}/.zshrc"
+    marker: "# {mark} TOOL INITIALIZATIONS"
+    insertafter: EOF
+    block: |
+      # NVM (Node Version Manager)
+      export NVM_DIR="$HOME/.nvm"
+      [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
+      [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"
+
+      # SDKMAN
+      export SDKMAN_DIR="$HOME/.sdkman"
+      [[ -s "$SDKMAN_DIR/bin/sdkman-init.sh" ]] && source "$SDKMAN_DIR/bin/sdkman-init.sh"
+
+      # PNPM
+      export PNPM_HOME="$HOME/.local/share/pnpm"
+      case ":$PATH:" in
+        *":$PNPM_HOME:"*) ;;
+        *) export PATH="$PNPM_HOME:$PATH" ;;
+      esac
+
+      # Go
+      export PATH=$PATH:$HOME/.local/go/bin:$HOME/go/bin
+
+      # Python UV
+      export PATH="$HOME/.local/bin:$PATH"
   become: false
