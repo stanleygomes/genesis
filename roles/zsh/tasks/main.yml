@@ -1,0 +1,54 @@
+---
+- name: Install zsh
+  apt:
+    name: zsh
+    state: present
+    update_cache: yes
+  become: true
+
+- name: Check if Oh My Zsh is installed
+  stat:
+    path: "{{ ansible_env.HOME }}/.oh-my-zsh"
+  register: oh_my_zsh_stat
+  become: false
+
+- name: Install Oh My Zsh
+  shell: sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)" "" --unattended
+  become: false
+  when: not oh_my_zsh_stat.stat.exists
+
+- name: Set zsh as default shell
+  user:
+    name: "{{ ansible_env.USER }}"
+    shell: /usr/bin/zsh
+  become: true
+
+- name: Add aliases to .zshrc
+  blockinfile:
+    path: "{{ ansible_env.HOME }}/.zshrc"
+    marker: "# {mark} PERSONAL ALIASES"
+    block: |
+      # Alias para abrir um novo terminal no diretório atual
+      alias terminal='gnome-terminal --working-directory="$(pwd)" &'
+
+      # Alias para o bat (no Ubuntu o comando é batcat)
+      alias bat='batcat'
+      alias cat='batcat'
+
+      # Alias para o eza (substituto moderno do ls)
+      alias ls='eza --icons'
+      alias ll='eza -lh --icons --grid --group-directories-first'
+      alias la='eza -a --icons'
+      alias lt='eza --tree --icons'
+
+      # Alias para o dust (substituto moderno do du)
+      alias du='dust'
+
+      # Inicialização do zoxide (substituto inteligente para o cd)
+      eval "$(zoxide init zsh --cmd cd)"
+
+      # Alias para o fd (substituto moderno do find)
+      alias fd='fdfind'
+      alias find='fdfind'
+    state: present
+  become: false
