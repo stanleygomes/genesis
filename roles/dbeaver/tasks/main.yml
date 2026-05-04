@@ -1,6 +1,6 @@
 ---
 - name: Check if DBeaver is installed
-  command: dbeaver -version
+  command: dpkg -s dbeaver-ce
   register: dbeaver_check
   ignore_errors: true
   changed_when: false
