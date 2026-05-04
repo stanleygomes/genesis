@@ -1,4 +1,46 @@
 ---
+- name: Install bat
+  apt:
+    name: bat
+    state: present
+    update_cache: yes
+  become: true
+
+- name: Install btop
+  apt:
+    name: btop
+    state: present
+    update_cache: yes
+  become: true
+
+- name: Create directory for eza key
+  file:
+    path: /etc/apt/keyrings
+    state: directory
+    mode: '0755'
+  become: true
+
+- name: Add eza GPG key
+  get_url:
+    url: https://raw.githubusercontent.com/eza-community/eza/main/deb.asc
+    dest: /etc/apt/keyrings/gierens.gpg
+    mode: '0644'
+  become: true
+
+- name: Add eza repository
+  apt_repository:
+    repo: "deb [signed-by=/etc/apt/keyrings/gierens.gpg] http://deb.gierens.de stable main"
+    state: present
+    filename: gierens
+  become: true
+
+- name: Install eza
+  apt:
+    name: eza
+    state: present
+    update_cache: yes
+  become: true
+
 - name: Add personal aliases
   blockinfile:
     path: "{{ ansible_env.HOME }}/.bashrc"
