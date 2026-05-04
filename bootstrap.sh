@@ -40,18 +40,41 @@ fi
 echo "🔐 Setting up temporary passwordless sudo..."
 echo "$USER ALL=(ALL) NOPASSWD:ALL" | sudo tee /etc/sudoers.d/genesis-temporary > /dev/null
 
-# 5. Run the setup
-echo "🛠️ Running Ansible playbook..."
+# 5. Choose configuration
+echo "📋 Available configurations:"
+PLAYBOOKS=($(ls playbooks/*.yml 2>/dev/null | xargs -n 1 basename | sed 's/\.yml$//' | sort))
+
+if [ ${#PLAYBOOKS[@]} -eq 0 ]; then
+    echo "❌ No playbooks found in playbooks/ directory!"
+    exit 1
+fi
+
+for i in "${!PLAYBOOKS[@]}"; do
+    echo "  $((i+1))) ${PLAYBOOKS[$i]}"
+done
+
+read -p "Select a configuration [1-${#PLAYBOOKS[@]}] (default: 1): " selection
+selection=${selection:-1}
+INDEX=$((selection-1))
+CONFIG=${PLAYBOOKS[$INDEX]}
+
+if [ -z "$CONFIG" ]; then
+    echo "⚠️  Invalid selection, defaulting to 'full'"
+    CONFIG="full"
+fi
+
+# 6. Run the setup
+echo "🛠️ Running Ansible playbook ($CONFIG)..."
 cd "$TARGET_DIR"
 
 # Check if Makefile exists to use 'make run', otherwise run ansible-playbook directly
 if [ -f "Makefile" ]; then
-    LC_ALL=en_US.UTF-8 LANG=en_US.UTF-8 PYTHONUTF8=1 make run EXTRA_ARGS=""
+    LC_ALL=en_US.UTF-8 LANG=en_US.UTF-8 PYTHONUTF8=1 make run CONFIG="$CONFIG" EXTRA_ARGS=""
 else
-    LC_ALL=en_US.UTF-8 LANG=en_US.UTF-8 PYTHONUTF8=1 ansible-playbook -i inventory playbooks/full.yml
+    LC_ALL=en_US.UTF-8 LANG=en_US.UTF-8 PYTHONUTF8=1 ansible-playbook -i inventory "playbooks/$CONFIG.yml"
 fi
 
-# 6. Cleanup
+# 7. Cleanup
 echo "🧹 Cleaning up..."
 sudo rm /etc/sudoers.d/genesis-temporary
 
