@@ -55,6 +55,11 @@
 
       # Alias para o fd (substituto moderno do find)
       alias fd='fdfind'
+
+      # Aliases para Neovim
+      alias vim='nvim'
+      alias nano='nvim'
+      alias vi='nvim'
     state: present
   become: false
 

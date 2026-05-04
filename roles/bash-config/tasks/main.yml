@@ -13,6 +13,13 @@
     update_cache: yes
   become: true
 
+- name: Install Neovim
+  apt:
+    name: neovim
+    state: present
+    update_cache: yes
+  become: true
+
 - name: Create directory for eza key
   file:
     path: /etc/apt/keyrings
@@ -94,6 +101,11 @@
 
       # Alias para o fd (substituto moderno do find)
       alias fd='fdfind'
+
+      # Aliases para Neovim
+      alias vim='nvim'
+      alias nano='nvim'
+      alias vi='nvim'
 
       # Hermes Agent completions
       if command -v hermes &> /dev/null; then
