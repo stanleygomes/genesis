@@ -1,0 +1,42 @@
+---
+- name: Check if swap file exists
+  stat:
+    path: /swapfile
+  register: swap_file_check
+
+- name: Create swap file
+  command: fallocate -l 8G /swapfile
+  when: not swap_file_check.stat.exists
+  args:
+    creates: /swapfile
+
+- name: Set swap file permissions
+  file:
+    path: /swapfile
+    owner: root
+    group: root
+    mode: '0600'
+
+- name: Format swap file
+  command: mkswap /swapfile
+  when: not swap_file_check.stat.exists or (swap_file_check.stat.size == 0)
+
+- name: Check if swap is enabled
+  shell: swapon --show | grep -q "/swapfile"
+  register: swap_enabled
+  ignore_errors: true
+  changed_when: false
+
+- name: Enable swap file
+  command: swapon /swapfile
+  when: swap_enabled.rc != 0
+
+- name: Add swap file to fstab
+  mount:
+    name: none
+    src: /swapfile
+    fstype: swap
+    opts: sw
+    passno: 0
+    dump: 0
+    state: present

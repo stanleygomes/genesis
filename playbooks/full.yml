@@ -10,6 +10,7 @@
       setup:
       become: false
   roles:
+    - system
     - git
     - google-chrome
     - gnome-setup
