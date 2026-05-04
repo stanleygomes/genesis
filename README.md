@@ -7,7 +7,7 @@ This repository contains the **Ansible** configuration to automate the setup and
 To set up a fresh machine, just run:
 
 ```bash
-curl -sSL https://is.gd/start_genesis | bash
+curl -sSL https://raw.githubusercontent.com/stanleygomes/genesis/refs/heads/master/bootstrap.sh | bash
 ```
 
 This command will install `git`, `ansible`, clone this repository, and run the setup.
@@ -18,10 +18,10 @@ This command will install `git`, `ansible`, clone this repository, and run the s
 
 ### What does this project do?
 
-- Manages system packages (Apt, Flatpak, Snap).
-- Configures development environments (Node.js/NVM, Java/SDKMAN, Python/UV, pnpm).
-- Installs and configures AI tools (Gemini CLI, GitHub Copilot CLI, Antigravity IDE).
-- Setups CLI/TUI tools with desktop shortcuts (LazyGit, LazyDocker, Harlequin, etc.).
+- Manages system packages (Apt, Flatpak, Snap etc).
+- Configures development environments (Node.js/NVM, Java/SDKMAN, Python/UV, Go, PHP, pnpm).
+- Installs and configures AI tools (Gemini CLI, GitHub Copilot CLI, Antigravity IDE etc).
+- Setups CLI/TUI tools with desktop shortcuts (LazyGit, LazyDocker, Harlequin, etc).
 - Customizes the shell (Bash prompt with git status, aliases).
 - Manages GNOME settings and extensions (Tweaks, Extension Manager).
 
@@ -49,6 +49,12 @@ This command will run the main playbook and ask for sudo password.
 make run
 ```
 
+To run a specific configuration (e.g., `essential` or `full`):
+
+```bash
+make run CONFIG=bash
+```
+
 ### Run in dry-run mode:
 
 This command will run the main playbook in check mode and ask for sudo password.
@@ -59,10 +65,10 @@ make check
 
 ## Project Structure
 
-- `local.yml`: Main playbook.
+- `playbooks/`: Folder containing multiple setup configurations (e.g., `full.yml`, `bash.yml`).
 - `inventory`: Host definition (usually just localhost).
 - `roles/`: Different configuration categories.
-- `vars/`: Configuration variables.
+- `configs/`: Specific tool configurations (VS Code, etc.).
 
 ## Roles Included
 
