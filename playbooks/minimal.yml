@@ -14,6 +14,7 @@
     - system
     - git
     - docker
+    - nvm
     - gemini-cli
     - github-copilot
     - hermes-agent
