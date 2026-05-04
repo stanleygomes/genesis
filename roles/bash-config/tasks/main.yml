@@ -21,10 +21,7 @@
   become: true
 
 - name: Add eza GPG key
-  get_url:
-    url: https://raw.githubusercontent.com/eza-community/eza/main/deb.asc
-    dest: /etc/apt/keyrings/gierens.gpg
-    mode: '0644'
+  shell: curl -fsSL https://raw.githubusercontent.com/eza-community/eza/main/deb.asc | gpg --dearmor --yes -o /etc/apt/keyrings/gierens.gpg
   become: true
 
 - name: Add eza repository
