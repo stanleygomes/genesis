@@ -21,7 +21,7 @@
   become: false
 
 - name: Install Hermes Agent
-  shell: curl -fsSL https://hermes-agent.nousresearch.com/install.sh | bash -s -- --skip-setup
+  shell: curl -fsSL https://raw.githubusercontent.com/NousResearch/hermes-agent/main/scripts/install.sh | bash -s -- --skip-setup
   args:
     executable: /bin/bash
   when: hermes_check.rc != 0
