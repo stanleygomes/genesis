@@ -2,7 +2,7 @@
   "editor.lineHeight": 1.5,
   "editor.smoothScrolling": true,
   "editor.tabSize": 2,
-  "terminal.integrated.fontFamily": "'Fira Code Nerd Font', 'Jetbrains Mono Nerd Font', 'Hack Nerd Font', 'monospace'",
+  "terminal.integrated.fontFamily": "JetBrains Mono",
   "terminal.integrated.lineHeight": 1.5,
   "sublimeTextKeymap.promptV3Features": true,
   "editor.multiCursorModifier": "ctrlCmd",
@@ -18,7 +18,7 @@
     "suppressLineUncommittedWarning": false,
     "suppressNoRepositoryWarning": false,
     "suppressResultsExplorerNotice": false,
-    "suppressShowKeyBindingsNotice": true,
+    "suppressShowKeyBindingsNotice": true
   },
   "editor.wordWrap": "off",
   "gitlens.historyExplorer.enabled": true,
@@ -43,10 +43,10 @@
   "javascript.updateImportsOnFileMove.enabled": "always",
   "workbench.colorCustomizations": {},
   "[json]": {
-    "editor.defaultFormatter": "vscode.json-language-features",
+    "editor.defaultFormatter": "vscode.json-language-features"
   },
   "eslint.options": {
-    "extensions": [".ts", ".html"],
+    "extensions": [".ts", ".html"]
   },
   "eslint.workingDirectories": ["./hubsales-frontend"],
   "editor.renderControlCharacters": true,
@@ -71,8 +71,8 @@
   "java.imports.gradle.wrapper.checksums": [
     {
       "sha256": "1ca04e74ee966719e1155341da6fca086d0d21686db29e3efdebd03817e639e0",
-      "allowed": false,
-    },
+      "allowed": false
+    }
   ],
   "security.workspace.trust.untrustedFiles": "open",
   "dart.flutterSdkPath": "/Users/youruser/flutter_dev",
@@ -84,7 +84,7 @@
     "editor.suggest.snippetsPreventQuickSuggestions": false,
     "editor.suggestSelection": "first",
     "editor.tabCompletion": "onlySnippets",
-    "editor.wordBasedSuggestions": "off",
+    "editor.wordBasedSuggestions": "off"
   },
   "editor.accessibilitySupport": "off",
   "dart.debugExternalPackageLibraries": false,
@@ -93,7 +93,7 @@
   "thunder-client.customLocation": "$HOME/projects/middleware-hubsales/api-docs/",
   "window.dialogStyle": "custom",
   "editor.unicodeHighlight.allowedCharacters": {
-    "​": true,
+    "​": true
   },
   "Notes.notesLocation": "/home/stanley/Downloads/notes-vscode",
   "java.format.enabled": false,
@@ -103,19 +103,19 @@
   "java.dependency.packagePresentation": "hierarchical",
   "java.debug.settings.stepping.skipClasses": [],
   "debug.javascript.defaultRuntimeExecutable": {
-    "pwa-node": "node",
+    "pwa-node": "node"
   },
   "remote.autoForwardPortsSource": "hybrid",
   "java.debug.settings.vmArgs": "",
   "sonarlint.connectedMode.connections.sonarqube": [
     {
-      "serverUrl": "https://sonarqube-staging.luizalabs.com",
-    },
+      "serverUrl": "https://sonarqube-staging.luizalabs.com"
+    }
   ],
   "sonarlint.rules": {
     "java:S2200": {
-      "level": "off",
-    },
+      "level": "off"
+    }
   },
   "eslint.run": "onSave",
   "editor.defaultFormatter": "esbenp.prettier-vscode",
@@ -129,8 +129,8 @@
     "password": "pkJ3qsdNA@CsA#",
     "secure": true,
     "secureOptions": {
-      "rejectUnauthorized": true,
-    },
+      "rejectUnauthorized": true
+    }
   },
   "chat.instructionsFilesLocations": {
     ".github/instructions": true,
@@ -139,7 +139,7 @@
     "/tmp/postman-collections-post-response.instructions.md": true,
     "/tmp/postman-collections-pre-request.instructions.md": true,
     "/tmp/postman-folder-post-response.instructions.md": true,
-    "/tmp/postman-folder-pre-request.instructions.md": true,
+    "/tmp/postman-folder-pre-request.instructions.md": true
   },
   "extensions.supportUntrustedWorkspaces": {},
   "geminicodeassist.project": "do-it-todo-app",
@@ -154,7 +154,7 @@
   "editor.cursorSmoothCaretAnimation": "on",
   "vscode_custom_css.imports": [
     "file:////home/stanley/.vscode/extensions/gental.smoothui-1.1.5/css.css",
-    "file:////home/stanley/.vscode/extensions/gental.smoothui-1.1.5/js.js",
+    "file:////home/stanley/.vscode/extensions/gental.smoothui-1.1.5/js.js"
   ],
   "breadcrumbs.enabled": false,
   "terminal.integrated.smoothScrolling": true,
@@ -171,5 +171,5 @@
   "workbench.colorTheme": "Noemi Dark",
   "workbench.productIconTheme": "fluent-icons",
   "files.autoSave": "afterDelay",
-  "php.executablePath": "",
+  "php.executablePath": ""
 }

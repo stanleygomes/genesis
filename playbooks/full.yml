@@ -13,6 +13,7 @@
     - git
     - google-chrome
     - gnome-setup
+    - fonts
     # - mongodb-compass
     - docker
     - dbeaver

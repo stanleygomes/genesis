@@ -1,0 +1,14 @@
+---
+- name: Check if JetBrains Mono font is installed
+  command: dpkg -s fonts-jetbrains-mono
+  register: font_check
+  ignore_errors: true
+  changed_when: false
+  become: false
+
+- name: Install JetBrains Mono font
+  apt:
+    name: fonts-jetbrains-mono
+    state: present
+  become: true
+  when: font_check.rc != 0

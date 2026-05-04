@@ -123,3 +123,35 @@
       [[ -s "$HOME/.sdkman/bin/sdkman-init.sh" ]] && source "$HOME/.sdkman/bin/sdkman-init.sh"
     state: present
   become: false
+
+- name: Check if gsettings is available
+  command: which gsettings
+  register: gsettings_check
+  ignore_errors: true
+  changed_when: false
+  become: false
+
+- name: Set JetBrains Mono as the default monospace font
+  command: gsettings set org.gnome.desktop.interface monospace-font-name 'JetBrains Mono 13'
+  become: false
+  when: gsettings_check.rc == 0
+  ignore_errors: true
+
+- name: Get default GNOME Terminal profile
+  command: gsettings get org.gnome.Terminal.ProfilesList default
+  register: terminal_profile
+  become: false
+  when: gsettings_check.rc == 0
+  changed_when: false
+  ignore_errors: true
+
+- name: Set JetBrains Mono in GNOME Terminal
+  shell: |
+    PROFILE_ID={{ terminal_profile.stdout | replace("'", "") }}
+    gsettings set org.gnome.Terminal.Legacy.Profile:/org/gnome/terminal/legacy/profiles:/:${PROFILE_ID}/ use-system-font false
+    gsettings set org.gnome.Terminal.Legacy.Profile:/org/gnome/terminal/legacy/profiles:/:${PROFILE_ID}/ font 'JetBrains Mono 13'
+  become: false
+  when:
+    - gsettings_check.rc == 0
+    - terminal_profile.rc == 0
+  ignore_errors: true
