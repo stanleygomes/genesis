@@ -31,7 +31,10 @@ if [ ! -d "$TARGET_DIR" ]; then
     git clone "$REPO_URL" "$TARGET_DIR"
 else
     echo "📂 Genesis repository already exists at $TARGET_DIR. Updating..."
-    cd "$TARGET_DIR"
+fi
+
+cd "$TARGET_DIR"
+if [ -d ".git" ]; then
     git pull
 fi
 
@@ -42,7 +45,7 @@ echo "$USER ALL=(ALL) NOPASSWD:ALL" | sudo tee /etc/sudoers.d/genesis-temporary 
 
 # 5. Choose configuration
 echo "📋 Available configurations:"
-PLAYBOOKS=($(ls playbooks/*.yml 2>/dev/null | xargs -n 1 basename | sed 's/\.yml$//' | sort))
+PLAYBOOKS=($(find playbooks -maxdepth 1 -name "*.yml" -exec basename {} .yml \; | sort))
 
 if [ ${#PLAYBOOKS[@]} -eq 0 ]; then
     echo "❌ No playbooks found in playbooks/ directory!"
@@ -65,7 +68,6 @@ fi
 
 # 6. Run the setup
 echo "🛠️ Running Ansible playbook ($CONFIG)..."
-cd "$TARGET_DIR"
 
 # Check if Makefile exists to use 'make run', otherwise run ansible-playbook directly
 if [ -f "Makefile" ]; then
