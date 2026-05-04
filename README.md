@@ -20,7 +20,7 @@ This command will install `git`, `ansible`, clone this repository, and run the s
 
 - Manages system packages (Apt, Flatpak, Snap etc).
 - Configures development environments (Node.js/NVM, Java/SDKMAN, Python/UV, Go, PHP, pnpm).
-- Installs and configures AI tools (Gemini CLI, GitHub Copilot CLI, Antigravity IDE etc).
+- Installs and configures AI tools (Gemini CLI, GitHub Copilot CLI, Hermes Agent, Antigravity IDE etc).
 - Setups CLI/TUI tools with desktop shortcuts (LazyGit, LazyDocker, Harlequin, etc).
 - Customizes the shell (Bash prompt with git status, aliases).
 - Manages GNOME settings and extensions (Tweaks, Extension Manager).
@@ -72,7 +72,7 @@ make check
 
 ## Roles Included
 
-- **AI Tools**: `antigravity`, `gemini-cli`, `github-copilot`.
+- **AI Tools**: `antigravity`, `gemini-cli`, `github-copilot`, `hermes-agent`.
 - **Development**: `docker`, `nvm`, `pnpm`, `sdkman`, `python-uv`, `php`.
 - **GUI Apps**: `google-chrome`, `mongodb-compass`, `dbeaver`, `postman`.
 - **CLI/TUI**: `btop`, `harlequin`, `lazydocker`, `lazygit`, `lazysql`, `posting`.

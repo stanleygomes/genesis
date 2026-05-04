@@ -27,5 +27,6 @@
     - lazydocker
     - posting
     - fonts
+    - hermes-agent
     - bash-config
     - zsh

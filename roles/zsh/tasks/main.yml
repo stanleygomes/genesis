@@ -85,4 +85,9 @@
 
       # Python UV
       export PATH="$HOME/.local/bin:$PATH"
+
+      # Hermes Agent completions
+      if (( $+commands[hermes] )); then
+        eval "$(hermes completion zsh)"
+      fi
   become: false

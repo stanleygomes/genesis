@@ -94,6 +94,11 @@
 
       # Alias para o fd (substituto moderno do find)
       alias fd='fdfind'
+
+      # Hermes Agent completions
+      if command -v hermes &> /dev/null; then
+        eval "$(hermes completion bash)"
+      fi
     state: present
   become: false
 
