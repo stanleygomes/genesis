@@ -1,5 +1,5 @@
 ---
-- name: Workstation Setup (desktop)
+- name: Workstation Setup (custom1)
   hosts: localhost
   connection: local
   become: true

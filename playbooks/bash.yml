@@ -1,5 +1,5 @@
 ---
-- name: Workstation Setup (Essential)
+- name: Workstation Setup (bash)
   hosts: localhost
   connection: local
   become: true
