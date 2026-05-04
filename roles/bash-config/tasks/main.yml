@@ -6,6 +6,10 @@
     block: |
       # Alias para abrir um novo terminal no diretório atual
       alias terminal='gnome-terminal --working-directory="$(pwd)" &'
+
+      # Alias para o bat (no Ubuntu o comando é batcat)
+      alias bat='batcat'
+      alias cat='batcat'
     state: present
   become: false
 

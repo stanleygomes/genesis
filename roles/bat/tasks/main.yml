@@ -1,0 +1,7 @@
+---
+- name: Install bat
+  apt:
+    name: bat
+    state: present
+    update_cache: yes
+  become: true
