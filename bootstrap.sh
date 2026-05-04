@@ -48,7 +48,7 @@ cd "$TARGET_DIR"
 if [ -f "Makefile" ]; then
     LC_ALL=en_US.UTF-8 LANG=en_US.UTF-8 PYTHONUTF8=1 make run EXTRA_ARGS=""
 else
-    LC_ALL=en_US.UTF-8 LANG=en_US.UTF-8 PYTHONUTF8=1 ansible-playbook -i inventory local.yml
+    LC_ALL=en_US.UTF-8 LANG=en_US.UTF-8 PYTHONUTF8=1 ansible-playbook -i inventory playbooks/full.yml
 fi
 
 # 6. Cleanup

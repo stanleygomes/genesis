@@ -1,16 +1,18 @@
 .PHONY: run check syntax explain help
 
 # Variables
-PLAYBOOK = local.yml
+CONFIG ?= full
+PLAYBOOK = playbooks/$(CONFIG).yml
 INVENTORY = inventory
 
 help:
 	@echo "Genesis Workstation Makefile"
 	@echo "---------------------------"
-	@echo "make run      - Run the main playbook"
-	@echo "make check    - Run in dry-run mode (simulation)"
+	@echo "make run      - Run the playbook (default: CONFIG=full)"
+	@echo "                Usage: make run CONFIG=essential"
+	@echo "make check    - Run in dry-run mode"
 	@echo "make syntax   - Check playbook syntax"
-	@echo "make list     - List all tasks that would be executed"
+	@echo "make list     - List all tasks"
 	@echo "make explain  - Show hosts and mapped variables"
 	@echo "make bootstrap - Run the bootstrap script"
 
