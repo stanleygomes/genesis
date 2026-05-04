@@ -58,6 +58,13 @@
   become: true
   ignore_errors: "{{ ansible_check_mode }}"
 
+- name: Install zoxide
+  apt:
+    name: zoxide
+    state: present
+    update_cache: yes
+  become: true
+
 - name: Add personal aliases
   blockinfile:
     path: "{{ ansible_env.HOME }}/.bashrc"
@@ -78,6 +85,9 @@
 
       # Alias para o dust (substituto moderno do du)
       alias du='dust'
+
+      # Inicialização do zoxide (substituto inteligente para o cd)
+      eval "$(zoxide init bash --cmd cd)"
     state: present
   become: false
 
