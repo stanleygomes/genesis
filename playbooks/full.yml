@@ -33,8 +33,7 @@
     - lazygit
     - lazydocker
     - posting
-    - btop
-    - bat
+    - terminal-utils
     - filezilla
     - bash-config
     - desktop-entries

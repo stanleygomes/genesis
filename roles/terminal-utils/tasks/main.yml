@@ -5,3 +5,10 @@
     state: present
     update_cache: yes
   become: true
+
+- name: Install btop
+  apt:
+    name: btop
+    state: present
+    update_cache: yes
+  become: true
