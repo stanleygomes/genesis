@@ -1,5 +1,5 @@
 ---
-- name: Workstation Setup (Full)
+- name: Workstation Setup (Essential)
   hosts: localhost
   connection: local
   become: true
@@ -9,31 +9,21 @@
     - name: Gather facts as normal user to set ansible_env correctly
       setup:
       become: false
+
   roles:
     - git
-    - google-chrome
-    - gnome-setup
-    # - mongodb-compass
     - docker
-    - dbeaver
     - sdkman
     - nvm
     - pnpm
-    # - harlequin
+    - harlequin
     - python-uv
     - php
     - go
-    # - lazysql
-    # - ollama
-    - antigravity
-    - postman
-    # - bruno
     - gemini-cli
     - github-copilot
     - lazygit
     - lazydocker
     - posting
     - btop
-    - filezilla
     - bash-config
-    - desktop-entries
