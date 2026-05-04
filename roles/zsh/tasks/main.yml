@@ -93,6 +93,7 @@
 
       # Hermes Agent completions
       if (( $+commands[hermes] )); then
-        eval "$(hermes completion zsh)"
+        eval "$(hermes completion zsh | grep -v '_hermes \"\$@\"')"
+        compdef _hermes hermes
       fi
   become: false

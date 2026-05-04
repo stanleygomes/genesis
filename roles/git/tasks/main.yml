@@ -13,11 +13,26 @@
   become: true
   when: git_check.rc != 0
 
+- name: Check existing Git User Name
+  command: git config --global user.name
+  register: existing_git_user
+  ignore_errors: true
+  changed_when: false
+  become: false
+
 - name: Configure Git User Name
   git_config:
     name: user.name
     value: "{{ git_user_name }}"
     scope: global
+  become: false
+  when: existing_git_user.stdout == ""
+
+- name: Check existing Git User Email
+  command: git config --global user.email
+  register: existing_git_email
+  ignore_errors: true
+  changed_when: false
   become: false
 
 - name: Configure Git User Email
@@ -26,6 +41,7 @@
     value: "{{ git_user_email }}"
     scope: global
   become: false
+  when: existing_git_email.stdout == ""
 
 - name: Create .ssh directory
   file:
