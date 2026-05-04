@@ -16,7 +16,6 @@ miguelsolorio.fluent-icons
 ms-vscode-remote.remote-containers
 ms-vscode.sublime-keybindings
 natizyskunk.sftp
-pomdtr.excalidraw-editor
 purocean.drawio-preview
 ryanluker.vscode-coverage-gutters
 stanleygomes.codex-notes
