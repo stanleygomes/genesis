@@ -26,3 +26,12 @@ def checklist(title, text, options_list):
     result = run_whiptail(cmd)
     if result is None: return []
     return re.findall(r'"([^"]*)"', result)
+
+def inputbox(title, text, default=""):
+    """Mostra uma caixa de entrada de texto."""
+    cmd = [
+        "whiptail", "--title", title,
+        "--inputbox", text,
+        "10", "60", default
+    ]
+    return run_whiptail(cmd)

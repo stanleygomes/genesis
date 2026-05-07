@@ -8,7 +8,15 @@ sys.path.append(os.path.dirname(os.path.abspath(__file__)))
 from genesis import ui, playbooks, runner
 
 def main():
-    # 1. Obter playbooks disponíveis
+    # 1. Obter dados do usuário
+    user_name = ui.inputbox("Identificação", "Digite seu Nome Completo (para o Git):", "Genesis User")
+    user_email = ui.inputbox("Identificação", "Digite seu E-mail (para o Git):", "user@example.com")
+    
+    if user_name is None or user_email is None:
+        print("⚠️  Configuração cancelada.")
+        sys.exit(0)
+
+    # 2. Obter playbooks disponíveis
     available = playbooks.get_available()
     if not available:
         print("❌ Nenhum playbook encontrado!")
@@ -26,8 +34,13 @@ def main():
         print("⚠️  Nenhuma configuração selecionada. Saindo.")
         sys.exit(0)
 
-    # 3. Para cada selecionado, verificar sub-opções
-    extra_vars = []
+    # 3. Preparar variáveis básicas
+    extra_vars = [
+        f"git_user_name='{user_name}'",
+        f"git_user_email='{user_email}'"
+    ]
+
+    # 4. Para cada selecionado, verificar sub-opções
     for p in selected_playbooks:
         sub_opts = playbooks.get_sub_options(p)
         if sub_opts:
