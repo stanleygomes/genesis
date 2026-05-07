@@ -95,19 +95,94 @@ done
 # Always include 'common'
 FINAL_CONFIGS="common $SELECTED_CONFIGS"
 
+# --- Sub-options handling ---
+EXTRA_VARS=""
+for config in $SELECTED_CONFIGS; do
+    PLAYBOOK_FILE="playbooks/$config.yml"
+    if [ ! -f "$PLAYBOOK_FILE" ]; then continue; fi
+
+    SUB_OPTIONS_LINE=$(grep "^# @sub-options:" "$PLAYBOOK_FILE")
+    if [ -n "$SUB_OPTIONS_LINE" ]; then
+        echo ""
+        echo "🔍 Playbook '$config' has optional components."
+        # Extract options (remove header and split by comma)
+        OPTIONS=($(echo "$SUB_OPTIONS_LINE" | cut -d: -f2- | tr ',' ' ' | xargs))
+        
+        for i in "${!OPTIONS[@]}"; do
+            echo "  $((i+1))) ${OPTIONS[$i]}"
+        done
+        
+        SUB_SELECTIONS=""
+        while [ -z "$SUB_SELECTIONS" ]; do
+            if [ -t 0 ]; then
+                read -p "Select components to KEEP (numbers separated by space, or 'all') [1-${#OPTIONS[@]}]: " selections
+            else
+                if [ -c /dev/tty ]; then
+                    read -p "Select components to KEEP (numbers separated by space, or 'all') [1-${#OPTIONS[@]}]: " selections < /dev/tty
+                else
+                    selections="all"
+                fi
+            fi
+
+            if [ "$selections" = "all" ]; then
+                SUB_SELECTIONS="all"
+            else
+                for selection in $selections; do
+                    if [[ "$selection" =~ ^[0-9]+$ ]]; then
+                        INDEX=$((selection-1))
+                        if [ $INDEX -ge 0 ] && [ $INDEX -lt ${#OPTIONS[@]} ]; then
+                            SUB_SELECTIONS="$SUB_SELECTIONS ${OPTIONS[$INDEX]}"
+                        fi
+                    fi
+                done
+                SUB_SELECTIONS=$(echo $SUB_SELECTIONS | xargs)
+            fi
+
+            if [ -z "$SUB_SELECTIONS" ]; then
+                echo "⚠️  Invalid selection. Please choose at least one component."
+            fi
+        done
+
+        # If not 'all', disable the ones not selected
+        if [ "$SUB_SELECTIONS" != "all" ]; then
+            for opt in "${OPTIONS[@]}"; do
+                # Check if opt is in SUB_SELECTIONS
+                if [[ ! " $SUB_SELECTIONS " =~ " $opt " ]]; then
+                    # Convert - to _ for variable name
+                    VAR_NAME="install_${opt//-/_}"
+                    EXTRA_VARS="$EXTRA_VARS $VAR_NAME=false"
+                fi
+            done
+        fi
+    fi
+done
+
+# Prepare EXTRA_ARGS for Makefile
+FINAL_EXTRA_ARGS=""
+if [ -n "$EXTRA_VARS" ]; then
+    FINAL_EXTRA_ARGS="EXTRA_ARGS='-e \"$EXTRA_VARS\"'"
+fi
+
 # 6. Run the setup
+echo ""
 echo "🛠️ Running Ansible playbooks ($FINAL_CONFIGS)..."
+if [ -n "$EXTRA_VARS" ]; then
+    echo "⚙️  With custom variables: $EXTRA_VARS"
+fi
 
 # Check if Makefile exists to use 'make run', otherwise run ansible-playbook directly
 if [ -f "Makefile" ]; then
-    LC_ALL=en_US.UTF-8 LANG=en_US.UTF-8 PYTHONUTF8=1 make run CONFIG="$FINAL_CONFIGS" EXTRA_ARGS=""
+    # Note: We pass EXTRA_ARGS as a string to make
+    LC_ALL=en_US.UTF-8 LANG=en_US.UTF-8 PYTHONUTF8=1 eval "make run CONFIG=\"$FINAL_CONFIGS\" $FINAL_EXTRA_ARGS"
 else
-    # Fallback if Makefile is missing (manual construction of playbook paths)
+    # Fallback if Makefile is missing
     PLAYBOOK_PATHS=""
     for cfg in $FINAL_CONFIGS; do
         PLAYBOOK_PATHS="$PLAYBOOK_PATHS playbooks/$cfg.yml"
     done
-    LC_ALL=en_US.UTF-8 LANG=en_US.UTF-8 PYTHONUTF8=1 ansible-playbook -i inventory $PLAYBOOK_PATHS
+    ANSIBLE_VARS=""
+    if [ -n "$EXTRA_VARS" ]; then ANSIBLE_VARS="-e \"$EXTRA_VARS\""; fi
+    LC_ALL=en_US.UTF-8 LANG=en_US.UTF-8 PYTHONUTF8=1 eval "ansible-playbook -i inventory $PLAYBOOK_PATHS $ANSIBLE_VARS"
 fi
 
 # 7. Cleanup
