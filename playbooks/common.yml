@@ -1,5 +1,5 @@
 ---
-- name: Common config used for all configurations
+- name: Common configuration used for all setups
   hosts: localhost
   connection: local
   become: true

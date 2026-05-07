@@ -1,5 +1,5 @@
 ---
-- name: Workstation Setup (bash)
+- name: AI tools setup
   hosts: localhost
   connection: local
   become: true
@@ -11,12 +11,6 @@
       become: false
 
   roles:
-    - system
-    - git
-    - docker
-    - nvm
     - gemini-cli
     - github-copilot
     - hermes-agent
-    - bash-config
-    - zsh
