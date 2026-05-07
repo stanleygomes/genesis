@@ -27,47 +27,47 @@ This command will install `git`, `ansible`, clone this repository, and run the s
 
 ### Prerequisites
 
-Before running the playbooks, you need to have **Ansible** installed on your machine.
+Before running the playbooks, you need to have **Ansible** installed on your machine. If you use `bootstrap.sh`, you don't need to install Ansible manually.
 
 > [!NOTE]
 > How to install: https://docs.ansible.com/projects/ansible/latest/installation_guide/intro_installation.html
 
 ## Usage
 
-1. Clone the repository:
+### 1. Interactive Installer (Recommended)
+
+The easiest way to set up is using the interactive installer:
 
 ```bash
-git clone https://github.com/stanleygomes/genesis.git
-cd genesis
+./bootstrap.sh
 ```
 
-2. Run the main playbook:
+This will open a menu where you can:
+- Select multiple playbooks (using **Space**).
+- Choose optional components for specific categories (sub-menus).
+- See a summary before the installation begins.
 
-This command will run the main playbook and ask for sudo password.
+### 2. Manual Execution (via Makefile)
 
-```
-make run
-```
-
-To run a specific configuration or multiple configurations (e.g., `bash` and `desktop`):
+To run a specific configuration or multiple configurations:
 
 ```bash
 make run CONFIG="bash desktop"
 ```
 
-### Run in dry-run mode:
+### 3. Run in dry-run mode:
 
-This command will run the main playbook in check mode and ask for sudo password.
-
-```
-make check
+```bash
+make check CONFIG="desktop"
 ```
 
 ## Project Structure
 
-- `playbooks/`: Folder containing multiple setup configurations (e.g., `desktop.yml`, `bash.yml`).
-- `inventory`: Host definition (usually just localhost).
-- `roles/`: Different configuration categories.
+- `playbooks/`: Setup configurations (e.g., `common.yml`, `desktop.yml`, `ai.yml`).
+- `roles/`: Modular Ansible roles.
+- `scripts/`: Python interactive installer logic.
+- `group_vars/`: Global configuration variables (`all.yml`).
+- `inventory`: Host definition (localhost).
 - `configs/`: Specific tool configurations (VS Code, etc.).
 
 ## Roles Included

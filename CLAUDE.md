@@ -6,32 +6,35 @@ This document contains guidelines and useful commands for working with this Ansi
 
 ### Makefile (Recommended)
 
-- **Install/Run**: `make run` (Use `CONFIG=name` to choose playbook)
+- **Bootstrap**: `./bootstrap.sh` (Interactive installer)
+- **Install/Run**: `make run` (Use `CONFIG="name1 name2"` to choose playbooks)
 - **Simulate (Dry Run)**: `make check`
 - **Check Syntax**: `make syntax`
 - **List Tasks**: `make list`
 
 ### Ansible (Manual)
 
-- **Run Playbook**: `ansible-playbook playbooks/desktop.yml --ask-become-pass`
-- **Check Syntax**: `ansible-playbook playbooks/desktop.yml --syntax-check`
-- **Dry Run Mode**: `ansible-playbook playbooks/desktop.yml --check`
-- **List Tasks**: `ansible-playbook playbooks/desktop.yml --list-tasks`
+- **Run Playbook**: `ansible-playbook -i inventory playbooks/desktop.yml --ask-become-pass`
+- **Check Syntax**: `ansible-playbook -i inventory playbooks/desktop.yml --syntax-check`
 
-### Linting
+## Interactive Installer & Sub-options
 
-- **Ansible Lint**: `ansible-lint playbooks/*.yml`
+The project uses a Python-based interactive installer (`scripts/setup.py`) that supports sub-menus.
+
+- **Metadata**: Add `# @sub-options: role1, role2` to the top of a playbook to enable sub-menus.
+- **Conditional Roles**: In playbooks, use `when: install_role_name | default(true) | bool` to make roles optional. Hyphens in role names should be converted to underscores in variable names (e.g., `hermes-agent` -> `install_hermes_agent`).
 
 ## Style Guidelines
 
 - **Naming**: Use descriptive names in English for tasks.
 - **Modules**: Always prefer native Ansible modules over `shell` or `command` modules.
-- **Idempotency**: Ensure all roles are idempotent (can be run multiple times without side effects).
-- **Variables**: Keep specific variables in the `vars/` directory and secrets (if any) in Ansible Vault.
-- **Roles**: Organize logic into modular roles for easier maintenance.
-- **Environment**: For tools requiring Node.js (via NVM) or Java (via SDKMAN), always source the appropriate init script in `shell` tasks.
+- **Idempotency**: Ensure all roles are idempotent.
+- **Variables**: Global variables in `group_vars/all.yml`. Role defaults in `roles/<name>/defaults/main.yml`.
 
-- `playbooks/`: Setup configurations (`desktop.yml`, `bash.yml`, etc.).
-- `roles/`: Logic separated by concern (e.g., `docker`, `git`, `gnome-setup`).
-- `configs/`: External configuration files (VS Code, etc.).
+## Project Structure
+
+- `playbooks/`: Setup configurations.
+- `roles/`: Logic separated by concern.
+- `scripts/`: Python-based installer logic (`genesis` package).
+- `group_vars/`: Global variable definitions.
 - `inventory`: Host definitions.
