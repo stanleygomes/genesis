@@ -9,8 +9,8 @@ from genesis import ui, playbooks, runner
 
 def main():
     # 1. Obter dados do usuário
-    user_name = ui.inputbox("Identificação", "Digite seu Nome Completo (para o Git):", "Genesis User")
-    user_email = ui.inputbox("Identificação", "Digite seu E-mail (para o Git):", "user@example.com")
+    user_name = ui.inputbox("Identificação", "Digite seu Nome Completo (para o Git):", "")
+    user_email = ui.inputbox("Identificação", "Digite seu E-mail (para o Git):", "")
     
     if user_name is None or user_email is None:
         print("⚠️  Configuração cancelada.")
