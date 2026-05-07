@@ -1,5 +1,5 @@
 ---
-- name: Workstation Setup (desktop)
+- name: Desktop Setup
   hosts: localhost
   connection: local
   become: true
@@ -10,16 +10,12 @@
       setup:
       become: false
   roles:
-    - system
-    - git
     - google-chrome
     - gnome-setup
     - fonts
     # - mongodb-compass
-    - docker
     - dbeaver
     - sdkman
-    - nvm
     - pnpm
     # - harlequin
     - python-uv
@@ -30,12 +26,8 @@
     - antigravity
     - postman
     # - bruno
-    - gemini-cli
-    - github-copilot
     - lazygit
     - lazydocker
     - posting
     - filezilla
-    - bash-config
-    - zsh
     - desktop-entries
