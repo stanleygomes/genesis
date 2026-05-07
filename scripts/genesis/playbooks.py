@@ -4,7 +4,7 @@ PLAYBOOKS_DIR = "playbooks"
 COMMON_PLAYBOOK = "common"
 
 def get_available():
-    """Lê a pasta de playbooks e retorna uma lista de nomes (exceto o common)."""
+    """Reads the playbooks directory and returns a list of names (except common)."""
     if not os.path.exists(PLAYBOOKS_DIR):
         return []
     
@@ -15,7 +15,7 @@ def get_available():
     return sorted(playbooks)
 
 def get_sub_options(playbook_name):
-    """Lê o arquivo do playbook em busca da linha @sub-options."""
+    """Reads the playbook file looking for the @sub-options line."""
     path = os.path.join(PLAYBOOKS_DIR, f"{playbook_name}.yml")
     if not os.path.exists(path):
         return []

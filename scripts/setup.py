@@ -2,62 +2,62 @@
 import sys
 import os
 
-# Adiciona o diretório atual ao path para encontrar o pacote genesis
+# Add the current directory to the path to find the genesis package
 sys.path.append(os.path.dirname(os.path.abspath(__file__)))
 
 from genesis import ui, playbooks, runner
 
 def main():
-    # 1. Obter dados do usuário
-    user_name = ui.inputbox("Identificação", "Digite seu Nome Completo (para o Git):", "")
-    user_email = ui.inputbox("Identificação", "Digite seu E-mail (para o Git):", "")
+    # 1. Get user data
+    user_name = ui.inputbox("Identification", "Enter your Full Name (for Git):", "")
+    user_email = ui.inputbox("Identification", "Enter your E-mail (for Git):", "")
     
     if user_name is None or user_email is None:
-        print("⚠️  Configuração cancelada.")
+        print("⚠️  Setup cancelled.")
         sys.exit(0)
 
-    # 2. Obter playbooks disponíveis
+    # 2. Get available playbooks
     available = playbooks.get_available()
     if not available:
-        print("❌ Nenhum playbook encontrado!")
+        print("❌ No playbooks found!")
         sys.exit(1)
 
-    # 2. Selecionar playbooks principais
-    options_list = [(p, f"Instalar {p}", "OFF") for p in available]
+    # 3. Select main playbooks
+    options_list = [(p, f"Install {p} configuration", "OFF") for p in available]
     selected_playbooks = ui.checklist(
-        "Genesis Setup - Seleção de Playbooks",
-        "Use ESPAÇO para marcar/desmarcar e ENTER para confirmar:",
+        "Genesis Setup - Playbook Selection",
+        "Use SPACE to mark/unmark and ENTER to confirm:",
         options_list
     )
     
     if not selected_playbooks:
-        print("⚠️  Nenhuma configuração selecionada. Saindo.")
+        print("⚠️  No configuration selected. Exiting.")
         sys.exit(0)
 
-    # 3. Preparar variáveis básicas
+    # 4. Prepare basic variables
     extra_vars = [
         f"git_user_name='{user_name}'",
         f"git_user_email='{user_email}'"
     ]
 
-    # 4. Para cada selecionado, verificar sub-opções
+    # 5. For each selected playbook, check sub-options
     for p in selected_playbooks:
         sub_opts = playbooks.get_sub_options(p)
         if sub_opts:
-            sub_options_list = [(opt, f"Componente: {opt}", "ON") for opt in sub_opts]
+            sub_options_list = [(opt, f"Component: {opt}", "ON") for opt in sub_opts]
             kept = ui.checklist(
-                f"Opções: {p}",
-                f"Selecione o que deseja manter para '{p}':",
+                f"Options: {p}",
+                f"Select what you want to KEEP for '{p}':",
                 sub_options_list
             )
 
-            # Desativar o que não foi selecionado
+            # Disable what was not selected
             for opt in sub_opts:
                 if opt not in kept:
                     var_name = f"install_{opt.replace('-', '_')}"
                     extra_vars.append(f"{var_name}=false")
 
-    # 4. Executar
+    # 6. Execute
     config_str = f"{playbooks.COMMON_PLAYBOOK} {' '.join(selected_playbooks)}"
     runner.execute(config_str, extra_vars)
 

@@ -1,17 +1,17 @@
 import os
 
 def show_summary(config_str, extra_vars):
-    """Mostra um resumo da instalação no console."""
+    """Shows an installation summary in the console."""
     print("\n" + "="*50)
-    print("🚀 RESUMO DA INSTALAÇÃO")
+    print("🚀 INSTALLATION SUMMARY")
     print("="*50)
     print(f"Playbooks: {config_str}")
     if extra_vars:
-        print(f"Variáveis customizadas: {', '.join(extra_vars)}")
+        print(f"Custom variables: {', '.join(extra_vars)}")
     print("="*50 + "\n")
 
 def execute(config_str, extra_vars):
-    """Monta e executa o comando final do Ansible via Make."""
+    """Assembles and executes the final Ansible command via Make."""
     extra_args = ""
     if extra_vars:
         vars_str = " ".join(extra_vars)

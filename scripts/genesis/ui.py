@@ -2,7 +2,7 @@ import subprocess
 import re
 
 def run_whiptail(cmd):
-    """Executa o whiptail e captura a saída do stderr."""
+    """Executes whiptail and captures stderr output."""
     result = subprocess.run(cmd, stderr=subprocess.PIPE)
     if result.returncode != 0:
         return None
@@ -10,8 +10,8 @@ def run_whiptail(cmd):
 
 def checklist(title, text, options_list):
     """
-    Mostra um menu de checklist do whiptail.
-    options_list: lista de (tag, description, status)
+    Shows a whiptail checklist menu.
+    options_list: list of (tag, description, status)
     """
     options = []
     for tag, desc, status in options_list:
@@ -28,7 +28,7 @@ def checklist(title, text, options_list):
     return re.findall(r'"([^"]*)"', result)
 
 def inputbox(title, text, default=""):
-    """Mostra uma caixa de entrada de texto."""
+    """Shows a text input box."""
     cmd = [
         "whiptail", "--title", title,
         "--inputbox", text,
