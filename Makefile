@@ -2,14 +2,15 @@
 
 # Variables
 CONFIG ?= desktop
-PLAYBOOK = playbooks/$(CONFIG).yml
+PLAYBOOKS_DIR = playbooks
+PLAYBOOK_FILES = $(foreach cfg,$(CONFIG),$(PLAYBOOKS_DIR)/$(cfg).yml)
 INVENTORY = inventory
 
 help:
 	@echo "Genesis Workstation Makefile"
 	@echo "---------------------------"
 	@echo "make run      - Run the playbook (default: CONFIG=desktop)"
-	@echo "                Usage: make run CONFIG=essential"
+	@echo "                Usage: make run CONFIG=\"bash desktop\""
 	@echo "make check    - Run in dry-run mode"
 	@echo "make syntax   - Check playbook syntax"
 	@echo "make list     - List all tasks"
@@ -23,16 +24,16 @@ bootstrap:
 	./bootstrap.sh
 
 run:
-	ansible-playbook -i $(INVENTORY) $(PLAYBOOK) $(EXTRA_ARGS)
+	ansible-playbook -i $(INVENTORY) $(PLAYBOOK_FILES) $(EXTRA_ARGS)
 
 check:
-	ansible-playbook -i $(INVENTORY) $(PLAYBOOK) --check $(EXTRA_ARGS)
+	ansible-playbook -i $(INVENTORY) $(PLAYBOOK_FILES) --check $(EXTRA_ARGS)
 
 syntax:
-	ansible-playbook -i $(INVENTORY) $(PLAYBOOK) --syntax-check
+	ansible-playbook -i $(INVENTORY) $(PLAYBOOK_FILES) --syntax-check
 
 list:
-	ansible-playbook -i $(INVENTORY) $(PLAYBOOK) --list-tasks
+	ansible-playbook -i $(INVENTORY) $(PLAYBOOK_FILES) --list-tasks
 
 explain:
 	ansible-inventory --list -y

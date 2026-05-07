@@ -49,10 +49,10 @@ This command will run the main playbook and ask for sudo password.
 make run
 ```
 
-To run a specific configuration (e.g., `essential` or `desktop`):
+To run a specific configuration or multiple configurations (e.g., `bash` and `desktop`):
 
 ```bash
-make run CONFIG=bash
+make run CONFIG="bash desktop"
 ```
 
 ### Run in dry-run mode:

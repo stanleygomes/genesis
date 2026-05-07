@@ -45,10 +45,11 @@ echo "$USER ALL=(ALL) NOPASSWD:ALL" | sudo tee /etc/sudoers.d/genesis-temporary 
 
 # 5. Choose configuration
 echo "📋 Available configurations:"
-PLAYBOOKS=($(find playbooks -maxdepth 1 -name "*.yml" -exec basename {} .yml \; | sort))
+# List playbooks except 'common.yml' which is mandatory
+PLAYBOOKS=($(find playbooks -maxdepth 1 -name "*.yml" ! -name "common.yml" -exec basename {} .yml \; | sort))
 
 if [ ${#PLAYBOOKS[@]} -eq 0 ]; then
-    echo "❌ No playbooks found in playbooks/ directory!"
+    echo "❌ No optional playbooks found in playbooks/ directory!"
     exit 1
 fi
 
@@ -56,46 +57,57 @@ for i in "${!PLAYBOOKS[@]}"; do
     echo "  $((i+1))) ${PLAYBOOKS[$i]}"
 done
 
-# Explicit selection loop
-CONFIG=""
-while [ -z "$CONFIG" ]; do
+# Multiple selection loop
+SELECTED_CONFIGS=""
+while [ -z "$SELECTED_CONFIGS" ]; do
     if [ -t 0 ]; then
-        read -p "Select a configuration [1-${#PLAYBOOKS[@]}]: " selection
+        read -p "Select additional configurations (numbers separated by space, or 'all') [1-${#PLAYBOOKS[@]}]: " selections
     else
         if [ -c /dev/tty ]; then
-            read -p "Select a configuration [1-${#PLAYBOOKS[@]}]: " selection < /dev/tty
+            read -p "Select additional configurations (numbers separated by space, or 'all') [1-${#PLAYBOOKS[@]}]: " selections < /dev/tty
         else
             echo "❌ Headless environment detected without /dev/tty. Please run the script interactively."
             exit 1
         fi
     fi
 
-    # Validate if selection is a number
-    case "$selection" in
-        ''|*[!0-9]*) selection="" ;;
-        *) ;;
-    esac
-
-    if [ -n "$selection" ]; then
-        INDEX=$((selection-1))
-        if [ $INDEX -ge 0 ] && [ $INDEX -lt ${#PLAYBOOKS[@]} ]; then
-            CONFIG=${PLAYBOOKS[$INDEX]}
-        fi
+    if [ "$selections" = "all" ]; then
+        SELECTED_CONFIGS="${PLAYBOOKS[*]}"
+    else
+        for selection in $selections; do
+            # Validate if selection is a number
+            if [[ "$selection" =~ ^[0-9]+$ ]]; then
+                INDEX=$((selection-1))
+                if [ $INDEX -ge 0 ] && [ $INDEX -lt ${#PLAYBOOKS[@]} ]; then
+                    SELECTED_CONFIGS="$SELECTED_CONFIGS ${PLAYBOOKS[$INDEX]}"
+                fi
+            fi
+        done
+        # Trim leading space
+        SELECTED_CONFIGS=$(echo $SELECTED_CONFIGS | xargs)
     fi
 
-    if [ -z "$CONFIG" ]; then
-        echo "⚠️  Invalid selection. Please choose a number between 1 and ${#PLAYBOOKS[@]}."
+    if [ -z "$SELECTED_CONFIGS" ]; then
+        echo "⚠️  Invalid selection. Please choose at least one playbook."
     fi
 done
 
+# Always include 'common'
+FINAL_CONFIGS="common $SELECTED_CONFIGS"
+
 # 6. Run the setup
-echo "🛠️ Running Ansible playbook ($CONFIG)..."
+echo "🛠️ Running Ansible playbooks ($FINAL_CONFIGS)..."
 
 # Check if Makefile exists to use 'make run', otherwise run ansible-playbook directly
 if [ -f "Makefile" ]; then
-    LC_ALL=en_US.UTF-8 LANG=en_US.UTF-8 PYTHONUTF8=1 make run CONFIG="$CONFIG" EXTRA_ARGS=""
+    LC_ALL=en_US.UTF-8 LANG=en_US.UTF-8 PYTHONUTF8=1 make run CONFIG="$FINAL_CONFIGS" EXTRA_ARGS=""
 else
-    LC_ALL=en_US.UTF-8 LANG=en_US.UTF-8 PYTHONUTF8=1 ansible-playbook -i inventory "playbooks/$CONFIG.yml"
+    # Fallback if Makefile is missing (manual construction of playbook paths)
+    PLAYBOOK_PATHS=""
+    for cfg in $FINAL_CONFIGS; do
+        PLAYBOOK_PATHS="$PLAYBOOK_PATHS playbooks/$cfg.yml"
+    done
+    LC_ALL=en_US.UTF-8 LANG=en_US.UTF-8 PYTHONUTF8=1 ansible-playbook -i inventory $PLAYBOOK_PATHS
 fi
 
 # 7. Cleanup
