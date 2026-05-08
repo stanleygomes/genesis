@@ -1,21 +1,11 @@
 ---
-- name: Install bat
+- name: Install terminal utilities (bat, btop, neovim)
   apt:
-    name: bat
-    state: present
-    update_cache: yes
-  become: true
-
-- name: Install btop
-  apt:
-    name: btop
-    state: present
-    update_cache: yes
-  become: true
-
-- name: Install Neovim
-  apt:
-    name: neovim
+    name:
+      - bat
+      - btop
+      - neovim
+      - zsh
     state: present
     update_cache: yes
   become: true
@@ -24,7 +14,7 @@
   file:
     path: /etc/apt/keyrings
     state: directory
-    mode: '0755'
+    mode: "0755"
   become: true
 
 - name: Add eza GPG key
@@ -62,13 +52,6 @@
   become: true
   ignore_errors: "{{ ansible_check_mode }}"
 
-- name: Install zoxide
-  apt:
-    name: zoxide
-    state: absent
-    update_cache: yes
-  become: true
-
 - name: Install fd-find
   apt:
     name: fd-find
@@ -76,15 +59,43 @@
     update_cache: yes
   become: true
 
-- name: Add personal aliases
+# --- ZSH Specific Setup ---
+
+- name: Check if Oh My Zsh is installed
+  stat:
+    path: "{{ ansible_env.HOME }}/.oh-my-zsh"
+  register: oh_my_zsh_stat
+  become: false
+
+- name: Install Oh My Zsh
+  shell: sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)" "" --unattended
+  become: false
+  when: not oh_my_zsh_stat.stat.exists
+
+- name: Set zsh as default shell
+  shell: chsh -s /usr/bin/zsh
+  become: false
+  changed_when: false
+  ignore_errors: true
+
+- name: Set Oh My Zsh theme
+  lineinfile:
+    path: "{{ ansible_env.HOME }}/.zshrc"
+    regexp: "^ZSH_THEME="
+    line: 'ZSH_THEME="robbyrussell"'
+  become: false
+
+# --- Shared Configurations (Aliases) ---
+
+- name: Add common aliases to .bashrc and .zshrc
   blockinfile:
-    path: "{{ ansible_env.HOME }}/.bashrc"
+    path: "{{ ansible_env.HOME }}/{{ item }}"
     marker: "# {mark} PERSONAL ALIASES"
     block: |
       # Alias para abrir um novo terminal no diretório atual
       alias terminal='gnome-terminal --working-directory="$(pwd)" &'
 
-      # Alias para o bat (no Ubuntu o comando é batcat)
+      # Alias para o bat/cat (no Ubuntu o comando é batcat)
       alias bat='batcat'
       alias cat='batcat'
 
@@ -104,15 +115,50 @@
       alias vim='nvim'
       alias nano='nvim'
       alias vi='nvim'
-
-      # Hermes Agent completions
-      if command -v hermes &> /dev/null; then
-        eval "$(hermes completion bash)"
-      fi
     state: present
   become: false
+  loop:
+    - .bashrc
+    - .zshrc
 
-- name: Add git branch parser and custom PS1
+# --- Shell Specific Initializations ---
+
+- name: Add tool initializations to .zshrc
+  blockinfile:
+    path: "{{ ansible_env.HOME }}/.zshrc"
+    marker: "# {mark} TOOL INITIALIZATIONS"
+    insertafter: EOF
+    block: |
+      # Node.js
+      export NVM_DIR="$HOME/.nvm"
+      [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
+      [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"
+
+      # Java
+      export SDKMAN_DIR="$HOME/.sdkman"
+      [[ -s "$SDKMAN_DIR/bin/sdkman-init.sh" ]] && source "$SDKMAN_DIR/bin/sdkman-init.sh"
+
+      # PNPM
+      export PNPM_HOME="$HOME/.local/share/pnpm"
+      case ":$PATH:" in
+        *":$PNPM_HOME:"*) ;;
+        *) export PATH="$PNPM_HOME:$PATH" ;;
+      esac
+
+      # Go
+      export PATH=$PATH:$HOME/.local/go/bin:$HOME/go/bin
+
+      # Python
+      export PATH="$HOME/.local/bin:$PATH"
+
+      # Hermes Agent completions
+      if (( $+commands[hermes] )); then
+        eval "$(hermes completion zsh | grep -v '_hermes \"\$@\"')"
+        compdef _hermes hermes
+      fi
+  become: false
+
+- name: Add git branch parser and custom PS1 to .bashrc
   blockinfile:
     path: "{{ ansible_env.HOME }}/.bashrc"
     marker: "# {mark} CUSTOM PROMPT (PS1)"
@@ -125,7 +171,7 @@
     state: present
   become: false
 
-- name: Ensure SDKMAN is at the end of bashrc
+- name: Ensure Java (SDKMAN) is at the end of bashrc
   blockinfile:
     path: "{{ ansible_env.HOME }}/.bashrc"
     marker: "# {mark} JAVA CONFIGURATION"
@@ -137,34 +183,14 @@
     state: present
   become: false
 
-- name: Check if gsettings is available
-  command: which gsettings
-  register: gsettings_check
-  ignore_errors: true
-  changed_when: false
+- name: Add Hermes completion to .bashrc
+  blockinfile:
+    path: "{{ ansible_env.HOME }}/.bashrc"
+    marker: "# {mark} HERMES COMPLETION"
+    block: |
+      # Hermes Agent completions
+      if command -v hermes &> /dev/null; then
+        eval "$(hermes completion bash)"
+      fi
+    state: present
   become: false
-
-- name: Set JetBrains Mono as the default monospace font
-  command: gsettings set org.gnome.desktop.interface monospace-font-name 'JetBrains Mono 13'
-  become: false
-  when: gsettings_check.rc == 0
-  ignore_errors: true
-
-- name: Get default GNOME Terminal profile
-  command: gsettings get org.gnome.Terminal.ProfilesList default
-  register: terminal_profile
-  become: false
-  when: gsettings_check.rc == 0
-  changed_when: false
-  ignore_errors: true
-
-- name: Set JetBrains Mono in GNOME Terminal
-  shell: |
-    PROFILE_ID={{ terminal_profile.stdout | replace("'", "") }}
-    gsettings set org.gnome.Terminal.Legacy.Profile:/org/gnome/terminal/legacy/profiles:/:${PROFILE_ID}/ use-system-font false
-    gsettings set org.gnome.Terminal.Legacy.Profile:/org/gnome/terminal/legacy/profiles:/:${PROFILE_ID}/ font 'JetBrains Mono 13'
-  become: false
-  when:
-    - gsettings_check.rc == 0
-    - terminal_profile.rc == 0
-  ignore_errors: true
