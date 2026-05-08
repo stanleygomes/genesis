@@ -128,7 +128,7 @@
 - name: Ensure SDKMAN is at the end of bashrc
   blockinfile:
     path: "{{ ansible_env.HOME }}/.bashrc"
-    marker: "# {mark} SDKMAN CONFIGURATION"
+    marker: "# {mark} JAVA CONFIGURATION"
     insertafter: EOF
     block: |
       #THIS MUST BE AT THE END OF THE FILE FOR SDKMAN TO WORK!!!

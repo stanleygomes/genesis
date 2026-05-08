@@ -16,9 +16,8 @@
     - mongodb-compass
     - docker
     - dbeaver
-    - sdkman
-    - pnpm
-    - python-uv
+    - java
+    - python
     - go
     - bruno
     - github-copilot

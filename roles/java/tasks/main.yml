@@ -1,12 +1,12 @@
 ---
-- name: Check for SDKMAN dependencies
+- name: Check for Java dependencies
   command: dpkg -s curl zip unzip
   register: sdkman_deps_check
   ignore_errors: true
   changed_when: false
   become: false
 
-- name: Install dependencies for SDKMAN
+- name: Install dependencies for Java
   apt:
     name:
       - curl
@@ -16,13 +16,13 @@
   become: true
   when: sdkman_deps_check.rc != 0
 
-- name: Check if SDKMAN is installed
+- name: Check if Java (SDKMAN) is installed
   stat:
     path: "{{ ansible_env.HOME }}/.sdkman"
   register: sdkman_stat
   become: false
 
-- name: Download and install SDKMAN
+- name: Download and install Java (via SDKMAN)
   shell: curl -s "https://get.sdkman.io" | bash
   when: not sdkman_stat.stat.exists
   args:

@@ -67,12 +67,12 @@
     marker: "# {mark} TOOL INITIALIZATIONS"
     insertafter: EOF
     block: |
-      # NVM (Node Version Manager)
+      # Node.js
       export NVM_DIR="$HOME/.nvm"
       [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
       [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"
 
-      # SDKMAN
+      # Java
       export SDKMAN_DIR="$HOME/.sdkman"
       [[ -s "$SDKMAN_DIR/bin/sdkman-init.sh" ]] && source "$SDKMAN_DIR/bin/sdkman-init.sh"
 
@@ -86,7 +86,7 @@
       # Go
       export PATH=$PATH:$HOME/.local/go/bin:$HOME/go/bin
 
-      # Python UV
+      # Python
       export PATH="$HOME/.local/bin:$PATH"
 
       # Hermes Agent completions

@@ -15,10 +15,9 @@
     - fonts
     # - mongodb-compass
     - dbeaver
-    - sdkman
-    - pnpm
+    - java
     # - harlequin
-    - python-uv
+    - python
     - php
     - go
     # - lazysql

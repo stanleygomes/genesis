@@ -1,5 +1,5 @@
 ---
-- name: Common configuration used for all setups
+- name: Programing Languages Setup
   hosts: localhost
   connection: local
   become: true
@@ -9,10 +9,9 @@
     - name: Gather facts as normal user to set ansible_env correctly
       setup:
       become: false
-
   roles:
-    - system
-    - git
-    - docker
-    - bash-config
-    - zsh
+    - java
+    - python
+    - php
+    - go
+    - node
