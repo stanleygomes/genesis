@@ -1,4 +1,13 @@
 ---
+- name: Install Python environment dependencies
+  apt:
+    name:
+      - python3-venv
+      - python3-pip
+    state: present
+    update_cache: yes
+  become: true
+
 - name: Check if uv is installed
   stat:
     path: "{{ ansible_env.HOME }}/.local/bin/uv"
