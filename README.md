@@ -22,7 +22,7 @@ This command will install `git`, `ansible`, clone this repository, and run the s
 - Configures development environments (Node.js with pnpm, Java, Python, Go, PHP).
 - Installs and configures AI tools (Gemini CLI, GitHub Copilot CLI, Hermes Agent, Antigravity IDE etc).
 - Setups CLI/TUI tools with desktop shortcuts (LazyGit, LazyDocker, Harlequin, etc).
-- Customizes the shell (Bash prompt with git status, aliases).
+- Customizes the shell and terminal (Zsh with Oh My Zsh, Bash, aliases, GNOME Terminal settings).
 - Manages GNOME settings and extensions (Tweaks, Extension Manager).
 
 ### Prerequisites
@@ -76,4 +76,4 @@ make check CONFIG="desktop"
 - **Development**: `docker`, `node` (includes pnpm), `java`, `python`, `php`.
 - **GUI Apps**: `google-chrome`, `mongodb-compass`, `dbeaver`, `postman`.
 - **CLI/TUI**: `btop`, `harlequin`, `lazydocker`, `lazygit`, `lazysql`, `posting`.
-- **System/UI**: `gnome-setup`, `bash-config`, `desktop-entries`.
+- **System/UI**: `gnome-setup`, `terminal`, `desktop-entries`.
