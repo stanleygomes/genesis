@@ -97,7 +97,16 @@
       alias du='dust'
 
       # Inicialização do zoxide (substituto inteligente para o cd)
-      eval "$(zoxide init bash --cmd cd)"
+      eval "$(zoxide init bash --cmd z)"
+
+      # Wrapper para usar zoxide como alias do cd
+      cd() {
+        if [ -z "$1" ]; then
+          builtin cd
+        else
+          z "$@"
+        fi
+      }
 
       # Alias para o fd (substituto moderno do find)
       alias fd='fdfind'
