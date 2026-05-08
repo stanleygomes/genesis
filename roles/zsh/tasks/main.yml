@@ -18,10 +18,10 @@
   when: not oh_my_zsh_stat.stat.exists
 
 - name: Set zsh as default shell
-  user:
-    name: "{{ ansible_user_id }}"
-    shell: /usr/bin/zsh
-  become: true
+  shell: chsh -s /usr/bin/zsh
+  become: false
+  changed_when: false
+  ignore_errors: true
 
 - name: Set Oh My Zsh theme
   lineinfile:
@@ -38,8 +38,9 @@
       # Alias para abrir um novo terminal no diretório atual
       alias terminal='gnome-terminal --working-directory="$(pwd)" &'
 
-      # Alias para o bat (no Ubuntu o comando é batcat)
+      # Alias para o bat/cat (no Ubuntu o comando é batcat)
       alias bat='batcat'
+      alias cat='batcat'
 
       # Alias para o eza (substituto moderno do ls)
       alias ls='eza --icons'
@@ -49,9 +50,6 @@
 
       # Alias para o dust (substituto moderno do du)
       alias du='dust'
-
-      # Inicialização do zoxide (substituto inteligente para o cd)
-      eval "$(zoxide init zsh --cmd cd)"
 
       # Alias para o fd (substituto moderno do find)
       alias fd='fdfind'
