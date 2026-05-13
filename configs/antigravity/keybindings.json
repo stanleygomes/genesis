@@ -49,7 +49,7 @@
     "when": "editorTextFocus",
   },
   {
-    "key": "ctrl+shift+r",
+    "key": "ctrl+shift+p",
     "command": "workbench.action.openRecent",
   },
   {
@@ -79,5 +79,27 @@
     "key": "shift+alt+o",
     "command": "-editor.action.organizeImports",
     "when": "textInputFocus && !editorReadonly && supportedCodeAction =~ /(\\s|^)source\\.organizeImports\\b/",
+  },
+  {
+    "key": "ctrl+j",
+    "command": "workbench.action.terminal.toggleTerminal",
+    "when": "terminal.active",
+  },
+  {
+    "key": "ctrl+shift+[BracketLeft]",
+    "command": "-workbench.action.terminal.toggleTerminal",
+    "when": "terminal.active",
+  },
+  {
+    "key": "ctrl+k",
+    "command": "antigravity.agentViewContainerId",
+  },
+  {
+    "key": "ctrl+p",
+    "command": "workbench.action.showCommands",
+  },
+  {
+    "key": "ctrl+shift+p",
+    "command": "-workbench.action.showCommands",
   },
 ]
