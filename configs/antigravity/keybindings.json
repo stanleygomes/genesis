@@ -102,4 +102,14 @@
     "key": "ctrl+shift+p",
     "command": "-workbench.action.showCommands",
   },
+  {
+    "key": "ctrl+m",
+    "command": "workbench.action.toggleZenMode",
+    "when": "!isAuxiliaryWindowFocusedContext",
+  },
+  {
+    "key": "ctrl+k z",
+    "command": "-workbench.action.toggleZenMode",
+    "when": "!isAuxiliaryWindowFocusedContext",
+  },
 ]
