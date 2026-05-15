@@ -69,11 +69,10 @@
     groups: docker
     append: yes
   register: user_group_update
-  when: docker_group_check.rc != 0
 
 - name: Reset connection to apply group changes
   meta: reset_connection
-  when: docker_group_check.rc != 0 and user_group_update.changed
+  when: user_group_update.changed
 
 - name: Ensure Docker service is running
   service:
