@@ -45,17 +45,19 @@ def main():
     for p in selected_playbooks:
         sub_opts = playbooks.get_sub_options(p)
         if sub_opts:
-            sub_options_list = [(opt, f"Component: {opt}", "ON") for opt in sub_opts]
+            sub_options_list = [(opt, f"Component: {opt}", "OFF") for opt in sub_opts]
             kept = ui.checklist(
                 f"Options: {p}",
-                f"Select what you want to KEEP for '{p}':",
+                f"Select what you want to install for '{p}':",
                 sub_options_list
             )
 
-            # Disable what was not selected
+            # Explicitly set variables for all options
             for opt in sub_opts:
-                if opt not in kept:
-                    var_name = f"install_{opt.replace('-', '_')}"
+                var_name = f"install_{opt.replace('-', '_')}"
+                if kept and opt in kept:
+                    extra_vars.append(f"{var_name}=true")
+                else:
                     extra_vars.append(f"{var_name}=false")
 
     # 6. Execute

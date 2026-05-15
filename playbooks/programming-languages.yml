@@ -10,8 +10,8 @@
       setup:
       become: false
   roles:
-    - { role: java, when: install_java | default(true) }
-    - { role: python, when: install_python | default(true) }
-    - { role: php, when: install_php | default(true) }
-    - { role: go, when: install_go | default(true) }
-    - { role: node, when: install_node | default(true) }
+    - { role: java, when: install_java | default(false) | bool }
+    - { role: python, when: install_python | default(false) | bool }
+    - { role: php, when: install_php | default(false) | bool }
+    - { role: go, when: install_go | default(false) | bool }
+    - { role: node, when: install_node | default(false) | bool }
