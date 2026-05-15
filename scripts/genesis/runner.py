@@ -1,4 +1,5 @@
-import os
+import subprocess
+import shlex
 
 def show_summary(config_str, extra_vars):
     """Shows an installation summary in the console."""
@@ -12,12 +13,24 @@ def show_summary(config_str, extra_vars):
 
 def execute(config_str, extra_vars):
     """Assembles and executes the final Ansible command via Make."""
-    extra_args = ""
+    # Build the extra vars string safely
+    extra_args_val = ""
     if extra_vars:
         vars_str = " ".join(extra_vars)
-        extra_args = f"EXTRA_ARGS='-e \"{vars_str}\"'"
+        extra_args_val = f"-e {shlex.quote(vars_str)}"
 
-    command = f"make run CONFIG=\"{config_str}\" {extra_args}"
+    # Use subprocess.run with a list of arguments to avoid shell quoting issues
+    cmd = ["make", "run", f"CONFIG={config_str}"]
+    if extra_args_val:
+        cmd.append(f"EXTRA_ARGS={extra_args_val}")
     
     show_summary(config_str, extra_vars)
-    os.system(command)
+    
+    try:
+        subprocess.run(cmd, check=True)
+    except subprocess.CalledProcessError as e:
+        print(f"\n❌ Error during execution: {e}")
+        exit(e.returncode)
+    except KeyboardInterrupt:
+        print("\n⚠️  Execution interrupted by user.")
+        exit(1)

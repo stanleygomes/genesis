@@ -35,9 +35,10 @@ def main():
         sys.exit(0)
 
     # 4. Prepare basic variables
+    import shlex
     extra_vars = [
-        f"git_user_name='{user_name}'",
-        f"git_user_email='{user_email}'"
+        f"git_user_name={shlex.quote(user_name)}",
+        f"git_user_email={shlex.quote(user_email)}"
     ]
 
     # 5. For each selected playbook, check sub-options
