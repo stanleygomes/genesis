@@ -11,9 +11,9 @@ TARGET_DIR="$HOME/projects/genesis"
 echo "🚀 Starting Genesis Workstation Setup..."
 
 # 1. Install basic dependencies
-echo "📦 Installing system requirements (git, python, whiptail, ansible)..."
+echo "📦 Installing system requirements (git, python, whiptail, ansible, make)..."
 sudo apt update
-sudo apt install -y git python3 whiptail ansible software-properties-common
+sudo apt install -y git python3 whiptail ansible make software-properties-common
 
 # 2. Clone or update the repository
 if [ ! -d "$TARGET_DIR" ]; then
