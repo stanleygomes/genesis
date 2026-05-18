@@ -31,7 +31,9 @@ def main():
     if default_name and default_email:
         user_name = default_name
         user_email = default_email
-        print(f"ℹ️  Using existing Git config: {user_name} <{user_email}>")
+        print("✅ Git is already configured!")
+        print(f"   Name:  {user_name}")
+        print(f"   Email: {user_email}\n")
     else:
         user_name = ui.inputbox("Identification", "Enter your Full Name (for Git):", default_name)
         if user_name is None:
