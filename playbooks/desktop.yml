@@ -1,3 +1,4 @@
+# @sub-options: antigravity, vscode
 ---
 - name: Desktop Setup
   hosts: localhost
@@ -22,8 +23,8 @@
     - go
     # - lazysql
     # - ollama
-    - antigravity
-    - vscode
+    - { role: antigravity, when: install_antigravity | default(false) | bool }
+    - { role: vscode, when: install_vscode | default(false) | bool }
     - postman
     # - bruno
     - lazygit
