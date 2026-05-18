@@ -1,20 +1,47 @@
 #!/usr/bin/env python3
 import sys
 import os
+import subprocess
 
 # Add the current directory to the path to find the genesis package
 sys.path.append(os.path.dirname(os.path.abspath(__file__)))
 
 from genesis import ui, playbooks, runner
 
+def get_git_config(key):
+    try:
+        result = subprocess.run(
+            ["git", "config", "--global", key],
+            stdout=subprocess.PIPE,
+            stderr=subprocess.PIPE,
+            text=True,
+            check=False
+        )
+        if result.returncode == 0:
+            return result.stdout.strip()
+    except Exception:
+        pass
+    return ""
+
 def main():
     # 1. Get user data
-    user_name = ui.inputbox("Identification", "Enter your Full Name (for Git):", "")
-    user_email = ui.inputbox("Identification", "Enter your E-mail (for Git):", "")
-    
-    if user_name is None or user_email is None:
-        print("⚠️  Setup cancelled.")
-        sys.exit(0)
+    default_name = get_git_config("user.name")
+    default_email = get_git_config("user.email")
+
+    if default_name and default_email:
+        user_name = default_name
+        user_email = default_email
+        print(f"ℹ️  Using existing Git config: {user_name} <{user_email}>")
+    else:
+        user_name = ui.inputbox("Identification", "Enter your Full Name (for Git):", default_name)
+        if user_name is None:
+            print("⚠️  Setup cancelled.")
+            sys.exit(0)
+
+        user_email = ui.inputbox("Identification", "Enter your E-mail (for Git):", default_email)
+        if user_email is None:
+            print("⚠️  Setup cancelled.")
+            sys.exit(0)
 
     # 2. Get available playbooks
     available = playbooks.get_available()
