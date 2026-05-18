@@ -23,6 +23,7 @@
     # - lazysql
     # - ollama
     - antigravity
+    - vscode
     - postman
     # - bruno
     - lazygit

@@ -1,0 +1,82 @@
+---
+- name: Check if VS Code is installed
+  command: dpkg -s code
+  register: vscode_check
+  ignore_errors: true
+  changed_when: false
+  become: false
+
+- name: Install dependencies for VS Code
+  apt:
+    name:
+      - wget
+      - gnupg
+      - apt-transport-https
+    state: present
+  become: true
+  when: vscode_check.rc != 0
+
+- name: Ensure keyrings directory exists
+  file:
+    path: /etc/apt/keyrings
+    state: directory
+    mode: '0755'
+  become: true
+  when: vscode_check.rc != 0
+
+- name: Download VS Code GPG key
+  shell: curl -fsSL https://packages.microsoft.com/keys/microsoft.asc | gpg --dearmor --yes -o /etc/apt/keyrings/packages.microsoft.gpg
+  become: true
+  args:
+    creates: /etc/apt/keyrings/packages.microsoft.gpg
+  when: vscode_check.rc != 0
+
+- name: Add VS Code repository
+  apt_repository:
+    repo: "deb [arch=amd64,arm64,armhf signed-by=/etc/apt/keyrings/packages.microsoft.gpg] https://packages.microsoft.com/repos/code stable main"
+    state: present
+    filename: vscode
+  become: true
+  when: vscode_check.rc != 0
+
+- name: Install VS Code
+  apt:
+    name: code
+    state: present
+    update_cache: yes
+  become: true
+  when: vscode_check.rc != 0
+
+- name: Create VS Code User config directory
+  file:
+    path: "{{ ansible_env.HOME }}/.config/Code/User"
+    state: directory
+    mode: '0755'
+  become: false
+
+- name: Sync VS Code settings
+  copy:
+    src: "{{ playbook_dir }}/../configs/ide/settings.json"
+    dest: "{{ ansible_env.HOME }}/.config/Code/User/settings.json"
+    mode: '0644'
+  become: false
+
+- name: Sync VS Code keybindings
+  copy:
+    src: "{{ playbook_dir }}/../configs/ide/keybindings.json"
+    dest: "{{ ansible_env.HOME }}/.config/Code/User/keybindings.json"
+    mode: '0644'
+  become: false
+
+- name: Read extensions list
+  set_fact:
+    extensions: "{{ lookup('file', playbook_dir + '/../configs/ide/extensions.txt').splitlines() }}"
+  become: false
+
+- name: Install VS Code extensions
+  shell: code --install-extension {{ item }}
+  loop: "{{ extensions }}"
+  become: false
+  register: ext_install
+  changed_when: "'is already installed' not in ext_install.stdout"
+  ignore_errors: true

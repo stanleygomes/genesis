@@ -35,21 +35,21 @@
 
 - name: Sync Antigravity settings
   copy:
-    src: "{{ playbook_dir }}/../configs/antigravity/settings.json"
+    src: "{{ playbook_dir }}/../configs/ide/settings.json"
     dest: "{{ ansible_env.HOME }}/.config/Antigravity/User/settings.json"
     mode: '0644'
   become: false
 
 - name: Sync Antigravity keybindings
   copy:
-    src: "{{ playbook_dir }}/../configs/antigravity/keybindings.json"
+    src: "{{ playbook_dir }}/../configs/ide/keybindings.json"
     dest: "{{ ansible_env.HOME }}/.config/Antigravity/User/keybindings.json"
     mode: '0644'
   become: false
 
 - name: Read extensions list
   set_fact:
-    extensions: "{{ lookup('file', playbook_dir + '/../configs/antigravity/extensions.txt').splitlines() }}"
+    extensions: "{{ lookup('file', playbook_dir + '/../configs/ide/extensions.txt').splitlines() }}"
   become: false
 
 - name: Install Antigravity extensions
