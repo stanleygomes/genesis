@@ -19,6 +19,7 @@ natizyskunk.sftp
 purocean.drawio-preview
 ryanluker.vscode-coverage-gutters
 stanleygomes.codex-notes
+stanleygomes.parable-workspaces
 stanleygomes.noemi-theme
 zobo.php-intellisense
 golang.go
