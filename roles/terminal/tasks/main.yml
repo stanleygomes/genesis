@@ -1,9 +1,10 @@
 ---
-- name: Install terminal utilities (bat, btop, neovim)
+- name: Install terminal utilities (bat, btop, jq, neovim)
   apt:
     name:
       - bat
       - btop
+      - jq
       - neovim
       - zsh
     state: present
