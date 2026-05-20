@@ -1,29 +1,137 @@
 ---
-- name: Ensure keyrings directory exists
-  file:
-    path: /etc/apt/keyrings
-    state: directory
-    mode: '0755'
+- name: Remove legacy Antigravity package from apt
+  apt:
+    name: antigravity
+    state: absent
   become: true
 
-- name: Download Antigravity GPG key
-  shell: curl -fsSL https://us-central1-apt.pkg.dev/doc/repo-signing-key.gpg | gpg --dearmor --yes -o /etc/apt/keyrings/antigravity-repo-key.gpg
-  become: true
-  args:
-    creates: /etc/apt/keyrings/antigravity-repo-key.gpg
-
-- name: Add Antigravity repository
+- name: Remove legacy Antigravity repository
   apt_repository:
     repo: "deb [signed-by=/etc/apt/keyrings/antigravity-repo-key.gpg] https://us-central1-apt.pkg.dev/projects/antigravity-auto-updater-dev/ antigravity-debian main"
-    state: present
+    state: absent
     filename: antigravity
   become: true
 
-- name: Install Antigravity IDE
-  apt:
-    name: antigravity
-    state: present
-    update_cache: yes
+- name: Remove legacy Antigravity GPG key
+  file:
+    path: /etc/apt/keyrings/antigravity-repo-key.gpg
+    state: absent
+  become: true
+
+- name: Set download URL based on architecture
+  set_fact:
+    antigravity_url: "{{ 'https://edgedl.me.gvt1.com/edgedl/release2/j0qc3/antigravity/stable/2.0.1-4861014005645312/linux-x64/Antigravity%20IDE.tar.gz' if ansible_architecture == 'x86_64' else 'https://edgedl.me.gvt1.com/edgedl/release2/j0qc3/antigravity/stable/2.0.1-4861014005645312/linux-arm/Antigravity%20IDE.tar.gz' }}"
+
+- name: Ensure target installation directory is clean
+  file:
+    path: /usr/share/antigravity
+    state: absent
+  become: true
+
+- name: Create installation directory
+  file:
+    path: /usr/share/antigravity
+    state: directory
+    mode: '0755'
+    owner: root
+    group: root
+  become: true
+
+- name: Download and extract Antigravity IDE
+  unarchive:
+    src: "{{ antigravity_url }}"
+    dest: /usr/share/antigravity
+    remote_src: yes
+    extra_opts:
+      - "--strip-components=1"
+    owner: root
+    group: root
+  become: true
+
+- name: Set permissions on chrome-sandbox
+  file:
+    path: /usr/share/antigravity/chrome-sandbox
+    mode: '4755'
+    owner: root
+    group: root
+  become: true
+
+- name: Create symlink in /usr/bin for antigravity
+  file:
+    src: /usr/share/antigravity/bin/antigravity-ide
+    dest: /usr/bin/antigravity
+    state: link
+    force: yes
+  become: true
+
+- name: Create fallback symlink /usr/share/antigravity-ide
+  file:
+    src: /usr/share/antigravity
+    dest: /usr/share/antigravity-ide
+    state: link
+    force: yes
+  become: true
+
+- name: Copy Antigravity icon to pixmaps
+  copy:
+    src: /usr/share/antigravity/resources/app/resources/linux/code.png
+    dest: /usr/share/pixmaps/antigravity.png
+    remote_src: yes
+    mode: '0644'
+  become: true
+
+- name: Create Antigravity desktop entry
+  copy:
+    dest: /usr/share/applications/antigravity.desktop
+    mode: '0644'
+    content: |
+      [Desktop Entry]
+      Name=Antigravity
+      Comment=Experience liftoff
+      GenericName=Text Editor
+      Exec=/usr/bin/antigravity %F
+      Icon=antigravity
+      Type=Application
+      StartupNotify=false
+      StartupWMClass=Antigravity
+      Categories=TextEditor;Development;IDE;
+      MimeType=application/x-antigravity-workspace;
+      Actions=new-empty-window;
+      Keywords=vscode;
+
+      [Desktop Action new-empty-window]
+      Name=New Empty Window
+      Name[cs]=Nové prázdné okno
+      Name[de]=Neues leeres Fenster
+      Name[es]=Nueva ventana vacía
+      Name[fr]=Nouvelle fenêtre vide
+      Name[it]=Nuova finestra vuota
+      Name[ja]=新しい空のウィンドウ
+      Name[ko]=새 빈 창
+      Name[ru]=Новое пустое окно
+      Name[zh_CN]=新建空窗口
+      Name[zh_TW]=開新空視窗
+      Exec=/usr/bin/antigravity --new-window %F
+      Icon=antigravity
+  become: true
+
+- name: Create Antigravity URL Handler desktop entry
+  copy:
+    dest: /usr/share/applications/antigravity-url-handler.desktop
+    mode: '0644'
+    content: |
+      [Desktop Entry]
+      Name=Antigravity - URL Handler
+      Comment=Experience liftoff
+      GenericName=Text Editor
+      Exec=/usr/bin/antigravity --open-url %U
+      Icon=antigravity
+      Type=Application
+      NoDisplay=true
+      StartupNotify=true
+      Categories=Utility;TextEditor;Development;IDE;
+      MimeType=x-scheme-handler/antigravity;
+      Keywords=vscode;
   become: true
 
 - name: Create User config directory
