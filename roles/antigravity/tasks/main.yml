@@ -1,29 +1,4 @@
 ---
-- name: Remove legacy Antigravity package from apt
-  apt:
-    name: antigravity
-    state: absent
-  become: true
-
-- name: Remove legacy Antigravity repository
-  apt_repository:
-    repo: "deb [signed-by=/etc/apt/keyrings/antigravity-repo-key.gpg] https://us-central1-apt.pkg.dev/projects/antigravity-auto-updater-dev/ antigravity-debian main"
-    state: absent
-    filename: antigravity
-  become: true
-
-- name: Remove legacy Antigravity GPG key
-  file:
-    path: /etc/apt/keyrings/antigravity-repo-key.gpg
-    state: absent
-  become: true
-
-- name: Remove legacy Antigravity desktop entry
-  file:
-    path: /usr/share/applications/antigravity.desktop
-    state: absent
-  become: true
-
 - name: Set download URL based on architecture
   set_fact:
     antigravity_url: "{{ 'https://edgedl.me.gvt1.com/edgedl/release2/j0qc3/antigravity/stable/2.0.1-4861014005645312/linux-x64/Antigravity%20IDE.tar.gz' if ansible_architecture == 'x86_64' else 'https://edgedl.me.gvt1.com/edgedl/release2/j0qc3/antigravity/stable/2.0.1-4861014005645312/linux-arm/Antigravity%20IDE.tar.gz' }}"
@@ -38,7 +13,7 @@
   file:
     path: /usr/share/antigravity
     state: directory
-    mode: '0755'
+    mode: "0755"
     owner: root
     group: root
   become: true
@@ -57,7 +32,7 @@
 - name: Set permissions on chrome-sandbox
   file:
     path: /usr/share/antigravity/chrome-sandbox
-    mode: '4755'
+    mode: "4755"
     owner: root
     group: root
   become: true
@@ -83,13 +58,13 @@
     src: /usr/share/antigravity/resources/app/resources/linux/code.png
     dest: /usr/share/pixmaps/antigravity.png
     remote_src: yes
-    mode: '0644'
+    mode: "0644"
   become: true
 
 - name: Create Antigravity desktop entry
   copy:
     dest: /usr/share/applications/antigravity-ide.desktop
-    mode: '0644'
+    mode: "0644"
     content: |
       [Desktop Entry]
       Name=Antigravity
@@ -107,16 +82,6 @@
 
       [Desktop Action new-empty-window]
       Name=New Empty Window
-      Name[cs]=Nové prázdné okno
-      Name[de]=Neues leeres Fenster
-      Name[es]=Nueva ventana vacía
-      Name[fr]=Nouvelle fenêtre vide
-      Name[it]=Nuova finestra vuota
-      Name[ja]=新しい空のウィンドウ
-      Name[ko]=새 빈 창
-      Name[ru]=Новое пустое окно
-      Name[zh_CN]=新建空窗口
-      Name[zh_TW]=開新空視窗
       Exec=/usr/bin/antigravity --new-window %F
       Icon=antigravity
   become: true
@@ -124,7 +89,7 @@
 - name: Create Antigravity URL Handler desktop entry
   copy:
     dest: /usr/share/applications/antigravity-url-handler.desktop
-    mode: '0644'
+    mode: "0644"
     content: |
       [Desktop Entry]
       Name=Antigravity - URL Handler
@@ -144,21 +109,21 @@
   file:
     path: "{{ ansible_env.HOME }}/.config/Antigravity IDE/User"
     state: directory
-    mode: '0755'
+    mode: "0755"
   become: false
 
 - name: Sync Antigravity settings
   copy:
     src: "{{ playbook_dir }}/../configs/ide/settings.json"
     dest: "{{ ansible_env.HOME }}/.config/Antigravity IDE/User/settings.json"
-    mode: '0644'
+    mode: "0644"
   become: false
 
 - name: Sync Antigravity keybindings
   copy:
     src: "{{ playbook_dir }}/../configs/ide/keybindings.json"
     dest: "{{ ansible_env.HOME }}/.config/Antigravity IDE/User/keybindings.json"
-    mode: '0644'
+    mode: "0644"
   become: false
 
 - name: Read extensions list
