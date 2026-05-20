@@ -9,19 +9,22 @@
     - /usr/share/applications/antigravity-url-handler.desktop
   become: true
 
-- name: Set download URL based on architecture
+- name: Set download URLs based on architecture
   set_fact:
-    antigravity_url: "{{ 'https://edgedl.me.gvt1.com/edgedl/release2/j0qc3/antigravity/stable/2.0.1-4861014005645312/linux-x64/Antigravity%20IDE.tar.gz' if ansible_architecture == 'x86_64' else 'https://edgedl.me.gvt1.com/edgedl/release2/j0qc3/antigravity/stable/2.0.1-4861014005645312/linux-arm/Antigravity%20IDE.tar.gz' }}"
+    antigravity_ide_url: "{{ 'https://edgedl.me.gvt1.com/edgedl/release2/j0qc3/antigravity/stable/2.0.1-4861014005645312/linux-x64/Antigravity%20IDE.tar.gz' if ansible_architecture == 'x86_64' else 'https://edgedl.me.gvt1.com/edgedl/release2/j0qc3/antigravity/stable/2.0.1-4861014005645312/linux-arm/Antigravity%20IDE.tar.gz' }}"
+    antigravity_hub_url: "{{ 'https://storage.googleapis.com/antigravity-public/antigravity-hub/2.0.0-6324554176528384/linux-x64/Antigravity.tar.gz' if ansible_architecture == 'x86_64' else 'https://storage.googleapis.com/antigravity-public/antigravity-hub/2.0.0-6324554176528384/linux-arm/Antigravity.tar.gz' }}"
 
-- name: Ensure target installation directory is clean
+# === INSTALL ANTIGRAVITY IDE ===
+
+- name: Ensure target Antigravity IDE installation directory is clean
   file:
-    path: /usr/share/antigravity
+    path: /usr/share/antigravity-ide
     state: absent
   become: true
 
-- name: Create installation directory
+- name: Create Antigravity IDE installation directory
   file:
-    path: /usr/share/antigravity
+    path: /usr/share/antigravity-ide
     state: directory
     mode: "0755"
     owner: root
@@ -30,7 +33,59 @@
 
 - name: Download and extract Antigravity IDE
   unarchive:
-    src: "{{ antigravity_url }}"
+    src: "{{ antigravity_ide_url }}"
+    dest: /usr/share/antigravity-ide
+    remote_src: yes
+    extra_opts:
+      - "--strip-components=1"
+    owner: root
+    group: root
+  become: true
+
+- name: Set permissions on Antigravity IDE chrome-sandbox
+  file:
+    path: /usr/share/antigravity-ide/chrome-sandbox
+    mode: "4755"
+    owner: root
+    group: root
+  become: true
+
+- name: Create symlink in /usr/bin for Antigravity IDE
+  file:
+    src: /usr/share/antigravity-ide/bin/antigravity-ide
+    dest: /usr/bin/antigravity-ide
+    state: link
+    force: yes
+  become: true
+
+- name: Copy Antigravity IDE icon to pixmaps
+  copy:
+    src: /usr/share/antigravity-ide/resources/app/resources/linux/code.png
+    dest: /usr/share/pixmaps/antigravity-ide.png
+    remote_src: yes
+    mode: "0644"
+  become: true
+
+# === INSTALL ANTIGRAVITY (HUB) ===
+
+- name: Ensure target Antigravity Hub installation directory is clean
+  file:
+    path: /usr/share/antigravity
+    state: absent
+  become: true
+
+- name: Create Antigravity Hub installation directory
+  file:
+    path: /usr/share/antigravity
+    state: directory
+    mode: "0755"
+    owner: root
+    group: root
+  become: true
+
+- name: Download and extract Antigravity Hub
+  unarchive:
+    src: "{{ antigravity_hub_url }}"
     dest: /usr/share/antigravity
     remote_src: yes
     extra_opts:
@@ -39,7 +94,7 @@
     group: root
   become: true
 
-- name: Set permissions on chrome-sandbox
+- name: Set permissions on Antigravity Hub chrome-sandbox
   file:
     path: /usr/share/antigravity/chrome-sandbox
     mode: "4755"
@@ -47,29 +102,31 @@
     group: root
   become: true
 
-- name: Create symlink in /usr/bin for antigravity
+- name: Create symlink in /usr/bin for Antigravity Hub
   file:
-    src: /usr/share/antigravity/bin/antigravity-ide
+    src: /usr/share/antigravity/antigravity
     dest: /usr/bin/antigravity
     state: link
     force: yes
   become: true
 
-- name: Create fallback symlink /usr/share/antigravity-ide
-  file:
-    src: /usr/share/antigravity
-    dest: /usr/share/antigravity-ide
-    state: link
-    force: yes
+- name: Extract Antigravity Hub icon from app.asar
+  shell: |
+    python3 -c '
+    import struct, json
+    with open("/usr/share/antigravity/resources/app.asar", "rb") as f:
+        f.seek(12)
+        size_header = struct.unpack("<I", f.read(4))[0]
+        header = json.loads(f.read(size_header).decode("utf-8"))
+        icon_info = header["files"]["icon.png"]
+        f.seek(16 + size_header + int(icon_info["offset"]))
+        data = f.read(int(icon_info["size"]))
+        with open("/usr/share/pixmaps/antigravity.png", "wb") as out:
+            out.write(data)
+    '
   become: true
 
-- name: Copy Antigravity icon to pixmaps
-  copy:
-    src: /usr/share/antigravity/resources/app/resources/linux/code.png
-    dest: /usr/share/pixmaps/antigravity.png
-    remote_src: yes
-    mode: "0644"
-  become: true
+# === CONFIGURATIONS & EXTENSIONS ===
 
 - name: Create User config directory
   file:
@@ -98,7 +155,7 @@
   become: false
 
 - name: Install Antigravity extensions
-  shell: antigravity --install-extension {{ item }}
+  shell: antigravity-ide --install-extension {{ item }}
   loop: "{{ extensions }}"
   become: false
   register: ext_install
