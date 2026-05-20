@@ -13,3 +13,49 @@
     mode: '0644'
   loop: "{{ tui_apps }}"
   become: false
+
+- name: Create Antigravity desktop entry
+  copy:
+    dest: "{{ ansible_env.HOME }}/.local/share/applications/antigravity-ide.desktop"
+    mode: "0644"
+    content: |
+      [Desktop Entry]
+      Name=Antigravity
+      Comment=Experience liftoff
+      GenericName=Text Editor
+      Exec=/usr/bin/antigravity %F
+      Icon=antigravity
+      Type=Application
+      StartupNotify=false
+      StartupWMClass=antigravity-ide
+      Categories=TextEditor;Development;IDE;
+      MimeType=application/x-antigravity-workspace;
+      Actions=new-empty-window;
+      Keywords=vscode;
+
+      [Desktop Action new-empty-window]
+      Name=New Empty Window
+      Exec=/usr/bin/antigravity --new-window %F
+      Icon=antigravity
+  become: false
+  when: install_antigravity | default(false) | bool
+
+- name: Create Antigravity URL Handler desktop entry
+  copy:
+    dest: "{{ ansible_env.HOME }}/.local/share/applications/antigravity-url-handler.desktop"
+    mode: "0644"
+    content: |
+      [Desktop Entry]
+      Name=Antigravity - URL Handler
+      Comment=Experience liftoff
+      GenericName=Text Editor
+      Exec=/usr/bin/antigravity --open-url %U
+      Icon=antigravity
+      Type=Application
+      NoDisplay=true
+      StartupNotify=true
+      Categories=Utility;TextEditor;Development;IDE;
+      MimeType=x-scheme-handler/antigravity;
+      Keywords=vscode;
+  become: false
+  when: install_antigravity | default(false) | bool
