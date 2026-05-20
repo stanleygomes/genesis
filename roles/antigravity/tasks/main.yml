@@ -18,6 +18,12 @@
     state: absent
   become: true
 
+- name: Remove legacy Antigravity desktop entry
+  file:
+    path: /usr/share/applications/antigravity.desktop
+    state: absent
+  become: true
+
 - name: Set download URL based on architecture
   set_fact:
     antigravity_url: "{{ 'https://edgedl.me.gvt1.com/edgedl/release2/j0qc3/antigravity/stable/2.0.1-4861014005645312/linux-x64/Antigravity%20IDE.tar.gz' if ansible_architecture == 'x86_64' else 'https://edgedl.me.gvt1.com/edgedl/release2/j0qc3/antigravity/stable/2.0.1-4861014005645312/linux-arm/Antigravity%20IDE.tar.gz' }}"
@@ -82,7 +88,7 @@
 
 - name: Create Antigravity desktop entry
   copy:
-    dest: /usr/share/applications/antigravity.desktop
+    dest: /usr/share/applications/antigravity-ide.desktop
     mode: '0644'
     content: |
       [Desktop Entry]
@@ -93,7 +99,7 @@
       Icon=antigravity
       Type=Application
       StartupNotify=false
-      StartupWMClass=Antigravity
+      StartupWMClass=antigravity-ide
       Categories=TextEditor;Development;IDE;
       MimeType=application/x-antigravity-workspace;
       Actions=new-empty-window;
