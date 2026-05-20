@@ -142,7 +142,7 @@
 
 - name: Create User config directory
   file:
-    path: "{{ ansible_env.HOME }}/.config/Antigravity/User"
+    path: "{{ ansible_env.HOME }}/.config/Antigravity IDE/User"
     state: directory
     mode: '0755'
   become: false
@@ -150,14 +150,14 @@
 - name: Sync Antigravity settings
   copy:
     src: "{{ playbook_dir }}/../configs/ide/settings.json"
-    dest: "{{ ansible_env.HOME }}/.config/Antigravity/User/settings.json"
+    dest: "{{ ansible_env.HOME }}/.config/Antigravity IDE/User/settings.json"
     mode: '0644'
   become: false
 
 - name: Sync Antigravity keybindings
   copy:
     src: "{{ playbook_dir }}/../configs/ide/keybindings.json"
-    dest: "{{ ansible_env.HOME }}/.config/Antigravity/User/keybindings.json"
+    dest: "{{ ansible_env.HOME }}/.config/Antigravity IDE/User/keybindings.json"
     mode: '0644'
   become: false
 
