@@ -1,0 +1,16 @@
+---
+- name: Uninstall legacy Gemini CLI if installed
+  shell: |
+    bash -c "source {{ ansible_env.HOME }}/.nvm/nvm.sh && npm uninstall -g @google/gemini-cli"
+  args:
+    executable: /bin/bash
+  become: false
+  ignore_errors: true
+
+- name: Install Antigravity CLI
+  shell: |
+    curl -fsSL https://antigravity.google/cli/install.sh | bash
+  args:
+    executable: /bin/bash
+    creates: "{{ ansible_env.HOME }}/.local/bin/agy"
+  become: false

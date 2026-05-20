@@ -1,4 +1,4 @@
-# @sub-options: gemini-cli, github-copilot, hermes-agent, claude-code, open-claw
+# @sub-options: antigravity-cli, github-copilot, hermes-agent, claude-code, open-claw
 ---
 - name: AI tools setup
   hosts: localhost
@@ -12,7 +12,7 @@
       become: false
 
   roles:
-    - { role: gemini-cli, when: install_gemini_cli | default(false) | bool }
+    - { role: antigravity-cli, when: install_antigravity_cli | default(false) | bool }
     - { role: github-copilot, when: install_github_copilot | default(false) | bool }
     - { role: hermes-agent, when: install_hermes_agent | default(false) | bool }
     - { role: claude-code, when: install_claude_code | default(false) | bool }
