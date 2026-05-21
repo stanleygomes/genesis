@@ -26,9 +26,17 @@ This repository manages Ansible-based setup for a Linux workstation. Keep change
 
 ## Variables and Defaults
 
-- Put shared values in `group_vars/all.yml`.
+- Put shared values in [group_vars/all.yml](file:///home/stanley/projects/genesis/group_vars/all.yml).
 - Put role-specific defaults in `roles/<name>/defaults/main.yml`.
 - Keep role variables and defaults close to the role that uses them.
+
+## Maintaining Ansible Roles
+
+When refactoring, debugging, or improving roles:
+- **Scope**: Trace inputs in `defaults/main.yml`, tasks in `tasks/main.yml`, and shared variables in [group_vars/all.yml](file:///home/stanley/projects/genesis/group_vars/all.yml).
+- **Structure**: Tasks should have clear purposes (probe, install, configure, validate). Use `ignore_errors: true` only on probes.
+- **Idempotency**: Use `creates:` (for shell/command) or `stat:` checks to skip completed tasks.
+- **Documentation**: Write comments to explain *why* a task exists rather than *what* it does.
 
 ## Repository Workflow
 
