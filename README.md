@@ -1,4 +1,4 @@
-# 🌎 Genesis - Workstation Setup
+# 🌎 Genesis
 
 This repository contains the **Ansible** configuration to automate the setup and maintenance of my personal computer. The goal is to turn my machine configuration into "Infrastructure as Code" (IaC), allowing me to rebuild or sync my environment quickly and consistently.
 
