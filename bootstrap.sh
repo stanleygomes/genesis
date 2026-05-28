@@ -1,4 +1,5 @@
 #!/bin/bash
+
 # Genesis Workstation Bootstrap Script
 # This script prepares the environment and calls the Python installer.
 
@@ -30,7 +31,7 @@ if [ -d ".git" ]; then
 fi
 
 # 3. Ensure the Python script has execution permission
-chmod +x scripts/setup.py
+chmod +x setup.py
 
 # 4. Configure temporary passwordless sudo
 # This avoids repetitive password prompts during Ansible execution
@@ -38,7 +39,7 @@ echo "🔐 Configuring temporary sudo..."
 echo "$USER ALL=(ALL) NOPASSWD:ALL" | sudo tee /etc/sudoers.d/genesis-temporary > /dev/null
 
 # 5. Run the Python installer
-python3 scripts/setup.py
+python3 setup.py
 
 # 6. Cleanup
 echo "🧹 Cleaning up temporary configurations..."
