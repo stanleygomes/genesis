@@ -151,12 +151,6 @@
 
       # Python
       export PATH="$HOME/.local/bin:$PATH"
-
-      # Hermes Agent completions
-      if (( $+commands[hermes] )); then
-        eval "$(hermes completion zsh | grep -v '_hermes \"\$@\"')"
-        compdef _hermes hermes
-      fi
   become: false
 
 - name: Add git branch parser and custom PS1 to .bashrc
@@ -184,14 +178,4 @@
     state: present
   become: false
 
-- name: Add Hermes completion to .bashrc
-  blockinfile:
-    path: "{{ ansible_env.HOME }}/.bashrc"
-    marker: "# {mark} HERMES COMPLETION"
-    block: |
-      # Hermes Agent completions
-      if command -v hermes &> /dev/null; then
-        eval "$(hermes completion bash)"
-      fi
-    state: present
-  become: false
+

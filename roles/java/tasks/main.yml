@@ -29,7 +29,6 @@
     executable: /bin/bash
   become: false
 
-
 - name: Install Java 25
   shell: |
     bash -c "source {{ ansible_env.HOME }}/.sdkman/bin/sdkman-init.sh && sdk install java {{ java_version }} && sdk default java {{ java_version }}"

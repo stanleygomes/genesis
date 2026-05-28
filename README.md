@@ -20,8 +20,8 @@ This command will install `git`, `ansible`, clone this repository, and run the s
 
 - Manages system packages (Apt, Flatpak, Snap etc).
 - Configures development environments (Node.js with pnpm, Java, Python, Go, PHP).
-- Installs and configures AI tools (Antigravity CLI, GitHub Copilot CLI, Hermes Agent, Antigravity IDE etc).
-- Setups CLI/TUI tools with desktop shortcuts (LazyGit, LazyDocker, Harlequin, etc).
+- Installs and configures AI tools (Antigravity CLI, GitHub Copilot CLI, Antigravity IDE etc).
+- Setups CLI/TUI tools with desktop shortcuts (LazyDocker, etc).
 - Customizes the shell and terminal (Zsh with Oh My Zsh, Bash, aliases, GNOME Terminal settings).
 - Manages GNOME settings and extensions (Tweaks, Extension Manager).
 
@@ -72,8 +72,8 @@ make check CONFIG="desktop"
 
 ## Roles Included
 
-- **AI Tools**: `antigravity`, `antigravity-cli`, `github-copilot`, `hermes-agent`.
+- **AI Tools**: `antigravity`, `antigravity-cli`, `github-copilot`.
 - **Development**: `docker`, `node` (includes pnpm), `java`, `python`, `php`.
 - **GUI Apps**: `google-chrome`, `mongodb-compass`, `dbeaver`, `postman`.
-- **CLI/TUI**: `btop`, `harlequin`, `lazydocker`, `lazygit`, `lazysql`, `posting`.
+- **CLI/TUI**: `btop`, `lazydocker`.
 - **System/UI**: `gnome-setup`, `terminal`, `desktop-entries`.
