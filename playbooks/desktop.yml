@@ -1,4 +1,3 @@
-# @sub-options: antigravity, vscode
 ---
 - name: Desktop Setup
   hosts: localhost
@@ -19,8 +18,8 @@
     - python
     - php
     - go
-    - { role: antigravity, when: install_antigravity | default(false) | bool }
-    - { role: vscode, when: install_vscode | default(false) | bool }
+    - antigravity
+    - vscode
     - postman
     - lazydocker
     - filezilla
