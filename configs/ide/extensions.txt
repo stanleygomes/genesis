@@ -23,3 +23,5 @@ stanleygomes.parable-workspaces
 stanleygomes.noemi-theme
 zobo.php-intellisense
 golang.go
+tamasfe.even-better-toml
+ms-python.python
