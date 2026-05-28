@@ -1,6 +1,6 @@
 # 🌎 Genesis
 
-This repository contains the **Ansible** configuration to automate the setup and maintenance of my personal computer. The goal is to turn my machine configuration into "Infrastructure as Code" (IaC), allowing me to rebuild or sync my environment quickly and consistently.
+This repository contains the **Ansible** configuration to automate the setup and maintenance of my personal computer, vps and more. The goal is to turn my machine configuration into "Infrastructure as Code" (IaC), allowing me to rebuild or sync my environment quickly and consistently.
 
 ## Quick Start (One-Liner)
 
@@ -23,9 +23,8 @@ This command will install `git`, `ansible`, clone this repository, and run the s
 - Installs and configures AI tools (Antigravity CLI, GitHub Copilot CLI, Antigravity IDE etc).
 - Setups CLI/TUI tools with desktop shortcuts (LazyDocker, etc).
 - Customizes the shell and terminal (Zsh with Oh My Zsh, Bash, aliases, GNOME Terminal settings).
-- Manages GNOME settings and extensions (Tweaks, Extension Manager).
 
-### Prerequisites
+### Requisites
 
 Before running the playbooks, you need to have **Ansible** installed on your machine. If you use `bootstrap.sh`, you don't need to install Ansible manually.
 
@@ -43,6 +42,7 @@ The easiest way to set up is using the interactive installer:
 ```
 
 This will open a menu where you can:
+
 - Select multiple playbooks (using **Space**).
 - Choose optional components for specific categories (sub-menus).
 - See a summary before the installation begins.
@@ -61,19 +61,15 @@ make run CONFIG="bash desktop"
 make check CONFIG="desktop"
 ```
 
-## Project Structure
+## 📂 Project Structure
 
-- `playbooks/`: Setup configurations (e.g., `common.yml`, `desktop.yml`).
-- `roles/`: Modular Ansible roles.
-- `scripts/`: Python interactive installer logic.
-- `group_vars/`: Global configuration variables (`all.yml`).
-- `inventory`: Host definition (localhost).
-- `configs/`: Specific tool configurations (VS Code, etc.).
-
-## Roles Included
-
-- **AI Tools**: `antigravity`, `antigravity-cli`, `github-copilot`.
-- **Development**: `docker`, `node` (includes pnpm), `java`, `python`, `php`.
-- **GUI Apps**: `google-chrome`, `mongodb-compass`, `dbeaver`, `postman`.
-- **CLI/TUI**: `btop`, `lazydocker`.
-- **System/UI**: `system`, `terminal`, `desktop-entries`.
+```text
+⚙️ configs/            # Specific tool configurations (VS Code, etc.)
+📊 group_vars/         # Global configuration variables (all.yml)
+📜 playbooks/          # Setup playbooks (common.yml, desktop.yml, etc.)
+🧩 roles/              # Modular Ansible roles (terminal, docker, etc.)
+🛠️ Makefile            # Helper tasks to run, check, list playbooks
+🐚 bootstrap.sh        # One-liner script to bootstrap environment
+💻 setup.py            # Interactive Python menu installer
+inventory              # Ansible host definition (localhost)
+```
