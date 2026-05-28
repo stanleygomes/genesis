@@ -22,13 +22,6 @@
   when: go_installed.rc != 0 or go_version not in go_installed.stdout
   become: false
 
-- name: Remove old Go installation
-  file:
-    path: "{{ ansible_env.HOME }}/.local/go"
-    state: absent
-  when: go_installed.rc != 0 or go_version not in go_installed.stdout
-  become: false
-
 - name: Extract Go
   unarchive:
     src: "/tmp/go.tar.gz"
