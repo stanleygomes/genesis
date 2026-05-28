@@ -11,7 +11,6 @@
       become: false
   roles:
     - google-chrome
-    - gnome-setup
     - fonts
     - mongodb-compass
     - docker

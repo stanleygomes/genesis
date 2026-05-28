@@ -76,4 +76,4 @@ make check CONFIG="desktop"
 - **Development**: `docker`, `node` (includes pnpm), `java`, `python`, `php`.
 - **GUI Apps**: `google-chrome`, `mongodb-compass`, `dbeaver`, `postman`.
 - **CLI/TUI**: `btop`, `lazydocker`.
-- **System/UI**: `gnome-setup`, `terminal`, `desktop-entries`.
+- **System/UI**: `system`, `terminal`, `desktop-entries`.

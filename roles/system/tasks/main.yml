@@ -40,3 +40,22 @@
     passno: 0
     dump: 0
     state: present
+
+- name: Check if GNOME Tweaks is installed
+  command: dpkg -s gnome-tweaks
+  register: gnome_tweaks_check
+  ignore_errors: true
+  changed_when: false
+  become: false
+
+- name: Install GNOME Tweaks and Extension Manager
+  apt:
+    name:
+      - gnome-tweaks
+      - gnome-shell-extension-manager
+      - gnome-shell-extensions
+    state: present
+    update_cache: yes
+  become: true
+  when: gnome_tweaks_check.rc != 0
+

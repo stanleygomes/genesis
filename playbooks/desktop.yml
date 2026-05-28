@@ -12,7 +12,6 @@
       become: false
   roles:
     - google-chrome
-    - gnome-setup
     - github-cli
     - fonts
     - dbeaver
