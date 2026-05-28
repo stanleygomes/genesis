@@ -63,7 +63,7 @@ make check CONFIG="desktop"
 
 ## Project Structure
 
-- `playbooks/`: Setup configurations (e.g., `common.yml`, `desktop.yml`, `ai.yml`).
+- `playbooks/`: Setup configurations (e.g., `common.yml`, `desktop.yml`).
 - `roles/`: Modular Ansible roles.
 - `scripts/`: Python interactive installer logic.
 - `group_vars/`: Global configuration variables (`all.yml`).
