@@ -4,6 +4,7 @@
     name:
       - python3-venv
       - python3-pip
+      - python-is-python3
     state: present
     update_cache: yes
   become: true
@@ -35,3 +36,14 @@
   become: false
   register: python_install
   changed_when: "'Installed' in python_install.stdout"
+
+- name: Create local symlinks for python and python3
+  file:
+    src: "{{ ansible_env.HOME }}/.local/bin/python3.14"
+    dest: "{{ ansible_env.HOME }}/.local/bin/{{ item }}"
+    state: link
+  become: false
+  loop:
+    - python
+    - python3
+
