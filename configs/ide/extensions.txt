@@ -25,3 +25,5 @@ zobo.php-intellisense
 golang.go
 tamasfe.even-better-toml
 ms-python.python
+yzhang.markdown-all-in-one
+bierner.markdown-mermaid
