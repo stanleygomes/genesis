@@ -88,5 +88,6 @@
   "workbench.productIconTheme": "fluent-icons",
   "files.autoSave": "afterDelay",
   "php.executablePath": "",
-  "editor.linkedEditing": true
+  "editor.linkedEditing": true,
+  "git.blame.editorDecoration.enabled": true
 }
