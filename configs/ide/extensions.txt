@@ -26,3 +26,4 @@ golang.go
 tamasfe.even-better-toml
 ms-python.python
 bierner.markdown-mermaid
+dbcode.dbcode
