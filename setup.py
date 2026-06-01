@@ -49,6 +49,17 @@ def inputbox(title, text, default=""):
     ]
     return run_whiptail(cmd)
 
+def yesno(title, text):
+    """Shows a yes/no dialog box. Returns True if Yes is selected, False otherwise."""
+    cmd = [
+        "whiptail", "--title", title,
+        "--yesno", text,
+        "10", "60"
+    ]
+    result = subprocess.run(cmd)
+    return result.returncode == 0
+
+
 # ------------------------------------------------------------------------------
 # Playbook Helpers (previously genesis/playbooks.py)
 # ------------------------------------------------------------------------------
@@ -170,8 +181,11 @@ def main():
     )
     
     if not selected_playbooks:
-        print("⚠️  No configuration selected. Exiting.")
-        sys.exit(0)
+        if yesno("No playbook selected", "You didn't select custom1 or desktop. Would you like to proceed with only the common configuration?"):
+            selected_playbooks = []
+        else:
+            print("⚠️  Setup cancelled.")
+            sys.exit(0)
 
     # 4. Prepare basic variables
     extra_vars = [
