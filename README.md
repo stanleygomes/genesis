@@ -2,6 +2,8 @@
 
 This repository contains the **Ansible** configuration to automate the setup and maintenance of my personal computer, vps and more. The goal is to turn my machine configuration into "Infrastructure as Code" (IaC), allowing me to rebuild or sync my environment quickly and consistently.
 
+![screenshot](https://github.com/stanleygomes/genesis/raw/HEAD/assets/screenshot.png)
+
 ## Quick Start (One-Liner)
 
 To set up a fresh machine, just run:
