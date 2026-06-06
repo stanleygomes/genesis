@@ -25,7 +25,11 @@
   become: false
 
 - name: Set Ghostty as default x-terminal-emulator
-  shell: update-alternatives --set x-terminal-emulator /usr/bin/ghostty
+  community.general.alternatives:
+    name: x-terminal-emulator
+    path: /usr/bin/ghostty
+    link: /usr/bin/x-terminal-emulator
+    priority: 50
+    state: selected
   become: true
-  changed_when: false
-  ignore_errors: "{{ ansible_check_mode }}"
+
