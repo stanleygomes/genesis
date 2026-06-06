@@ -23,6 +23,7 @@
     - postman
     - lazydocker
     - filezilla
+    - ollama
     - opencode
     - desktop-entries
     - antigravity-cli
