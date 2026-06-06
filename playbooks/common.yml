@@ -12,11 +12,11 @@
 
   roles:
     - system
+    - genesis
     - git
     - docker
     - ghostty
     - terminal
-
     - java
     - python
     - php
