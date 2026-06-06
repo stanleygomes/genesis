@@ -38,7 +38,10 @@ php_extensions:
 # ------------------------------------------------------------------------------
 # Desktop / TUI Apps Configuration
 # ------------------------------------------------------------------------------
+terminal_command: "ghostty"
+
 tui_apps:
+
   - name: "LazyDocker"
     exec: "lazydocker"
     icon: "docker"

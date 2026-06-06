@@ -14,7 +14,9 @@
     - system
     - git
     - docker
+    - ghostty
     - terminal
+
     - java
     - python
     - php

@@ -1,0 +1,5 @@
+---
+# Defaults for ghostty role
+ghostty_font_family: "JetBrains Mono"
+ghostty_font_size: 13
+ghostty_theme: "dark"
