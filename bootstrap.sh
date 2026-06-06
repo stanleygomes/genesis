@@ -14,6 +14,7 @@ echo "🚀 Starting Genesis Workstation Setup..."
 # 1. Install basic dependencies
 echo "📦 Installing system requirements (git, python, whiptail, ansible, make)..."
 sudo apt update
+sudo apt upgrade -y
 sudo apt install -y git python3 python-is-python3 whiptail ansible make software-properties-common
 
 # 2. Clone or update the repository
