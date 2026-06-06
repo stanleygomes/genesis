@@ -28,3 +28,4 @@ ms-python.python
 bierner.markdown-mermaid
 dbcode.dbcode
 detachhead.basedpyright
+sst-dev.opencode

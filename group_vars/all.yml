@@ -47,3 +47,8 @@ tui_apps:
     exec: "btop"
     icon: "utilities-system-monitor"
     comment: "Resource monitor that shows usage and stats"
+  - name: "OpenCode"
+    exec: "opencode"
+    icon: "utilities-terminal"
+    comment: "OpenCode AI coding agent terminal UI"
+

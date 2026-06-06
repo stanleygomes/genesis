@@ -1,0 +1,3 @@
+---
+# Defaults for OpenCode role
+opencode_install_dir: "{{ ansible_env.HOME }}/.opencode/bin"
