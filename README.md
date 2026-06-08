@@ -65,7 +65,7 @@ make run CONFIG="bash desktop"
 make check CONFIG="desktop"
 ```
 
-## 📂 Project Structure
+## Project Structure
 
 ```text
  configs/            # Specific tool configurations (VS Code, etc.)
