@@ -22,7 +22,7 @@ EXTRA_ARGS ?= --ask-become-pass
 
 bootstrap:
 	chmod +x bootstrap.sh
-	./bootstrap.shm
+	./bootstrap.sh
 
 install-cli:
 	uv sync
