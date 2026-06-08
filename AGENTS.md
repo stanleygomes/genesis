@@ -21,7 +21,7 @@ This repository manages Ansible-based setup for a Linux workstation. Keep change
 - Target `localhost` with `connection: local`.
 - Keep `become: true` at the play level when the play installs or configures system software.
 - Keep `gather_facts: false` in the main plays and gather facts in `pre_tasks` as the normal user when `ansible_env` matters.
-- Keep optional role toggles consistent with the existing submenu flow: `# @sub-options: ...` at the top of the playbook, and `when: install_<role> | default(false) | bool` for optional roles.
+- Keep optional role toggles consistent with the existing playbook variables: `when: install_<role> | default(false) | bool` for optional roles.
 - Convert hyphens in role names to underscores when building `install_*` variables.
 
 ## Variables and Defaults
@@ -41,11 +41,10 @@ When refactoring, debugging, or improving roles:
 ## Repository Workflow
 
 - Use the existing install/check commands as the first validation step when changing behavior: `make check`, `make syntax`, `make list`, and `make run`.
-- Follow the established installer flow in `scripts/setup.py` and the `playbooks/*.yml` files when adding new roles or menus.
+- Follow the established installer flow in `cli/main.py` and the `playbooks/*.yml` files when adding new roles or menus.
 - Keep the role names aligned with the role directory names.
 
 ## Examples of Good Changes
 
 - Add a new role by placing its defaults in `roles/<name>/defaults/main.yml` and wiring it into the relevant playbook.
-- Add a submenu role by updating the playbook `# @sub-options:` comment and the matching `install_<role>` guard.
 - Add a package install check by probing first, then skipping the install task when the package is already present.

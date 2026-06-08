@@ -35,19 +35,21 @@ Before running the playbooks, you need to have **Ansible** installed on your mac
 
 ## Usage
 
-### 1. Interactive Installer (Recommended)
+### 1. Interactive Installer (CLI)
 
-The easiest way to set up is using the interactive installer:
+The easiest way to set up or update the environment is using the interactive CLI. When you run the `bootstrap.sh` script, it automatically installs a command-line utility called `genesis` using `uv` and `Typer`.
+
+You can use the CLI directly from any terminal:
 
 ```bash
-./bootstrap.sh
+genesis install
 ```
+This will open an interactive menu (using `InquirerPy`) where you can select the playbooks to install.
 
-This will open a menu where you can:
-
-- Select multiple playbooks (using **Space**).
-- Choose optional components for specific categories (sub-menus).
-- See a summary before the installation begins.
+**Available Commands:**
+- `genesis install` - Opens the interactive menu to install playbooks.
+- `genesis update`  - Same as install, useful for updating configurations.
+- `genesis help`    - Shows the help message and available commands.
 
 ### 2. Manual Execution (via Makefile)
 
@@ -72,6 +74,7 @@ make check CONFIG="desktop"
 🧩 roles/              # Modular Ansible roles (terminal, docker, etc.)
 🛠️ Makefile            # Helper tasks to run, check, list playbooks
 🐚 bootstrap.sh        # One-liner script to bootstrap environment
-💻 setup.py            # Interactive Python menu installer
+💻 cli/                # Interactive Python CLI (Typer + InquirerPy)
+📦 pyproject.toml      # CLI dependency management via uv
 inventory              # Ansible host definition (localhost)
 ```
