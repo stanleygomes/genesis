@@ -7,7 +7,7 @@ set -e
 
 # --- Configuration ---
 REPO_URL="https://github.com/stanleygomes/genesis.git"
-TARGET_DIR="$HOME/projects/genesis"
+TARGET_DIR="$HOME/.config/genesis"
 
 echo "🚀 Starting Genesis Workstation Setup..."
 
