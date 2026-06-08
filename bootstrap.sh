@@ -44,7 +44,15 @@ echo "🔐 Configuring temporary sudo..."
 echo "$USER ALL=(ALL) NOPASSWD:ALL" | sudo tee /etc/sudoers.d/genesis-temporary > /dev/null
 
 # 5. Run the Python installer
-uv run python -m cli.main install < /dev/tty
+if [ -t 0 ]; then
+    uv run python -m cli.main install
+else
+    if (exec 3< /dev/tty) 2>/dev/null; then
+        uv run python -m cli.main install < /dev/tty
+    else
+        uv run python -m cli.main install
+    fi
+fi
 
 # 6. Cleanup
 echo "🧹 Cleaning up temporary configurations..."
