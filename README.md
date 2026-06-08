@@ -68,13 +68,13 @@ make check CONFIG="desktop"
 ## 📂 Project Structure
 
 ```text
-⚙️ configs/            # Specific tool configurations (VS Code, etc.)
-📊 group_vars/         # Global configuration variables (all.yml)
-📜 playbooks/          # Setup playbooks (common.yml, desktop.yml, etc.)
-🧩 roles/              # Modular Ansible roles (terminal, docker, etc.)
-🛠️ Makefile            # Helper tasks to run, check, list playbooks
-🐚 bootstrap.sh        # One-liner script to bootstrap environment
-💻 cli/                # Interactive Python CLI (Typer + InquirerPy)
-📦 pyproject.toml      # CLI dependency management via uv
-inventory              # Ansible host definition (localhost)
+ configs/            # Specific tool configurations (VS Code, etc.)
+ cli/                # Interactive Python CLI (Typer + InquirerPy)
+ group_vars/         # Global configuration variables (all.yml)
+ playbooks/          # Setup playbooks (common.yml, desktop.yml, etc.)
+ roles/              # Modular Ansible roles (terminal, docker, etc.)
+ Makefile            # Helper tasks to run, check, list playbooks
+ bootstrap.sh        # One-liner script to bootstrap environment
+ pyproject.toml      # CLI dependency management via uv
+ inventory              # Ansible host definition (localhost)
 ```
