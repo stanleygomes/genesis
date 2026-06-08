@@ -96,7 +96,6 @@
       # Alias para abrir um novo terminal no diretório atual
       alias terminal='{{ terminal_command }} --working-directory="$(pwd)" &'
 
-
       # Alias para o bat/cat (no Ubuntu o comando é batcat)
       alias bat='batcat'
 
@@ -116,6 +115,15 @@
       alias vim='nvim'
       alias nano='nvim'
       alias vi='nvim'
+
+      # Intercepta 'docker ps' para executar o lazydocker
+      docker() {
+          if [ "$1" = "ps" ]; then
+              lazydocker
+          else
+              command docker "$@"
+          fi
+      }
     state: present
   become: false
   loop:
