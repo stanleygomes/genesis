@@ -1,0 +1,55 @@
+---
+- name: Check if Ghostty is installed
+  command: which ghostty
+  register: ghostty_check
+  ignore_errors: true
+  changed_when: false
+  become: false
+
+- name: Add Ghostty PPA (Ubuntu)
+  apt_repository:
+    repo: 'ppa:mkasberg/ghostty-ubuntu'
+    state: present
+    update_cache: yes
+  become: true
+  when:
+    - ghostty_check.rc != 0
+    - ansible_distribution == 'Ubuntu'
+
+- name: Create directory for Ghostty key (Debian)
+  file:
+    path: /etc/apt/keyrings
+    state: directory
+    mode: '0755'
+  become: true
+  when:
+    - ghostty_check.rc != 0
+    - ansible_distribution == 'Debian'
+
+- name: Download Ghostty Debian GPG key (Debian)
+  get_url:
+    url: https://debian.griffo.io/EA0F721D231FDD3A0A17B9AC7808B4DD62C41256.asc
+    dest: /etc/apt/keyrings/debian-griffo-io.asc
+    mode: '0644'
+  become: true
+  when:
+    - ghostty_check.rc != 0
+    - ansible_distribution == 'Debian'
+
+- name: Add Ghostty Debian repository (Debian)
+  apt_repository:
+    repo: "deb [signed-by=/etc/apt/keyrings/debian-griffo-io.asc] https://debian.griffo.io/apt {{ ansible_distribution_release }} main"
+    state: present
+    filename: debian-griffo-io
+  become: true
+  when:
+    - ghostty_check.rc != 0
+    - ansible_distribution == 'Debian'
+
+- name: Install Ghostty
+  apt:
+    name: ghostty
+    state: present
+    update_cache: yes
+  become: true
+  when: ghostty_check.rc != 0
