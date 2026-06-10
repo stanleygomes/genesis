@@ -10,6 +10,7 @@ if not sys.stdin.isatty():
         pass
 
 from cli.commands import install as install_cmd
+from cli.commands import update as update_cmd
 
 app = typer.Typer(help="Genesis Workstation Installer CLI")
 
@@ -20,8 +21,8 @@ def install():
 
 @app.command()
 def update():
-    """Update playbooks configuration (same as install)."""
-    install_cmd.execute()
+    """Update playbooks configuration by running the bootstrap one-liner."""
+    update_cmd.execute()
 
 @app.command()
 def help():

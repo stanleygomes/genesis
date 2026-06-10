@@ -12,12 +12,32 @@ def show_summary(config_str, extra_vars):
         print(f"Custom variables: {', '.join(extra_vars)}")
     print("="*50 + "\n")
 
+def has_passwordless_sudo():
+    """Checks if passwordless sudo is available for the current user."""
+    try:
+        res = subprocess.run(
+            ["sudo", "-n", "true"],
+            stdout=subprocess.PIPE,
+            stderr=subprocess.PIPE,
+            check=False
+        )
+        return res.returncode == 0
+    except Exception:
+        return False
+
 def execute(config_str, extra_vars):
     """Assembles and executes the final Ansible command via Make."""
+    # Append --ask-become-pass only if passwordless sudo is not configured
     extra_args_val = ""
+    if not has_passwordless_sudo():
+        extra_args_val = "--ask-become-pass"
+
     if extra_vars:
         vars_str = " ".join(extra_vars)
-        extra_args_val = f"-e {shlex.quote(vars_str)}"
+        if extra_args_val:
+            extra_args_val += f" -e {shlex.quote(vars_str)}"
+        else:
+            extra_args_val = f"-e {shlex.quote(vars_str)}"
 
     cmd = ["make", "run", f"CONFIG={config_str}"]
     if extra_args_val:
