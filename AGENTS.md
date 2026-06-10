@@ -44,6 +44,14 @@ When refactoring, debugging, or improving roles:
 - Follow the established installer flow in `cli/main.py` and the `ansible/playbooks/*.yml` files when adding new roles or menus.
 - Keep the role names aligned with the role directory names.
 
+## Python CLI Guidelines
+
+The interactive installer CLI is built with `Typer` and `InquirerPy`.
+- **Location**: All CLI logic is in the `cli/` directory.
+- **Dependencies**: Managed via `uv` in [pyproject.toml](file:///home/stanley/projects/genesis/pyproject.toml).
+- **Flow**: The CLI entrypoint [cli/main.py](file:///home/stanley/projects/genesis/cli/main.py) delegates to [cli/commands/install.py](file:///home/stanley/projects/genesis/cli/commands/install.py) which dynamically scans playbooks in `ansible/playbooks/` (using the helper in [cli/helpers/playbook.py](file:///home/stanley/projects/genesis/cli/helpers/playbook.py), ignoring `common.yml`). Playbooks are executed by invoking root-level `Makefile` targets.
+- **Modifications**: If you change the behavior of the playbook selector or add new command workflows, ensure they are integrated with CLI helpers or within the commands module.
+
 ## Examples of Good Changes
 
 - Add a new role by placing its defaults in `ansible/roles/<name>/defaults/main.yml` and wiring it into the relevant playbook.
