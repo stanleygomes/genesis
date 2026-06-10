@@ -1,0 +1,23 @@
+---
+- name: Install libfuse2 for AppImage support
+  apt:
+    name: libfuse2
+    state: present
+    update_cache: yes
+  become: true
+
+- name: Check if Neovim is installed
+  stat:
+    path: /usr/local/bin/nvim
+  register: nvim_bin
+  become: false
+
+- name: Download Neovim AppImage
+  get_url:
+    url: "{{ neovim_appimage_url }}"
+    dest: /usr/local/bin/nvim
+    mode: '0755'
+    owner: root
+    group: root
+  become: true
+  when: not nvim_bin.stat.exists
