@@ -25,15 +25,15 @@
   when: vscode_check.rc != 0
 
 - name: Download VS Code GPG key
-  shell: curl -fsSL https://packages.microsoft.com/keys/microsoft.asc | gpg --dearmor --yes -o /etc/apt/keyrings/packages.microsoft.gpg
+  shell: curl -fsSL https://packages.microsoft.com/keys/microsoft.asc | gpg --dearmor --yes -o /etc/apt/trusted.gpg.d/microsoft.gpg
   become: true
   args:
-    creates: /etc/apt/keyrings/packages.microsoft.gpg
+    creates: /etc/apt/trusted.gpg.d/microsoft.gpg
   when: vscode_check.rc != 0
 
 - name: Add VS Code repository
   apt_repository:
-    repo: "deb [arch=amd64,arm64,armhf signed-by=/etc/apt/keyrings/packages.microsoft.gpg] https://packages.microsoft.com/repos/code stable main"
+    repo: "deb [arch=amd64,arm64,armhf signed-by=/etc/apt/trusted.gpg.d/microsoft.gpg] https://packages.microsoft.com/repos/code stable main"
     state: present
     filename: vscode
   become: true
