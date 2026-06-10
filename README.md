@@ -44,12 +44,14 @@ You can use the CLI directly from any terminal:
 ```bash
 genesis install
 ```
+
 This will open an interactive menu (using `InquirerPy`) where you can select the playbooks to install.
 
 **Available Commands:**
+
 - `genesis install` - Opens the interactive menu to install playbooks.
-- `genesis update`  - Same as install, useful for updating configurations.
-- `genesis help`    - Shows the help message and available commands.
+- `genesis update` - Same as install, useful for updating configurations.
+- `genesis help` - Shows the help message and available commands.
 
 ### 2. Manual Execution (via Makefile)
 
@@ -78,3 +80,58 @@ make check CONFIG="desktop"
  pyproject.toml      # CLI dependency management via uv
  inventory              # Ansible host definition (localhost)
 ```
+
+---
+
+## 🧩 Available Roles
+
+Here is a list of all roles available in this repository:
+
+| Role              | Description                                                                                                   |
+| :---------------- | :------------------------------------------------------------------------------------------------------------ |
+| `antigravity`     | Installs Antigravity IDE & Hub, configures workspace settings, keybindings, and extensions.                   |
+| `antigravity-cli` | Installs the Antigravity CLI client tool (`agy`).                                                             |
+| `bruno`           | Installs Bruno API client (open-source, Git-friendly alternative to Postman/Insomnia).                        |
+| `dbeaver`         | Installs DBeaver Community Edition (SQL database explorer/client).                                            |
+| `desktop-entries` | Generates GNOME desktop application shortcuts (`.desktop` files) for TUI/IDE tools.                           |
+| `docker`          | Installs Docker Engine, Docker Compose, and sets permissions/user groups.                                     |
+| `filezilla`       | Installs FileZilla FTP client.                                                                                |
+| `fonts`           | Installs JetBrains Mono font package.                                                                         |
+| `genesis`         | Configures the Genesis interactive CLI script (`genesis`) for workstation management.                         |
+| `ghostty`         | Installs Ghostty terminal emulator.                                                                           |
+| `git`             | Installs Git, configures user credentials, and generates/sets GitHub SSH keys.                                |
+| `github-cli`      | Installs GitHub CLI (`gh`).                                                                                   |
+| `github-copilot`  | Installs GitHub Copilot CLI globally via NPM.                                                                 |
+| `go`              | Installs Go language runtime and `golangci-lint` to `~/.local/go`.                                            |
+| `google-chrome`   | Installs Google Chrome web browser.                                                                           |
+| `java`            | Installs SDKMAN and configures Java development dependencies.                                                 |
+| `lazydocker`      | Installs LazyDocker TUI binary for Docker container monitoring.                                               |
+| `mongodb-compass` | Installs MongoDB Compass GUI client.                                                                          |
+| `neovim`          | Installs latest Neovim editor via its official AppImage (including `libfuse2`).                               |
+| `node`            | Installs NVM, Node.js runtime, and the `pnpm` package manager.                                                |
+| `ollama`          | Installs Ollama for running local LLMs and sets up its systemd service.                                       |
+| `opencode`        | Installs the OpenCode AI coding terminal assistant.                                                           |
+| `php`             | Installs PHP runtime, extensions, and Composer package manager.                                               |
+| `postman`         | Installs Postman API client via Snap.                                                                         |
+| `python`          | Installs Python runtime dependencies, Astral `uv` tool, and Python 3.14.                                      |
+| `system`          | Configures 8GB swap space, GNOME Tweaks, and GNOME extension manager.                                         |
+| `terminal`        | Installs modern shell utilities (bat, btop, jq, eza, dust, fd-find) and sets up Zsh + Oh My Zsh with aliases. |
+| `vscode`          | Installs VS Code, syncs user settings/keybindings, and installs extensions.                                   |
+
+---
+
+## 📜 Playbooks & Mapped Roles
+
+This project organises roles into the following playbooks:
+
+### 1. Common Configuration (`common.yml`)
+
+> Target: Core command line utilities, runtimes and development tools required for any setup.
+
+### 2. Desktop Configuration (`desktop.yml`)
+
+> Target: User interfaces, web browsers, IDEs, desktop entries and database tools.
+
+### 3. Custom Setup 1 (`custom1.yml`)
+
+> Target: Custom bundle containing browsers, Bruno, databases, local LLMs, and OpenCode.

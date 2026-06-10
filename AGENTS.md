@@ -48,3 +48,10 @@ When refactoring, debugging, or improving roles:
 
 - Add a new role by placing its defaults in `roles/<name>/defaults/main.yml` and wiring it into the relevant playbook.
 - Add a package install check by probing first, then skipping the install task when the package is already present.
+
+## Documentation Maintenance
+
+When adding, deleting, renaming, or modifying the purpose of roles or playbooks:
+- Always update the **Available Roles** table and the **Playbooks & Mapped Roles** list in [README.md](file:///home/stanley/projects/genesis/README.md).
+- Keep descriptions brief and accurate.
+- Maintain formatting, ordering alphabetically in the roles table.
