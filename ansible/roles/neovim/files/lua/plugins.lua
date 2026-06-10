@@ -24,14 +24,22 @@ return {
   -- Destaque de sintaxe (Treesitter)
   {
     "nvim-treesitter/nvim-treesitter",
+    branch = "main",
     build = ":TSUpdate",
     config = function()
-      local configs = require("nvim-treesitter.configs")
-      configs.setup({
-        ensure_installed = { "lua", "vim", "vimdoc", "javascript", "html", "python" },
-        sync_install = false,
-        highlight = { enable = true },
-        indent = { enable = true },
+      require("nvim-treesitter").setup()
+
+      -- Garante a instalação dos parsers básicos
+      pcall(function()
+        require("nvim-treesitter").install({ "lua", "vim", "vimdoc", "javascript", "html", "python" })
+      end)
+
+      -- Ativa destaque de sintaxe nativo do Treesitter no Neovim 0.12+
+      vim.api.nvim_create_autocmd("FileType", {
+        pattern = "*",
+        callback = function()
+          pcall(vim.treesitter.start)
+        end,
       })
     end
   },

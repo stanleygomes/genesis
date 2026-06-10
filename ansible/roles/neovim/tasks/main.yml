@@ -22,12 +22,13 @@
   become: true
   when: not nvim_bin.stat.exists
 
-- name: Install packages needed for plugins (ripgrep, build-essential, unzip)
+- name: Install packages needed for plugins (ripgrep, build-essential, unzip, tree-sitter-cli)
   apt:
     name:
       - ripgrep
       - build-essential
       - unzip
+      - tree-sitter-cli
     state: present
     update_cache: yes
   become: true
