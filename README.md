@@ -109,7 +109,7 @@ Here is a list of all roles available in this repository:
 | `java`            | Installs SDKMAN and configures Java development dependencies.                                                 |
 | `lazydocker`      | Installs LazyDocker TUI binary for Docker container monitoring.                                               |
 | `mongodb-compass` | Installs MongoDB Compass GUI client.                                                                          |
-| `neovim`          | Installs latest Neovim editor via its official AppImage (including `libfuse2`).                               |
+| `neovim`          | Installs latest Neovim editor via its official AppImage (including `libfuse2`), configuring it with `lazy.nvim` and plugins (Gruvbox, Telescope, Treesitter). |
 | `node`            | Installs NVM, Node.js runtime, and the `pnpm` package manager.                                                |
 | `ollama`          | Installs Ollama for running local LLMs and sets up its systemd service.                                       |
 | `opencode`        | Installs the OpenCode AI coding terminal assistant.                                                           |

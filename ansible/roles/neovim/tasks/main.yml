@@ -21,3 +21,35 @@
     group: root
   become: true
   when: not nvim_bin.stat.exists
+
+- name: Install packages needed for plugins (ripgrep, build-essential, unzip)
+  apt:
+    name:
+      - ripgrep
+      - build-essential
+      - unzip
+    state: present
+    update_cache: yes
+  become: true
+
+- name: Ensure Neovim configuration directories exist
+  file:
+    path: "{{ ansible_env.HOME }}/.config/nvim/lua"
+    state: directory
+    mode: '0755'
+  become: false
+
+- name: Copy Neovim init.lua configuration
+  copy:
+    src: init.lua
+    dest: "{{ ansible_env.HOME }}/.config/nvim/init.lua"
+    mode: '0644'
+  become: false
+
+- name: Copy Neovim plugins.lua configuration
+  copy:
+    src: lua/plugins.lua
+    dest: "{{ ansible_env.HOME }}/.config/nvim/lua/plugins.lua"
+    mode: '0644'
+  become: false
+
