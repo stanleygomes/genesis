@@ -114,11 +114,19 @@ return {
     "neovim/nvim-lspconfig",
     dependencies = { "williamboman/mason-lspconfig.nvim", "hrsh7th/cmp-nvim-lsp" },
     config = function()
-      local lspconfig = require("lspconfig")
       local capabilities = require("cmp_nvim_lsp").default_capabilities()
 
-      lspconfig.lua_ls.setup({ capabilities = capabilities })
-      lspconfig.pyright.setup({ capabilities = capabilities })
+      -- Configura e habilita o lua_ls nativamente
+      vim.lsp.config('lua_ls', {
+        capabilities = capabilities
+      })
+      vim.lsp.enable('lua_ls')
+
+      -- Configura e habilita o pyright nativamente
+      vim.lsp.config('pyright', {
+        capabilities = capabilities
+      })
+      vim.lsp.enable('pyright')
 
       vim.api.nvim_create_autocmd('LspAttach', {
         group = vim.api.nvim_create_augroup('UserLspConfig', {}),
