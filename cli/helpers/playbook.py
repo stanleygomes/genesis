@@ -1,6 +1,6 @@
 import os
 
-PLAYBOOKS_DIR = "playbooks"
+PLAYBOOKS_DIR = "ansible/playbooks"
 COMMON_PLAYBOOK = "common"
 
 def get_available_playbooks():

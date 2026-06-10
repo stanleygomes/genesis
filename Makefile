@@ -28,16 +28,16 @@ install-cli:
 	uv sync
 
 run:
-	ansible-playbook -i $(INVENTORY) $(PLAYBOOK_FILES) $(EXTRA_ARGS)
+	cd ansible && ansible-playbook -i $(INVENTORY) $(PLAYBOOK_FILES) $(EXTRA_ARGS)
 
 check:
-	ansible-playbook -i $(INVENTORY) $(PLAYBOOK_FILES) --check $(EXTRA_ARGS)
+	cd ansible && ansible-playbook -i $(INVENTORY) $(PLAYBOOK_FILES) --check $(EXTRA_ARGS)
 
 syntax:
-	ansible-playbook -i $(INVENTORY) $(PLAYBOOK_FILES) --syntax-check
+	cd ansible && ansible-playbook -i $(INVENTORY) $(PLAYBOOK_FILES) --syntax-check
 
 list:
-	ansible-playbook -i $(INVENTORY) $(PLAYBOOK_FILES) --list-tasks
+	cd ansible && ansible-playbook -i $(INVENTORY) $(PLAYBOOK_FILES) --list-tasks
 
 explain:
-	ansible-inventory --list -y
+	cd ansible && ansible-inventory --list -y
