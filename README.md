@@ -116,7 +116,7 @@ Here is a list of all roles available in this repository:
 | `php`             | Installs PHP runtime, extensions, and Composer package manager.                                               |
 | `postman`         | Installs Postman API client via Snap.                                                                         |
 | `python`          | Installs Python runtime dependencies, Astral `uv` tool, and Python 3.14.                                      |
-| `system`          | Configures 8GB swap space, GNOME Tweaks, and GNOME extension manager.                                         |
+| `system`          | Installs GNOME Tweaks and GNOME Extension Manager.                                                            |
 | `terminal`        | Installs modern shell utilities (bat, btop, jq, eza, dust, fd-find) and sets up Zsh + Oh My Zsh with aliases. |
 | `vscode`          | Installs VS Code, syncs user settings/keybindings, and installs extensions.                                   |
 
