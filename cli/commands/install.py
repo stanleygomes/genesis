@@ -1,5 +1,7 @@
 import sys
 import shlex
+import os
+import subprocess
 from cli.helpers import git, playbook, prompt
 from cli.core import runner
 
@@ -16,6 +18,28 @@ def execute():
         print("✅ Git is already configured!")
         print(f"   Name:  {user_name}")
         print(f"   Email: {user_email}\n")
+
+    # 1.5. Proverbs configuration (AI harness Workspace - Skills, Agents, rules and more)
+    configure_proverbs = prompt.ask_confirm(
+        "Do you want to configure proverbs (AI harness Workspace - Skills, Agents, rules and more)?",
+        default=False
+    )
+    if configure_proverbs:
+        agents_dir = os.path.expanduser("~/.agents")
+        if os.path.exists(agents_dir):
+            print(f"❌ The folder {agents_dir} already exists. You cannot configure proverbs without moving or renaming this folder first.")
+            sys.exit(1)
+        else:
+            print(f"📥 Cloning proverbs repository into {agents_dir}...")
+            try:
+                subprocess.run(
+                    ["git", "clone", "https://github.com/stanleygomes/proverbs.git", agents_dir],
+                    check=True
+                )
+                print("✅ proverbs configured successfully!\n")
+            except subprocess.CalledProcessError as e:
+                print(f"❌ Failed to clone proverbs repository: {e}")
+                sys.exit(1)
 
     # 2. Get available playbooks
     available = playbook.get_available_playbooks()
