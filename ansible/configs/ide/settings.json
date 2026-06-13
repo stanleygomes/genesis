@@ -89,5 +89,6 @@
   "files.autoSave": "afterDelay",
   "php.executablePath": "",
   "editor.linkedEditing": true,
-  "git.blame.editorDecoration.enabled": true
+  "git.blame.editorDecoration.enabled": true,
+  "extensions.autoUpdate": false
 }
