@@ -27,8 +27,20 @@ def execute():
     if configure_proverbs:
         agents_dir = os.path.expanduser("~/.agents")
         if os.path.exists(agents_dir):
-            print(f"❌ The folder {agents_dir} already exists. You cannot configure proverbs without moving or renaming this folder first.")
-            sys.exit(1)
+            if prompt.ask_confirm(f"The folder {agents_dir} already exists. Do you want to update it?", default=True):
+                print(f"🔄 Updating proverbs repository in {agents_dir}...")
+                try:
+                    subprocess.run(
+                        ["git", "-C", agents_dir, "pull"],
+                        check=True
+                    )
+                    print("✅ proverbs updated successfully!\n")
+                except subprocess.CalledProcessError as e:
+                    print(f"❌ Failed to update proverbs repository: {e}")
+                    sys.exit(1)
+            else:
+                print("⚠️ Setup cancelled.")
+                sys.exit(0)
         else:
             print(f"📥 Cloning proverbs repository into {agents_dir}...")
             try:
