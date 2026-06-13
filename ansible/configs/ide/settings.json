@@ -90,5 +90,7 @@
   "php.executablePath": "",
   "editor.linkedEditing": true,
   "git.blame.editorDecoration.enabled": true,
-  "extensions.autoUpdate": false
+  "extensions.autoUpdate": false,
+  "zenMode.centerLayout": false,
+  "zenMode.fullScreen": false
 }
