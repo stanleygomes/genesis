@@ -11,7 +11,7 @@
 
 - name: Set download URLs based on architecture
   set_fact:
-    antigravity_ide_url: "{{ 'https://edgedl.me.gvt1.com/edgedl/release2/j0qc3/antigravity/stable/2.0.4-6381998290370560/linux-x64/Antigravity%20IDE.tar.gz' }}"
+    antigravity_ide_url: "{{ 'https://edgedl.me.gvt1.com/edgedl/release2/j0qc3/antigravity/stable/2.1.1-6123990880747520/linux-x64/Antigravity%20IDE.tar.gz' }}"
     antigravity_hub_url: "{{ 'https://storage.googleapis.com/antigravity-public/antigravity-hub/2.0.6-5413878570549248/linux-x64/Antigravity.tar.gz' }}"
 
 # === INSTALL ANTIGRAVITY IDE ===
