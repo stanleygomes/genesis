@@ -10,6 +10,7 @@
       setup:
       become: false
   roles:
+    - system
     - google-chrome
     - github-cli
     - fonts
