@@ -10,6 +10,14 @@
       setup:
       become: false
 
+    - name: Update apt cache (ignoring unreachable repos)
+      # Run update once here so per-role apt tasks do not need update_cache: yes.
+      # --ignore-missing tolerates repos that are blocked (e.g., behind a VPN)
+      # or have a stale GPG key, without failing the entire play.
+      shell: apt-get update -o APT::Update::Error-Mode=ignore-errors || true
+      become: true
+      changed_when: false
+
   roles:
     - genesis
     - git

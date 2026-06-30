@@ -7,7 +7,6 @@
       - jq
       - zsh
     state: present
-    update_cache: yes
   become: true
 
 - name: Create directory for eza key
@@ -32,7 +31,6 @@
   apt:
     name: eza
     state: present
-    update_cache: yes
   become: true
 
 - name: Install Dust binary
@@ -56,7 +54,6 @@
   apt:
     name: fd-find
     state: present
-    update_cache: yes
   become: true
 
 # --- ZSH Specific Setup ---
