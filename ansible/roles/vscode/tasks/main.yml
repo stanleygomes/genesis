@@ -25,15 +25,16 @@
   when: vscode_check.rc != 0
 
 - name: Download VS Code GPG key
-  # Always refresh the key so apt update never fails with NO_PUBKEY,
-  # even when VS Code was already installed via a different path.
-  shell: curl -fsSL https://packages.microsoft.com/keys/microsoft.asc | gpg --dearmor --yes -o /etc/apt/trusted.gpg.d/microsoft.gpg
+  # Always refresh the key so apt update never fails with NO_PUBKEY.
+  # Use the same path VS Code's own installer registers (/etc/apt/keyrings/packages.microsoft.gpg)
+  # to avoid a Signed-By conflict when the repo entry already exists.
+  shell: curl -fsSL https://packages.microsoft.com/keys/microsoft.asc | gpg --dearmor --yes -o /etc/apt/keyrings/packages.microsoft.gpg
   become: true
   changed_when: false
 
 - name: Add VS Code repository
   apt_repository:
-    repo: "deb [arch=amd64,arm64,armhf signed-by=/etc/apt/trusted.gpg.d/microsoft.gpg] https://packages.microsoft.com/repos/code stable main"
+    repo: "deb [arch=amd64,arm64,armhf signed-by=/etc/apt/keyrings/packages.microsoft.gpg] https://packages.microsoft.com/repos/code stable main"
     state: present
     filename: vscode
   become: true
