@@ -16,7 +16,6 @@ mechatroner.rainbow-csv
 miguelsolorio.fluent-icons
 ms-vscode-remote.remote-containers
 ms-vscode.sublime-keybindings
-purocean.drawio-preview
 ryanluker.vscode-coverage-gutters
 stanleygomes.codex-notes
 stanleygomes.parable-workspaces
