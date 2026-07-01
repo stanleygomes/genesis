@@ -3,7 +3,6 @@
   apt:
     name: libfuse2
     state: present
-    update_cache: yes
   become: true
 
 - name: Check if Neovim is installed
@@ -30,7 +29,6 @@
       - unzip
       - tree-sitter-cli
     state: present
-    update_cache: yes
   become: true
 
 - name: Ensure Neovim configuration directories exist

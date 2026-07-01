@@ -36,13 +36,19 @@
     repo: "deb [arch=amd64 signed-by=/etc/apt/keyrings/githubcli-archive-keyring.gpg] https://cli.github.com/packages stable main"
     state: present
     filename: github-cli
+    update_cache: no
   become: true
+  when: gh_check.rc != 0
+
+- name: Update apt cache manually (ignoring unreachable repos)
+  shell: apt-get update || true
+  become: true
+  changed_when: false
   when: gh_check.rc != 0
 
 - name: Install GitHub CLI
   apt:
     name: "{{ github_cli_package }}"
     state: present
-    update_cache: yes
   become: true
   when: gh_check.rc != 0

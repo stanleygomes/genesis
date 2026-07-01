@@ -3,7 +3,6 @@
   apt:
     name: "{{ php_extensions }}"
     state: present
-    update_cache: yes
   become: true
 
 - name: Check if Composer is installed

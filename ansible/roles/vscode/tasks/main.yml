@@ -37,13 +37,19 @@
     repo: "deb [arch=amd64,arm64,armhf signed-by=/etc/apt/keyrings/packages.microsoft.gpg] https://packages.microsoft.com/repos/code stable main"
     state: present
     filename: vscode
+    update_cache: no
   become: true
+
+- name: Update apt cache manually (ignoring unreachable repos)
+  shell: apt-get update || true
+  become: true
+  changed_when: false
+  when: vscode_check.rc != 0
 
 - name: Install VS Code
   apt:
     name: code
     state: present
-    update_cache: yes
   become: true
   when: vscode_check.rc != 0
 

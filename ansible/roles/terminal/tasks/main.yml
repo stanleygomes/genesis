@@ -25,7 +25,13 @@
     repo: "deb [signed-by=/etc/apt/keyrings/gierens.gpg] http://deb.gierens.de stable main"
     state: present
     filename: gierens
+    update_cache: no
   become: true
+
+- name: Update apt cache manually (ignoring unreachable repos)
+  shell: apt-get update || true
+  become: true
+  changed_when: false
 
 - name: Install eza
   apt:

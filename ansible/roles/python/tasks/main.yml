@@ -6,7 +6,6 @@
       - python3-pip
       - python-is-python3
     state: present
-    update_cache: yes
   become: true
 
 - name: Check if uv is installed

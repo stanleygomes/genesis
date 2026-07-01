@@ -10,7 +10,7 @@
   apt_repository:
     repo: 'ppa:mkasberg/ghostty-ubuntu'
     state: present
-    update_cache: yes
+    update_cache: no
   become: true
   when:
     - ghostty_check.rc != 0
@@ -41,15 +41,21 @@
     repo: "deb [signed-by=/etc/apt/keyrings/debian-griffo-io.asc] https://debian.griffo.io/apt {{ ansible_distribution_release }} main"
     state: present
     filename: debian-griffo-io
+    update_cache: no
   become: true
   when:
     - ghostty_check.rc != 0
     - ansible_distribution == 'Debian'
 
+- name: Update apt cache manually (ignoring unreachable repos)
+  shell: apt-get update || true
+  become: true
+  changed_when: false
+  when: ghostty_check.rc != 0
+
 - name: Install Ghostty
   apt:
     name: ghostty
     state: present
-    update_cache: yes
   become: true
   when: ghostty_check.rc != 0

@@ -17,11 +17,16 @@
     repo: "deb [signed-by=/etc/apt/keyrings/bruno.gpg] http://debian.usebruno.com/ bruno stable"
     state: present
     filename: bruno
+    update_cache: no
   become: true
+
+- name: Update apt cache manually (ignoring unreachable repos)
+  shell: apt-get update || true
+  become: true
+  changed_when: false
 
 - name: Install Bruno
   apt:
     name: bruno
     state: present
-    update_cache: yes
   become: true

@@ -13,7 +13,6 @@
       - gnome-shell-extension-manager
       - gnome-shell-extensions
     state: present
-    update_cache: yes
   become: true
   when: gnome_tweaks_check.rc != 0
 

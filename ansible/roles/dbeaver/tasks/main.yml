@@ -35,12 +35,18 @@
     repo: "deb [signed-by=/etc/apt/keyrings/dbeaver.asc] https://dbeaver.io/debs/dbeaver-ce /"
     state: present
     filename: dbeaver
+    update_cache: no
   become: true
+  when: dbeaver_check.rc != 0
+
+- name: Update apt cache manually (ignoring unreachable repos)
+  shell: apt-get update || true
+  become: true
+  changed_when: false
   when: dbeaver_check.rc != 0
 
 - name: Install DBeaver Community Edition
   apt:
     name: dbeaver-ce
     state: present
-    update_cache: yes
   when: dbeaver_check.rc != 0

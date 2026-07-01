@@ -3,5 +3,4 @@
   apt:
     name: filezilla
     state: present
-    update_cache: yes
   become: true

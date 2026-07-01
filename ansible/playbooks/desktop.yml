@@ -9,6 +9,11 @@
     - name: Gather facts as normal user to set ansible_env correctly
       setup:
       become: false
+
+    - name: Update apt cache (ignoring unreachable repos)
+      shell: apt-get update || true
+      become: true
+      changed_when: false
   roles:
     - system
     - google-chrome
