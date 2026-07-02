@@ -25,9 +25,6 @@
     - python
     - go
     - bruno
-    - ollama
     - github-copilot
-    - opencode
     - lazydocker
-    - github-copilot
     - ghostty

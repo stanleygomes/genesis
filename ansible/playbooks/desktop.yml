@@ -17,7 +17,6 @@
   roles:
     - system
     - google-chrome
-    - github-cli
     - fonts
     - dbeaver
     - java
@@ -26,11 +25,8 @@
     - go
     - antigravity
     - vscode
-    - postman
     - lazydocker
     - filezilla
-    - ollama
-    - opencode
     - antigravity-cli
     - github-copilot
     - ghostty

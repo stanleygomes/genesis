@@ -101,7 +101,6 @@ Here is a list of all roles available in this repository:
 | `genesis`         | Configures the Genesis interactive CLI script (`genesis`) for workstation management.                         |
 | `ghostty`         | Installs Ghostty terminal emulator.                                                                           |
 | `git`             | Installs Git, configures user credentials, and generates/sets GitHub SSH keys.                                |
-| `github-cli`      | Installs GitHub CLI (`gh`).                                                                                   |
 | `github-copilot`  | Installs GitHub Copilot CLI globally via NPM.                                                                 |
 | `go`              | Installs Go language runtime and `golangci-lint` to `~/.local/go`.                                            |
 | `google-chrome`   | Installs Google Chrome web browser.                                                                           |
@@ -110,10 +109,7 @@ Here is a list of all roles available in this repository:
 | `mongodb-compass` | Installs MongoDB Compass GUI client.                                                                          |
 | `neovim`          | Installs latest Neovim editor via its official AppImage (including `libfuse2`), configuring it with `lazy.nvim` and plugins (Gruvbox, Telescope, Treesitter). |
 | `node`            | Installs NVM, Node.js runtime, and the `pnpm` package manager.                                                |
-| `ollama`          | Installs Ollama for running local LLMs and sets up its systemd service.                                       |
-| `opencode`        | Installs the OpenCode AI coding terminal assistant.                                                           |
 | `php`             | Installs PHP runtime, extensions, and Composer package manager.                                               |
-| `postman`         | Installs Postman API client via Snap.                                                                         |
 | `python`          | Installs Python runtime dependencies, Astral `uv` tool, and Python 3.14.                                      |
 | `system`          | Installs GNOME Tweaks and GNOME Extension Manager.                                                            |
 | `terminal`        | Installs modern shell utilities (bat, btop, jq, eza, dust, fd-find, starship) and sets up Zsh + Oh My Zsh with aliases. |
@@ -135,4 +131,4 @@ This project organises roles into the following playbooks:
 
 ### 3. Custom Setup 1 (`custom1.yml`)
 
-> Target: Custom bundle containing browsers, Bruno, databases, local LLMs, and OpenCode.
+> Target: Custom bundle containing browsers, Bruno, and databases.
