@@ -1,4 +1,3 @@
-adpyke.codesnap
 amiralizadeh9480.laravel-extra-intellisense
 beardedbear.beardedtheme
 codezombiech.gitignore
