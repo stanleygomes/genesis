@@ -1,5 +1,4 @@
 amiralizadeh9480.laravel-extra-intellisense
-beardedbear.beardedtheme
 codezombiech.gitignore
 lukasz-wronski.ftp-sync
 dbaeumer.vscode-eslint
@@ -9,7 +8,6 @@ esbenp.prettier-vscode
 fabiospampinato.vscode-diff
 formulahendry.auto-close-tag
 formulahendry.auto-rename-tag
-jebbs.plantuml
 waderyan.gitblame
 mechatroner.rainbow-csv
 miguelsolorio.fluent-icons
@@ -25,4 +23,3 @@ tamasfe.even-better-toml
 ms-python.python
 bierner.markdown-mermaid
 detachhead.basedpyright
-lkqm.gitblame-annotations
