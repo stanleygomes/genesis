@@ -8,7 +8,6 @@ set -e
 # --- Configuration ---
 REPO_URL="https://github.com/stanleygomes/genesis.git"
 TARGET_DIR="$HOME/.config/genesis"
-COMMON_PLAYBOOK="common"
 
 echo "🚀 Starting Genesis Workstation Setup..."
 
@@ -55,9 +54,9 @@ if [ -z "$git_user_email" ]; then
     read -rp "Enter your E-mail (for Git): " git_user_email
 fi
 
-# 5. Select which playbooks to run (common is always included)
+# 5. Select which playbooks to run (no default, common included as a regular option)
 mapfile -t available_playbooks < <(
-    find ansible/playbooks -maxdepth 1 -name "*.yml" ! -name "${COMMON_PLAYBOOK}.yml" -printf "%f\n" |
+    find ansible/playbooks -maxdepth 1 -name "*.yml" -printf "%f\n" |
     sed 's/\.yml$//' | sort
 )
 
@@ -66,15 +65,17 @@ for pb in "${available_playbooks[@]}"; do
     whiptail_items+=("$pb" "" OFF)
 done
 
-selected_playbooks=""
-if [ "${#whiptail_items[@]}" -gt 0 ]; then
-    selected_playbooks=$(whiptail --title "Genesis Setup" --checklist \
-        "Select the playbooks you want to install/update (space to toggle):" \
-        20 70 10 "${whiptail_items[@]}" 3>&1 1>&2 2>&3) || true
-    selected_playbooks=$(echo "$selected_playbooks" | tr -d '"')
+selected_playbooks=$(whiptail --title "Genesis Setup" --checklist \
+    "Select the playbooks you want to run (space to toggle):" \
+    20 70 10 "${whiptail_items[@]}" 3>&1 1>&2 2>&3) || true
+selected_playbooks=$(echo "$selected_playbooks" | tr -d '"')
+
+if [ -z "$selected_playbooks" ]; then
+    echo "⚠️ No playbook selected. Exiting."
+    exit 0
 fi
 
-playbook_files=("playbooks/${COMMON_PLAYBOOK}.yml")
+playbook_files=()
 for pb in $selected_playbooks; do
     playbook_files+=("playbooks/${pb}.yml")
 done
