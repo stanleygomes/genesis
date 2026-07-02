@@ -91,11 +91,11 @@ Here is a list of all roles available in this repository:
 
 | Role              | Description                                                                                                   |
 | :---------------- | :------------------------------------------------------------------------------------------------------------ |
-| `antigravity`     | Installs Antigravity IDE & Hub, configures workspace settings, keybindings, and extensions.                   |
+| `antigravity`     | Installs Antigravity IDE & Hub, configures workspace settings, keybindings, extensions, and desktop shortcuts. |
 | `antigravity-cli` | Installs the Antigravity CLI client tool (`agy`).                                                             |
 | `bruno`           | Installs Bruno API client (open-source, Git-friendly alternative to Postman/Insomnia).                        |
 | `dbeaver`         | Installs DBeaver Community Edition (SQL database explorer/client).                                            |
-| `desktop-entries` | Generates GNOME desktop application shortcuts (`.desktop` files) for TUI/IDE tools.                           |
+| `desktop-entries` | Generates GNOME desktop application shortcuts (`.desktop` files) for TUI tools.                               |
 | `docker`          | Installs Docker Engine, Docker Compose, and sets permissions/user groups.                                     |
 | `filezilla`       | Installs FileZilla FTP client.                                                                                |
 | `fonts`           | Installs JetBrains Mono font package.                                                                         |

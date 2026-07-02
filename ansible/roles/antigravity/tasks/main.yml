@@ -161,3 +161,73 @@
   register: ext_install
   changed_when: "'is already installed' not in ext_install.stdout"
   ignore_errors: true
+
+# === DESKTOP ENTRIES ===
+
+- name: Ensure applications directory exists
+  file:
+    path: "{{ ansible_env.HOME }}/.local/share/applications"
+    state: directory
+    mode: '0755'
+  become: false
+
+- name: Create Antigravity IDE desktop entry
+  copy:
+    dest: "{{ ansible_env.HOME }}/.local/share/applications/antigravity-ide.desktop"
+    mode: "0644"
+    content: |
+      [Desktop Entry]
+      Name=Antigravity IDE
+      Comment=Experience liftoff
+      GenericName=Text Editor
+      Exec=/usr/bin/antigravity-ide %F
+      Icon=antigravity-ide
+      Type=Application
+      StartupNotify=false
+      StartupWMClass=antigravity-ide
+      Categories=TextEditor;Development;IDE;
+      MimeType=application/x-antigravity-workspace;
+      Actions=new-empty-window;
+      Keywords=vscode;
+
+      [Desktop Action new-empty-window]
+      Name=New Empty Window
+      Exec=/usr/bin/antigravity-ide --new-window %F
+      Icon=antigravity-ide
+  become: false
+
+- name: Create Antigravity IDE URL Handler desktop entry
+  copy:
+    dest: "{{ ansible_env.HOME }}/.local/share/applications/antigravity-url-handler.desktop"
+    mode: "0644"
+    content: |
+      [Desktop Entry]
+      Name=Antigravity IDE - URL Handler
+      Comment=Experience liftoff
+      GenericName=Text Editor
+      Exec=/usr/bin/antigravity-ide --open-url %U
+      Icon=antigravity-ide
+      Type=Application
+      NoDisplay=true
+      StartupNotify=true
+      Categories=Utility;TextEditor;Development;IDE;
+      MimeType=x-scheme-handler/antigravity;
+      Keywords=vscode;
+  become: false
+
+- name: Create Antigravity Hub desktop entry
+  copy:
+    dest: "{{ ansible_env.HOME }}/.local/share/applications/antigravity.desktop"
+    mode: "0644"
+    content: |
+      [Desktop Entry]
+      Name=Antigravity
+      Comment=Antigravity Hub
+      GenericName=Application Hub
+      Exec=/usr/bin/antigravity %F
+      Icon=antigravity
+      Type=Application
+      StartupNotify=false
+      StartupWMClass=antigravity
+      Categories=Utility;Development;
+  become: false
