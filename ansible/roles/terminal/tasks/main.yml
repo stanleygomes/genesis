@@ -84,10 +84,10 @@
   when: not oh_my_zsh_stat.stat.exists
 
 - name: Set zsh as default shell
-  shell: chsh -s /usr/bin/zsh
-  become: false
-  changed_when: false
-  ignore_errors: true
+  user:
+    name: "{{ ansible_user_id }}"
+    shell: /usr/bin/zsh
+  become: true
 
 - name: Set Oh My Zsh theme
   lineinfile:
