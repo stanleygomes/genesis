@@ -2,7 +2,7 @@ import sys
 import shlex
 import os
 import subprocess
-from cli.helpers import git, playbook, prompt
+from cli.helpers import claude, git, playbook, prompt
 from cli.core import runner
 
 def execute():
@@ -52,6 +52,9 @@ def execute():
             except subprocess.CalledProcessError as e:
                 print(f"❌ Failed to clone proverbs repository: {e}")
                 sys.exit(1)
+
+        # Mirror proverbs (skills/rules) into ~/.claude so Claude Code picks them up
+        claude.sync_from_agents(agents_dir)
 
     # 2. Get available playbooks
     available = playbook.get_available_playbooks()
