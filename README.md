@@ -97,7 +97,6 @@ Here is a list of all roles available in this repository:
 | `dbeaver`         | Installs DBeaver Community Edition (SQL database explorer/client).                                            |
 | `docker`          | Installs Docker Engine, Docker Compose, and sets permissions/user groups.                                     |
 | `filezilla`       | Installs FileZilla FTP client.                                                                                |
-| `fonts`           | Installs JetBrains Mono font package.                                                                         |
 | `genesis`         | Configures the Genesis interactive CLI script (`genesis`) for workstation management.                         |
 | `ghostty`         | Installs Ghostty terminal emulator.                                                                           |
 | `git`             | Installs Git, configures user credentials, and generates/sets GitHub SSH keys.                                |
