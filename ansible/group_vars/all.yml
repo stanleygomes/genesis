@@ -35,22 +35,5 @@ php_extensions:
   - "php-bcmath"
   - "php-sqlite3"
 
-# ------------------------------------------------------------------------------
-# Desktop / TUI Apps Configuration
-# ------------------------------------------------------------------------------
 
-tui_apps:
-
-  - name: "LazyDocker"
-    exec: "lazydocker"
-    icon: "docker"
-    comment: "The simple terminal UI for both docker and docker-compose"
-  - name: "Btop"
-    exec: "btop"
-    icon: "utilities-system-monitor"
-    comment: "Resource monitor that shows usage and stats"
-  - name: "OpenCode"
-    exec: "opencode"
-    icon: "utilities-terminal"
-    comment: "OpenCode AI coding agent terminal UI"
 
