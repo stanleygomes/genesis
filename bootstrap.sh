@@ -65,7 +65,10 @@ for pb in "${available_playbooks[@]}"; do
     whiptail_items+=("$pb" "" OFF)
 done
 
-selected_playbooks=$(whiptail --title "Genesis Setup" --checklist \
+# Phosphor CRT color scheme (green on black) for the whiptail dialog
+NEWT_COLORS_SCHEME="$(cat ansible/configs/whiptail/theme.env)"
+
+selected_playbooks=$(NEWT_COLORS="$NEWT_COLORS_SCHEME" whiptail --title "Genesis Setup" --checklist \
     "Select the playbooks you want to run (space to toggle):" \
     20 70 10 "${whiptail_items[@]}" 3>&1 1>&2 2>&3) || true
 selected_playbooks=$(echo "$selected_playbooks" | tr -d '"')
