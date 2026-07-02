@@ -134,6 +134,11 @@
               command docker "$@"
           fi
       }
+
+      # Alias for installing/updating Genesis
+      genesis() {
+          curl -sSL https://raw.githubusercontent.com/stanleygomes/genesis/refs/heads/master/bootstrap.sh | bash
+      }
     state: present
   become: false
   loop:

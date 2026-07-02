@@ -35,23 +35,17 @@ Before running the playbooks, you need to have **Ansible** installed on your mac
 
 ## Usage
 
-### 1. Interactive Installer (CLI)
+### 1. Interactive Bootstrap Script
 
-The easiest way to set up or update the environment is using the interactive CLI. When you run the `bootstrap.sh` script, it automatically installs a command-line utility called `genesis` using `uv` and `Typer`.
+The easiest way to set up or update the environment is running `bootstrap.sh` (see the one-liner above). It installs the system requirements, clones/pulls this repository, and opens an interactive `whiptail` checklist to select which playbooks to run on top of `common.yml`.
 
-You can use the CLI directly from any terminal:
+After the first run, the `terminal` role installs a `genesis` shell function in your `.bashrc`/`.zshrc` that re-runs the bootstrap one-liner, so you can just type:
 
 ```bash
-genesis install
+genesis
 ```
 
-This will open an interactive menu (using `InquirerPy`) where you can select the playbooks to install.
-
-**Available Commands:**
-
-- `genesis install` - Opens the interactive menu to install playbooks.
-- `genesis update` - Same as install, useful for updating configurations.
-- `genesis help` - Shows the help message and available commands.
+from any terminal to update or reconfigure your machine.
 
 ### 2. Manual Execution (via Makefile)
 
@@ -78,9 +72,7 @@ make check CONFIG="desktop"
   ├── ansible.cfg      # Ansible configuration settings
   └── inventory        # Ansible host definition (localhost)
 🛠️ Makefile            # Helper tasks to run, check, list playbooks
-🐚 bootstrap.sh        # One-liner script to bootstrap environment
-💻 cli/                # Interactive Python CLI (Typer + InquirerPy)
-📦 pyproject.toml      # CLI dependency management via uv
+🐚 bootstrap.sh        # One-liner script to bootstrap environment (playbook selection via whiptail)
 ```
 
 ---
@@ -97,7 +89,6 @@ Here is a list of all roles available in this repository:
 | `dbeaver`         | Installs DBeaver Community Edition (SQL database explorer/client).                                            |
 | `docker`          | Installs Docker Engine, Docker Compose, and sets permissions/user groups.                                     |
 | `filezilla`       | Installs FileZilla FTP client.                                                                                |
-| `genesis`         | Configures the Genesis interactive CLI script (`genesis`) for workstation management.                         |
 | `ghostty`         | Installs Ghostty terminal emulator.                                                                           |
 | `git`             | Installs Git, configures user credentials, and generates/sets GitHub SSH keys.                                |
 | `github-copilot`  | Installs GitHub Copilot CLI globally via NPM.                                                                 |
@@ -109,6 +100,7 @@ Here is a list of all roles available in this repository:
 | `neovim`          | Installs latest Neovim editor via its official AppImage (including `libfuse2`), configuring it with `lazy.nvim` and plugins (Gruvbox, Telescope, Treesitter). |
 | `node`            | Installs NVM, Node.js runtime, and the `pnpm` package manager.                                                |
 | `php`             | Installs PHP runtime, extensions, and Composer package manager.                                               |
+| `proverbs`        | Mirrors the `proverbs` repo (Skills, Agents, rules) into `~/.claude` for Claude Code. Optional (`install_proverbs`). |
 | `python`          | Installs Python runtime dependencies, Astral `uv` tool, and Python 3.14.                                      |
 | `system`          | Installs GNOME Tweaks and GNOME Extension Manager.                                                            |
 | `terminal`        | Installs modern shell utilities (bat, btop, jq, eza, dust, fd-find, starship) and sets up Zsh + Oh My Zsh with aliases. |

@@ -16,16 +16,12 @@ help:
 	@echo "make list     - List all tasks"
 	@echo "make explain  - Show hosts and mapped variables"
 	@echo "make bootstrap - Run the bootstrap script"
-	@echo "make install-cli - Install CLI dependencies using uv"
 
 EXTRA_ARGS ?= --ask-become-pass
 
 bootstrap:
 	chmod +x bootstrap.sh
 	./bootstrap.sh
-
-install-cli:
-	uv sync
 
 run:
 	cd ansible && ansible-playbook -i $(INVENTORY) $(PLAYBOOK_FILES) $(EXTRA_ARGS)

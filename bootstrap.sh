@@ -1,21 +1,22 @@
 #!/bin/bash
 
 # Genesis Workstation Bootstrap Script
-# This script prepares the environment and calls the Python installer.
+# This script prepares the environment and runs the Ansible playbooks directly.
 
 set -e
 
 # --- Configuration ---
 REPO_URL="https://github.com/stanleygomes/genesis.git"
 TARGET_DIR="$HOME/.config/genesis"
+COMMON_PLAYBOOK="common"
 
 echo "🚀 Starting Genesis Workstation Setup..."
 
 # 1. Install basic dependencies
-echo "📦 Installing system requirements (git, python, whiptail, ansible, make)..."
+echo "📦 Installing system requirements (git, whiptail, ansible, make)..."
 sudo apt update
 sudo apt upgrade -y
-sudo apt install -y git python3 python-is-python3 whiptail ansible make software-properties-common
+sudo apt install -y git whiptail ansible make software-properties-common
 
 # 2. Clone or update the repository
 if [ ! -d "$TARGET_DIR" ]; then
@@ -31,23 +32,58 @@ if [ -d ".git" ]; then
     git pull
 fi
 
-# 3. Ensure uv is installed
-if ! command -v uv &> /dev/null; then
-    echo "📦 Installing uv..."
-    curl -LsSf https://astral.sh/uv/install.sh | sh
-    export PATH="$HOME/.local/bin:$PATH"
-fi
-
-# 4. Configure temporary passwordless sudo
+# 3. Configure temporary passwordless sudo
 # This avoids repetitive password prompts during Ansible execution
 echo "🔐 Configuring temporary sudo..."
 echo "$USER ALL=(ALL) NOPASSWD:ALL" | sudo tee /etc/sudoers.d/genesis-temporary > /dev/null
 
-# 5. Run the Python installer
-uv run python -m cli.main install
+# Always revoke the temporary sudo grant, even if setup fails or is interrupted
+cleanup() {
+    echo "🧹 Cleaning up temporary configurations..."
+    sudo rm -f /etc/sudoers.d/genesis-temporary
+}
+trap cleanup EXIT
 
-# 6. Cleanup
-echo "🧹 Cleaning up temporary configurations..."
-sudo rm /etc/sudoers.d/genesis-temporary
+# 4. Ensure a Git identity is configured (needed by the git role)
+git_user_name="$(git config --global user.name || true)"
+git_user_email="$(git config --global user.email || true)"
+
+if [ -z "$git_user_name" ]; then
+    read -rp "Enter your Full Name (for Git): " git_user_name
+fi
+if [ -z "$git_user_email" ]; then
+    read -rp "Enter your E-mail (for Git): " git_user_email
+fi
+
+# 5. Select which playbooks to run (common is always included)
+mapfile -t available_playbooks < <(
+    find ansible/playbooks -maxdepth 1 -name "*.yml" ! -name "${COMMON_PLAYBOOK}.yml" -printf "%f\n" |
+    sed 's/\.yml$//' | sort
+)
+
+whiptail_items=()
+for pb in "${available_playbooks[@]}"; do
+    whiptail_items+=("$pb" "" OFF)
+done
+
+selected_playbooks=""
+if [ "${#whiptail_items[@]}" -gt 0 ]; then
+    selected_playbooks=$(whiptail --title "Genesis Setup" --checklist \
+        "Select the playbooks you want to install/update (space to toggle):" \
+        20 70 10 "${whiptail_items[@]}" 3>&1 1>&2 2>&3) || true
+    selected_playbooks=$(echo "$selected_playbooks" | tr -d '"')
+fi
+
+playbook_files=("playbooks/${COMMON_PLAYBOOK}.yml")
+for pb in $selected_playbooks; do
+    playbook_files+=("playbooks/${pb}.yml")
+done
+
+# 6. Run the playbooks
+echo "🚀 Running playbooks: ${playbook_files[*]}"
+cd ansible
+ansible-playbook -i inventory "${playbook_files[@]}" \
+    -e "git_user_name=${git_user_name}" \
+    -e "git_user_email=${git_user_email}"
 
 echo "✨ Setup complete!"

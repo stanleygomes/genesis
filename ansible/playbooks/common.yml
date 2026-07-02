@@ -19,7 +19,6 @@
       changed_when: false
 
   roles:
-    - genesis
     - git
     - docker
     - terminal
@@ -29,3 +28,4 @@
     - php
     - go
     - node
+    - { role: proverbs, when: install_proverbs | default(false) | bool }
