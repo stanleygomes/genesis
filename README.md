@@ -81,30 +81,31 @@ make check CONFIG="desktop"
 
 Here is a list of all roles available in this repository:
 
-| Role              | Description                                                                                                   |
-| :---------------- | :------------------------------------------------------------------------------------------------------------ |
-| `antigravity`     | Installs Antigravity IDE & Hub, configures workspace settings, keybindings, extensions, and desktop shortcuts. |
-| `antigravity-cli` | Installs the Antigravity CLI client tool (`agy`).                                                             |
-| `bruno`           | Installs Bruno API client (open-source, Git-friendly alternative to Postman/Insomnia).                        |
-| `dbeaver`         | Installs DBeaver Community Edition (SQL database explorer/client).                                            |
-| `docker`          | Installs Docker Engine, Docker Compose, and sets permissions/user groups.                                     |
-| `filezilla`       | Installs FileZilla FTP client.                                                                                |
-| `ghostty`         | Installs Ghostty terminal emulator.                                                                           |
-| `git`             | Installs Git, configures user credentials, and generates/sets GitHub SSH keys.                                |
-| `github-copilot`  | Installs GitHub Copilot CLI globally via NPM.                                                                 |
-| `go`              | Installs Go language runtime and `golangci-lint` to `~/.local/go`.                                            |
-| `google-chrome`   | Installs Google Chrome web browser.                                                                           |
-| `java`            | Installs SDKMAN and configures Java development dependencies.                                                 |
-| `lazydocker`      | Installs LazyDocker TUI binary for Docker container monitoring.                                               |
-| `mongodb-compass` | Installs MongoDB Compass GUI client.                                                                          |
+| Role              | Description                                                                                                                                                   |
+| :---------------- | :------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| `antigravity`     | Installs Antigravity IDE & Hub, configures workspace settings, keybindings, extensions, and desktop shortcuts.                                                |
+| `antigravity-cli` | Installs the Antigravity CLI client tool (`agy`).                                                                                                             |
+| `bruno`           | Installs Bruno API client (open-source, Git-friendly alternative to Postman/Insomnia).                                                                        |
+| `dbeaver`         | Installs DBeaver Community Edition (SQL database explorer/client).                                                                                            |
+| `docker`          | Installs Docker Engine, Docker Compose, and sets permissions/user groups.                                                                                     |
+| `filezilla`       | Installs FileZilla FTP client.                                                                                                                                |
+| `ghostty`         | Installs Ghostty terminal emulator.                                                                                                                           |
+| `git`             | Installs Git, configures user credentials, and generates/sets GitHub SSH keys.                                                                                |
+| `github-copilot`  | Installs GitHub Copilot CLI globally via NPM.                                                                                                                 |
+| `go`              | Installs Go language runtime and `golangci-lint` to `~/.local/go`.                                                                                            |
+| `google-chrome`   | Installs Google Chrome web browser.                                                                                                                           |
+| `java`            | Installs SDKMAN and configures Java development dependencies.                                                                                                 |
+| `lazydocker`      | Installs LazyDocker TUI binary for Docker container monitoring.                                                                                               |
+| `mongodb-compass` | Installs MongoDB Compass GUI client.                                                                                                                          |
+| `mongosh`         | Installs MongoDB Shell (`mongosh`) and configures `mongo-connect` credential management script.                                                               |
 | `neovim`          | Installs latest Neovim editor via its official AppImage (including `libfuse2`), configuring it with `lazy.nvim` and plugins (Gruvbox, Telescope, Treesitter). |
-| `node`            | Installs NVM, Node.js runtime, and the `pnpm` package manager.                                                |
-| `php`             | Installs PHP runtime, extensions, and Composer package manager.                                               |
-| `proverbs`        | Mirrors the `proverbs` repo (Skills, Agents, rules) into `~/.claude` for Claude Code. Optional (`install_proverbs`). |
-| `python`          | Installs Python runtime dependencies, Astral `uv` tool, and Python 3.14.                                      |
-| `system`          | Installs GNOME Tweaks and GNOME Extension Manager.                                                            |
-| `terminal`        | Installs modern shell utilities (bat, btop, jq, eza, dust, fd-find, starship) and sets up Zsh + Oh My Zsh with aliases. |
-| `vscode`          | Installs VS Code, syncs user settings/keybindings, and installs extensions.                                   |
+| `node`            | Installs NVM, Node.js runtime, and the `pnpm` package manager.                                                                                                |
+| `php`             | Installs PHP runtime, extensions, and Composer package manager.                                                                                               |
+| `proverbs`        | Mirrors the `proverbs` repo (Skills, Agents, rules) into `~/.claude` for Claude Code. Optional (`install_proverbs`).                                          |
+| `python`          | Installs Python runtime dependencies, Astral `uv` tool, and Python 3.14.                                                                                      |
+| `system`          | Installs GNOME Tweaks and GNOME Extension Manager.                                                                                                            |
+| `terminal`        | Installs modern shell utilities (bat, btop, jq, eza, dust, fd-find, starship) and sets up Zsh + Oh My Zsh with aliases.                                       |
+| `vscode`          | Installs VS Code, syncs user settings/keybindings, and installs extensions.                                                                                   |
 
 ---
 

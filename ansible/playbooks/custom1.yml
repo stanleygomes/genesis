@@ -18,6 +18,7 @@
     - system
     - google-chrome
     - mongodb-compass
+    - mongosh
     - docker
     - dbeaver
     - java

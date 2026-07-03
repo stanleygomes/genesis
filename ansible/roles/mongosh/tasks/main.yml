@@ -1,0 +1,63 @@
+---
+- name: Install mongosh globally
+  shell: |
+    bash -c "source {{ ansible_env.HOME }}/.nvm/nvm.sh && npm install -g mongosh"
+  args:
+    executable: /bin/bash
+  become: false
+  register: mongosh_install
+  changed_when: "'added' in mongosh_install.stdout or 'changed' in mongosh_install.stdout or 'removed' in mongosh_install.stdout"
+
+- name: Create mongosh config directory
+  file:
+    path: "{{ ansible_env.HOME }}/.config/mongosh"
+    state: directory
+    mode: '0755'
+  become: false
+
+- name: Create mongodb config directory
+  file:
+    path: "{{ ansible_env.HOME }}/.config/mongodb"
+    state: directory
+    mode: '0755'
+  become: false
+
+- name: Copy mongo-connect credentials configuration template
+  copy:
+    src: "{{ playbook_dir }}/../configs/scripts/mongosh/.env"
+    dest: "{{ ansible_env.HOME }}/.config/mongodb/.env"
+    mode: '0600'
+    force: no
+  become: false
+
+- name: Copy mongo-connect script
+  copy:
+    src: "{{ playbook_dir }}/../configs/scripts/mongosh/mongosh.sh"
+    dest: "{{ ansible_env.HOME }}/.config/mongodb/mongo-connect"
+    mode: '0755'
+  become: false
+
+- name: Ensure ~/.local/bin directory exists
+  file:
+    path: "{{ ansible_env.HOME }}/.local/bin"
+    state: directory
+    mode: '0755'
+  become: false
+
+- name: Create symlink for mongo-connect
+  file:
+    src: "{{ ansible_env.HOME }}/.config/mongodb/mongo-connect"
+    dest: "{{ ansible_env.HOME }}/.local/bin/mongo-connect"
+    state: link
+  become: false
+
+- name: Ensure ~/.local/bin is in PATH for bashrc and zshrc
+  lineinfile:
+    path: "{{ ansible_env.HOME }}/{{ item }}"
+    line: 'export PATH="$HOME/.local/bin:$PATH"'
+    state: present
+    create: yes
+  become: false
+  loop:
+    - .bashrc
+    - .zshrc
