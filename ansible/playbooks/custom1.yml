@@ -1,5 +1,5 @@
 ---
-- name: Custom Setup 1
+- name: My Custom Setup 1
   hosts: localhost
   connection: local
   become: true

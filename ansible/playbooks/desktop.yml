@@ -1,5 +1,5 @@
 ---
-- name: Desktop Setup
+- name: My Custom Desktop Setup
   hosts: localhost
   connection: local
   become: true
