@@ -23,3 +23,4 @@ tamasfe.even-better-toml
 ms-python.python
 bierner.markdown-mermaid
 detachhead.basedpyright
+4ops.terraform
