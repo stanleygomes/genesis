@@ -62,7 +62,11 @@ mapfile -t available_playbooks < <(
 
 whiptail_items=()
 for pb in "${available_playbooks[@]}"; do
-    whiptail_items+=("$pb" "" OFF)
+    desc=""
+    if [ -f "ansible/playbooks/${pb}.yml" ]; then
+        desc=$(grep -m 1 "^- name:" "ansible/playbooks/${pb}.yml" | sed -E 's/^- name:[[:space:]]*//' | sed -E 's/^["'\''\x27]+//; s/["'\''\x27]+$//')
+    fi
+    whiptail_items+=("$pb" "${desc:-}" OFF)
 done
 
 # Phosphor CRT color scheme (green on black) for the whiptail dialog
