@@ -1,0 +1,26 @@
+---
+- name: Common configuration used for all setups
+  hosts: localhost
+  connection: local
+  become: true
+  gather_facts: false
+
+  pre_tasks:
+    - name: Gather facts as normal user to set ansible_env correctly
+      setup:
+      become: false
+
+    - name: Update apt cache (ignoring unreachable repos)
+      # Run update once here so per-role apt tasks do not need update_cache: yes.
+      # The || true ensures a flaky repo (VPN-blocked, stale GPG key, etc.)
+      # does not abort the entire play.
+      shell: apt-get update || true
+      become: true
+      changed_when: false
+
+  roles:
+    - git
+    - docker
+    - terminal
+    - neovim
+    - { role: proverbs, when: install_proverbs | default(false) | bool }
