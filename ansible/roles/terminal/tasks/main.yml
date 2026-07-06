@@ -70,6 +70,14 @@
   become: true
   ignore_errors: "{{ ansible_check_mode }}"
 
+- name: Install Atuin
+  shell: curl --proto '=https' --tlsv1.2 -sSf https://setup.atuin.sh | sh -s -- --no-modify-path
+  args:
+    executable: /bin/bash
+    creates: "{{ ansible_env.HOME }}/.atuin/bin/atuin"
+  become: false
+  ignore_errors: "{{ ansible_check_mode }}"
+
 # --- ZSH Specific Setup ---
 
 - name: Check if Oh My Zsh is installed
@@ -170,6 +178,9 @@
 
       # Python
       export PATH="$HOME/.local/bin:$PATH"
+
+      # Atuin
+      export PATH="$HOME/.atuin/bin:$PATH"
   become: false
 
 - name: Ensure Java (SDKMAN) is at the end of bashrc
@@ -192,6 +203,20 @@
     block: |
       # Starship prompt initialization
       eval "$(starship init {{ item.shell }})"
+    state: present
+  become: false
+  loop:
+    - { file: '.bashrc', shell: 'bash' }
+    - { file: '.zshrc', shell: 'zsh' }
+
+- name: Add Atuin initialization to shell configuration files
+  blockinfile:
+    path: "{{ ansible_env.HOME }}/{{ item.file }}"
+    marker: "# {mark} ATUIN CONFIGURATION"
+    insertafter: EOF
+    block: |
+      # Atuin shell history initialization
+      eval "$(atuin init {{ item.shell }})"
     state: present
   become: false
   loop:
