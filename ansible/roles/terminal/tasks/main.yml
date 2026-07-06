@@ -70,6 +70,25 @@
   become: true
   ignore_errors: "{{ ansible_check_mode }}"
 
+- name: Check if Atuin is installed
+  stat:
+    path: "{{ ansible_env.HOME }}/.atuin/bin/atuin"
+  register: atuin_stat
+  become: false
+
+- name: Install Atuin via setup script
+  shell: curl --proto '=https' --tlsv1.2 -LsSf https://setup.atuin.sh | sh -s -- --non-interactive
+  become: false
+  when: not atuin_stat.stat.exists
+  ignore_errors: "{{ ansible_check_mode }}"
+
+- name: Download bash-preexec for Atuin
+  get_url:
+    url: https://raw.githubusercontent.com/rcaloras/bash-preexec/master/bash-preexec.sh
+    dest: "{{ ansible_env.HOME }}/.bash-preexec.sh"
+    mode: "0644"
+  become: false
+
 # --- ZSH Specific Setup ---
 
 - name: Check if Oh My Zsh is installed
@@ -197,3 +216,33 @@
   loop:
     - { file: '.bashrc', shell: 'bash' }
     - { file: '.zshrc', shell: 'zsh' }
+
+- name: Remove unmanaged Atuin lines from shell configuration files
+  lineinfile:
+    path: "{{ ansible_env.HOME }}/{{ item.file }}"
+    line: "{{ item.line }}"
+    state: absent
+  become: false
+  loop:
+    - { file: '.bashrc', line: '. "$HOME/.atuin/bin/env"' }
+    - { file: '.bashrc', line: '[[ -f ~/.bash-preexec.sh ]] && source ~/.bash-preexec.sh' }
+    - { file: '.bashrc', line: 'eval "$(atuin init bash)"' }
+    - { file: '.zshrc', line: '. "$HOME/.atuin/bin/env"' }
+    - { file: '.zshrc', line: 'eval "$(atuin init zsh)"' }
+
+- name: Add Atuin initialization to shell configuration files
+  blockinfile:
+    path: "{{ ansible_env.HOME }}/{{ item.file }}"
+    marker: "# {mark} ATUIN CONFIGURATION"
+    insertafter: EOF
+    block: |
+      # Atuin history search
+      . "$HOME/.atuin/bin/env"
+      {{ item.preexec | default('') }}
+      eval "$(atuin init {{ item.shell }})"
+    state: present
+  become: false
+  loop:
+    - { file: '.bashrc', shell: 'bash', preexec: '[[ -f ~/.bash-preexec.sh ]] && source ~/.bash-preexec.sh' }
+    - { file: '.zshrc', shell: 'zsh' }
+
