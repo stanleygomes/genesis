@@ -1,5 +1,5 @@
 ---
-- name: Install terminal utilities (bat, btop, jq, zsh)
+- name: Install Zsh and basic terminal utilities (bat, btop, jq)
   apt:
     name:
       - bat

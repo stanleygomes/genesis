@@ -19,7 +19,7 @@
     - git
     - git-delta
     - docker
-    - terminal
+    - zsh
     - eza
     - dust
     - starship

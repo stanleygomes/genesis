@@ -50,7 +50,7 @@ Before running the playbooks, you need to have **Ansible** installed on your mac
 
 The easiest way to set up or update the environment is running `bootstrap.sh` (see the one-liner above). It installs the system requirements, clones/pulls this repository, and opens an interactive `whiptail` checklist to select which playbooks to run on top of `common.yml`.
 
-After the first run, the `terminal` role installs a `genesis` shell function in your `.bashrc`/`.zshrc` that re-runs the bootstrap one-liner, so you can just type:
+After the first run, the `zsh` role installs a `genesis` shell function in your `.bashrc`/`.zshrc` that re-runs the bootstrap one-liner, so you can just type:
 
 ```bash
 genesis
@@ -79,7 +79,7 @@ make check CONFIG="desktop"
   ├── configs/         # Specific tool configurations (VS Code, etc.)
   ├── group_vars/      # Global configuration variables (all.yml)
   ├── playbooks/       # Setup playbooks (common.yml, desktop.yml, etc.)
-  ├── roles/           # Modular Ansible roles (terminal, docker, etc.)
+  ├── roles/           # Modular Ansible roles (zsh, docker, etc.)
   ├── ansible.cfg      # Ansible configuration settings
   └── inventory        # Ansible host definition (localhost)
 🛠️ Makefile            # Helper tasks to run, check, list playbooks
@@ -120,10 +120,10 @@ Here is a list of all roles available in this repository:
 | `python`          | Installs Python runtime dependencies, Astral `uv` tool, and Python 3.14.                                                                                      |
 | `system`          | Installs GNOME Tweaks and GNOME Extension Manager.                                                                                                            |
 | `starship`        | Installs and configures Starship prompt for Bash and Zsh.                                                                                                     |
-| `terminal`        | Installs modern shell utilities (bat, btop, jq) and sets up Zsh + Oh My Zsh with aliases.                                                                      |
 | `terraform`       | Installs Terraform CLI tool from HashiCorp releases.                                                                                                          |
 | `vscode`          | Installs VS Code, syncs user settings/keybindings, and installs extensions.                                                                                   |
 | `xh`              | Installs xh HTTP client (a modern, fast alternative to cURL).                                                                                                 |
+| `zsh`             | Installs Zsh and Oh My Zsh, sets Zsh as default shell, and configures core aliases/functions.                                                                 |
 
 ---
 
