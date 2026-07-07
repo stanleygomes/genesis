@@ -59,3 +59,21 @@
     state: present
   become: true
   when: ghostty_check.rc != 0
+
+# Create the config directory in user space so Ghostty can locate its custom configuration file
+- name: Ensure Ghostty config directory exists
+  file:
+    path: "{{ ansible_env.HOME }}/.config/ghostty"
+    state: directory
+    mode: '0755'
+  become: false
+
+# Apply the user's preferred visual theme so the terminal colors match the system workspace aesthetic
+- name: Set Ghostty default theme
+  lineinfile:
+    path: "{{ ansible_env.HOME }}/.config/ghostty/config"
+    regexp: "^theme\\s*="
+    line: "theme = {{ ghostty_theme }}"
+    create: yes
+    mode: '0644'
+  become: false

@@ -1,2 +1,3 @@
 ---
 # Defaults for ghostty role
+ghostty_theme: "Monokai Soda"
