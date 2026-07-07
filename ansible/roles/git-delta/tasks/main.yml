@@ -10,17 +10,16 @@
 
 - name: Install git-delta via GitHub Release
   block:
-    - name: Get latest git-delta version
+    - name: Fetch version and download git-delta deb package
       shell: |
-        curl -s "https://api.github.com/repos/dandavison/delta/releases/latest" | grep -Po '"tag_name": "\K[^"]*'
-      register: git_delta_latest_version
-      changed_when: false
-      become: false
-
-    - name: Download git-delta deb package
-      get_url:
-        url: "https://github.com/dandavison/delta/releases/download/{{ git_delta_latest_version.stdout }}/git-delta_{{ git_delta_latest_version.stdout }}_amd64.deb"
-        dest: "/tmp/git-delta.deb"
+        DELTA_VERSION=$(curl -s "https://api.github.com/repos/dandavison/delta/releases/latest" | grep -Po '"tag_name": "\K[^"]*')
+        if [ -z "$DELTA_VERSION" ]; then
+          echo "Failed to get git-delta version (API limit?). Retrying with fallback version {{ git_delta_fallback_version }}"
+          DELTA_VERSION="{{ git_delta_fallback_version }}"
+        fi
+        curl -sLo /tmp/git-delta.deb "https://github.com/dandavison/delta/releases/download/${DELTA_VERSION}/git-delta_${DELTA_VERSION}_amd64.deb"
+      args:
+        executable: /bin/bash
       become: false
 
     - name: Install git-delta deb package
