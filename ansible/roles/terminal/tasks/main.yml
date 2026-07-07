@@ -1,42 +1,13 @@
 ---
-- name: Install terminal utilities (bat, btop, jq, git-delta)
+- name: Install terminal utilities (bat, btop, jq, zsh)
   apt:
     name:
       - bat
       - btop
       - jq
       - zsh
-      - git-delta
     state: present
   become: true
-
-- name: Configure Git to use delta as pager
-  git_config:
-    name: core.pager
-    value: delta
-    scope: global
-  become: false
-
-- name: Configure Git interactive diff filter to use delta
-  git_config:
-    name: interactive.diffFilter
-    value: "delta --color-only"
-    scope: global
-  become: false
-
-- name: Enable delta navigate mode
-  git_config:
-    name: delta.navigate
-    value: "true"
-    scope: global
-  become: false
-
-- name: Configure Git merge conflict style for delta
-  git_config:
-    name: merge.conflictstyle
-    value: diff3
-    scope: global
-  become: false
 
 - name: Create directory for eza key
   file:

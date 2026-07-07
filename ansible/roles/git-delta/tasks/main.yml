@@ -1,0 +1,39 @@
+---
+# git-delta provides syntax-highlighting pager for git, diff, and grep output.
+- name: Install git-delta
+  apt:
+    name: git-delta
+    state: present
+  become: true
+
+# Configure git to use delta as the pager globally
+- name: Configure Git to use delta as pager
+  git_config:
+    name: core.pager
+    value: delta
+    scope: global
+  become: false
+
+# Enable color output when running interactive diffs
+- name: Configure Git interactive diff filter to use delta
+  git_config:
+    name: interactive.diffFilter
+    value: "delta --color-only"
+    scope: global
+  become: false
+
+# Use delta's navigate mode to easily jump between files in diffs
+- name: Enable delta navigate mode
+  git_config:
+    name: delta.navigate
+    value: "true"
+    scope: global
+  become: false
+
+# Set up side-by-side or styled diffs for merge conflicts
+- name: Configure Git merge conflict style for delta
+  git_config:
+    name: merge.conflictstyle
+    value: diff3
+    scope: global
+  become: false

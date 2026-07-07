@@ -17,6 +17,7 @@
 
   roles:
     - git
+    - git-delta
     - docker
     - terminal
     - starship
