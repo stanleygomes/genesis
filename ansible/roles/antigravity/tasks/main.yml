@@ -2,7 +2,6 @@
 - name: Set download URLs based on architecture
   set_fact:
     antigravity_ide_url: "{{ 'https://edgedl.me.gvt1.com/edgedl/release2/j0qc3/antigravity/stable/2.1.1-6123990880747520/linux-x64/Antigravity%20IDE.tar.gz' }}"
-    antigravity_hub_url: "{{ 'https://storage.googleapis.com/antigravity-public/antigravity-hub/2.0.6-5413878570549248/linux-x64/Antigravity.tar.gz' }}"
 
 # === INSTALL ANTIGRAVITY IDE ===
 
@@ -48,72 +47,21 @@
     force: yes
   become: true
 
+# Point 'antigravity' directly to the IDE as requested by the user
+- name: Create symlink in /usr/bin for Antigravity pointing to IDE
+  file:
+    src: /usr/share/antigravity-ide/bin/antigravity-ide
+    dest: /usr/bin/antigravity
+    state: link
+    force: yes
+  become: true
+
 - name: Copy Antigravity IDE icon to pixmaps
   copy:
     src: /usr/share/antigravity-ide/resources/app/resources/linux/code.png
     dest: /usr/share/pixmaps/antigravity-ide.png
     remote_src: yes
     mode: "0644"
-  become: true
-
-# === INSTALL ANTIGRAVITY (HUB) ===
-
-- name: Ensure target Antigravity Hub installation directory is clean
-  file:
-    path: /usr/share/antigravity
-    state: absent
-  become: true
-
-- name: Create Antigravity Hub installation directory
-  file:
-    path: /usr/share/antigravity
-    state: directory
-    mode: "0755"
-    owner: root
-    group: root
-  become: true
-
-- name: Download and extract Antigravity Hub
-  unarchive:
-    src: "{{ antigravity_hub_url }}"
-    dest: /usr/share/antigravity
-    remote_src: yes
-    extra_opts:
-      - "--strip-components=1"
-    owner: root
-    group: root
-  become: true
-
-- name: Set permissions on Antigravity Hub chrome-sandbox
-  file:
-    path: /usr/share/antigravity/chrome-sandbox
-    mode: "4755"
-    owner: root
-    group: root
-  become: true
-
-- name: Create symlink in /usr/bin for Antigravity Hub
-  file:
-    src: /usr/share/antigravity/antigravity
-    dest: /usr/bin/antigravity
-    state: link
-    force: yes
-  become: true
-
-- name: Extract Antigravity Hub icon from app.asar
-  shell: |
-    python3 -c '
-    import struct, json
-    with open("/usr/share/antigravity/resources/app.asar", "rb") as f:
-        f.seek(12)
-        size_header = struct.unpack("<I", f.read(4))[0]
-        header = json.loads(f.read(size_header).decode("utf-8"))
-        icon_info = header["files"]["icon.png"]
-        f.seek(16 + size_header + int(icon_info["offset"]))
-        data = f.read(int(icon_info["size"]))
-        with open("/usr/share/pixmaps/antigravity.png", "wb") as out:
-            out.write(data)
-    '
   become: true
 
 # === CONFIGURATIONS & EXTENSIONS ===
@@ -158,7 +106,7 @@
   file:
     path: "{{ ansible_env.HOME }}/.local/share/applications"
     state: directory
-    mode: '0755'
+    mode: "0755"
   become: false
 
 - name: Create Antigravity IDE desktop entry
@@ -205,19 +153,9 @@
       Keywords=vscode;
   become: false
 
-- name: Create Antigravity Hub desktop entry
-  copy:
-    dest: "{{ ansible_env.HOME }}/.local/share/applications/antigravity.desktop"
-    mode: "0644"
-    content: |
-      [Desktop Entry]
-      Name=Antigravity
-      Comment=Antigravity Hub
-      GenericName=Application Hub
-      Exec=/usr/bin/antigravity %F
-      Icon=antigravity
-      Type=Application
-      StartupNotify=false
-      StartupWMClass=antigravity
-      Categories=Utility;Development;
+# Remove Hub desktop launcher as it is no longer installed
+- name: Remove Antigravity Hub desktop entry
+  file:
+    path: "{{ ansible_env.HOME }}/.local/share/applications/antigravity.desktop"
+    state: absent
   become: false
