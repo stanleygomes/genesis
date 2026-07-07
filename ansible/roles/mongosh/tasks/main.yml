@@ -51,13 +51,10 @@
     state: link
   become: false
 
-- name: Ensure ~/.local/bin is in PATH for bashrc and zshrc
+- name: Ensure ~/.local/bin is in PATH for zshrc
   lineinfile:
-    path: "{{ ansible_env.HOME }}/{{ item }}"
+    path: "{{ ansible_env.HOME }}/.zshrc"
     line: 'export PATH="$HOME/.local/bin:$PATH"'
     state: present
     create: yes
   become: false
-  loop:
-    - .bashrc
-    - .zshrc

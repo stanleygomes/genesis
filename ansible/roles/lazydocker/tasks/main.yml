@@ -16,9 +16,9 @@
   become: true
   ignore_errors: "{{ ansible_check_mode }}"
 
-- name: Add LazyDocker function wrapper to shell configuration files
+- name: Add LazyDocker function wrapper to .zshrc
   blockinfile:
-    path: "{{ ansible_env.HOME }}/{{ item }}"
+    path: "{{ ansible_env.HOME }}/.zshrc"
     marker: "# {mark} LAZYDOCKER ALIASES"
     block: |
       # Intercepta 'docker ps' para executar o lazydocker
@@ -31,7 +31,4 @@
       }
     state: present
   become: false
-  loop:
-    - .bashrc
-    - .zshrc
 

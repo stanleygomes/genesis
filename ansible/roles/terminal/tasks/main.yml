@@ -1,5 +1,5 @@
 ---
-- name: Install Zsh and basic terminal utilities (bat, btop, jq)
+- name: Install terminal utilities (bat, btop, jq, zsh)
   apt:
     name:
       - bat
@@ -8,8 +8,6 @@
       - zsh
     state: present
   become: true
-
-# --- ZSH Specific Setup ---
 
 - name: Check if Oh My Zsh is installed
   stat:
@@ -28,11 +26,9 @@
     shell: /usr/bin/zsh
   become: true
 
-# --- Shared Configurations (Aliases) ---
-
-- name: Add common aliases to .zshrc
+- name: Add common aliases to .bashrc and .zshrc
   blockinfile:
-    path: "{{ ansible_env.HOME }}/.zshrc"
+    path: "{{ ansible_env.HOME }}/{{ item }}"
     marker: "# {mark} PERSONAL ALIASES"
     block: |
       # Alias para o bat/cat (no Ubuntu o comando é batcat)
@@ -44,3 +40,6 @@
       }
     state: present
   become: false
+  loop:
+    - .bashrc
+    - .zshrc

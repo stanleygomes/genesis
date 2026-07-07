@@ -14,14 +14,6 @@
   when: not atuin_stat.stat.exists
   ignore_errors: "{{ ansible_check_mode }}"
 
-# bash-preexec is required to capture command start and end times in Bash shell history.
-- name: Download bash-preexec for Atuin
-  get_url:
-    url: https://raw.githubusercontent.com/rcaloras/bash-preexec/master/bash-preexec.sh
-    dest: "{{ ansible_env.HOME }}/.bash-preexec.sh"
-    mode: "0644"
-  become: false
-
 # Remove any lines appended by the installer to avoid duplicate initialization entries.
 - name: Remove unmanaged Atuin lines from shell configuration files
   lineinfile:

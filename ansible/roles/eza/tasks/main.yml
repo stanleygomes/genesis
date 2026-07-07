@@ -32,9 +32,9 @@
     state: present
   become: true
 
-- name: Add eza aliases to shell configuration files
+- name: Add eza aliases to .zshrc
   blockinfile:
-    path: "{{ ansible_env.HOME }}/{{ item }}"
+    path: "{{ ansible_env.HOME }}/.zshrc"
     marker: "# {mark} EZA ALIASES"
     block: |
       # Alias para o eza (substituto moderno do ls)
@@ -44,7 +44,4 @@
       alias lt='eza --tree --icons'
     state: present
   become: false
-  loop:
-    - .bashrc
-    - .zshrc
 

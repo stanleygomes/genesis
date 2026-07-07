@@ -13,9 +13,9 @@
     executable: /bin/bash
   become: false
 
-- name: Ensure NVM is in shell rc files
+- name: Ensure NVM is in .zshrc
   blockinfile:
-    path: "{{ ansible_env.HOME }}/{{ item }}"
+    path: "{{ ansible_env.HOME }}/.zshrc"
     marker: "# {mark} NVM CONFIGURATION"
     block: |
       export NVM_DIR="$HOME/.nvm"
@@ -23,9 +23,6 @@
       [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
     state: present
   become: false
-  loop:
-    - .bashrc
-    - .zshrc
 
 - name: Install Node.js 24
   shell: |

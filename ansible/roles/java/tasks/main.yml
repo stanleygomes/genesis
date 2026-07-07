@@ -29,9 +29,9 @@
     executable: /bin/bash
   become: false
 
-- name: Ensure Java (SDKMAN) is at the end of bashrc
+- name: Ensure Java (SDKMAN) is at the end of zshrc
   blockinfile:
-    path: "{{ ansible_env.HOME }}/.bashrc"
+    path: "{{ ansible_env.HOME }}/.zshrc"
     marker: "# {mark} JAVA CONFIGURATION"
     insertafter: EOF
     block: |

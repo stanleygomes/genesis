@@ -30,15 +30,12 @@
   when: go_installed.rc != 0 or go_version not in go_installed.stdout
   become: false
 
-- name: Ensure Go bin is in PATH via shell rc files
+- name: Ensure Go bin is in PATH via zshrc
   lineinfile:
-    path: "{{ ansible_env.HOME }}/{{ item }}"
+    path: "{{ ansible_env.HOME }}/.zshrc"
     line: 'export PATH=$PATH:{{ ansible_env.HOME }}/.local/go/bin:{{ ansible_env.HOME }}/go/bin'
     state: present
   become: false
-  loop:
-    - .bashrc
-    - .zshrc
 
 - name: Clean up Go tarball
   file:

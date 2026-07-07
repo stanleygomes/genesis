@@ -10,14 +10,13 @@
   ignore_errors: "{{ ansible_check_mode }}"
 
 # Append Starship evaluation initialization to the user's shell rc files.
-- name: Add Starship initialization to shell configuration files
+- name: Add Starship initialization to .zshrc
   blockinfile:
-    path: "{{ ansible_env.HOME }}/{{ item.file }}"
+    path: "{{ ansible_env.HOME }}/.zshrc"
     marker: "# {mark} STARSHIP CONFIGURATION"
     insertafter: EOF
     block: |
       # Starship prompt initialization
-      eval "$(starship init {{ item.shell }})"
+      eval "$(starship init zsh)"
     state: present
   become: false
-  loop: "{{ starship_shells }}"

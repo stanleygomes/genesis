@@ -50,7 +50,7 @@ Before running the playbooks, you need to have **Ansible** installed on your mac
 
 The easiest way to set up or update the environment is running `bootstrap.sh` (see the one-liner above). It installs the system requirements, clones/pulls this repository, and opens an interactive `whiptail` checklist to select which playbooks to run on top of `common.yml`.
 
-After the first run, the `zsh` role installs a `genesis` shell function in your `.bashrc`/`.zshrc` that re-runs the bootstrap one-liner, so you can just type:
+After the first run, the `zsh` role installs a `genesis` shell function in your `.zshrc` that re-runs the bootstrap one-liner, so you can just type:
 
 ```bash
 genesis
