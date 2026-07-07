@@ -1,0 +1,3 @@
+---
+# Defaults for dust role
+dust_fallback_version: "1.2.4"

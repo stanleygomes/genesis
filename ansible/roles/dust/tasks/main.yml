@@ -1,0 +1,19 @@
+---
+# dust is a more intuitive version of 'du' written in Rust.
+# We query the latest version from the GitHub releases API, download and extract the binary.
+- name: Install Dust binary
+  shell: |
+    DUST_VERSION=$(curl -s "https://api.github.com/repos/bootandy/dust/releases/latest" | grep -Po '"tag_name": "v\K[^"]*')
+    if [ -z "$DUST_VERSION" ]; then
+      echo "Failed to get dust version. Retrying with fallback version {{ dust_fallback_version }}"
+      DUST_VERSION="{{ dust_fallback_version }}"
+    fi
+    curl -sLo /tmp/dust.tar.gz "https://github.com/bootandy/dust/releases/download/v${DUST_VERSION}/dust-v${DUST_VERSION}-x86_64-unknown-linux-gnu.tar.gz"
+    cd /tmp
+    tar xf dust.tar.gz
+    install dust-v${DUST_VERSION}-x86_64-unknown-linux-gnu/dust /usr/local/bin
+  args:
+    executable: /bin/bash
+    creates: /usr/local/bin/dust
+  become: true
+  ignore_errors: "{{ ansible_check_mode }}"
