@@ -152,10 +152,3 @@
       MimeType=x-scheme-handler/antigravity;
       Keywords=vscode;
   become: false
-
-# Remove Hub desktop launcher as it is no longer installed
-- name: Remove Antigravity Hub desktop entry
-  file:
-    path: "{{ ansible_env.HOME }}/.local/share/applications/antigravity.desktop"
-    state: absent
-  become: false
