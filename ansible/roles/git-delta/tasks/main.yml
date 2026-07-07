@@ -2,9 +2,8 @@
 # git-delta provides syntax-highlighting pager for git, diff, and grep output.
 
 - name: Check if delta is installed
-  command: which delta
+  shell: which delta || true
   register: delta_check
-  ignore_errors: true
   changed_when: false
   become: false
 
@@ -32,7 +31,7 @@
         path: "/tmp/git-delta.deb"
         state: absent
       become: false
-  when: delta_check.rc != 0
+  when: delta_check.stdout == ""
 
 
 # Configure git to use delta as the pager globally
