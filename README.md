@@ -4,6 +4,17 @@ This repository contains the **Ansible** configuration to automate the setup and
 
 ![screenshot](https://github.com/stanleygomes/genesis/raw/HEAD/assets/screenshot.png)
 
+## Compatibility
+
+This project relies on `apt`, GNOME-specific tooling, and distro-specific package repositories, so it only supports:
+
+| OS       | Minimum version           |
+| :------- | :------------------------- |
+| Ubuntu   | 22.04 LTS (Jammy) or newer |
+| Debian   | 12 (Bookworm) or newer     |
+
+Any other OS/distro (Fedora, Arch, macOS, WSL without a supported base, etc.) is **not supported**. `bootstrap.sh` validates the OS before making any changes and aborts with an error if it's incompatible.
+
 ## Quick Start (One-Liner)
 
 To set up a fresh machine, just run:

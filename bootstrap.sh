@@ -9,6 +9,48 @@ set -e
 REPO_URL="https://github.com/stanleygomes/genesis.git"
 TARGET_DIR="$HOME/.config/genesis"
 
+# 0. Validate that the OS/distro is supported before touching anything
+check_os_compatibility() {
+    if [ ! -f /etc/os-release ]; then
+        echo "❌ Unsupported system: /etc/os-release not found." >&2
+        echo "   Genesis only supports Ubuntu 22.04+ and Debian 12+." >&2
+        exit 1
+    fi
+
+    # shellcheck disable=SC1091
+    . /etc/os-release
+
+    local id="${ID:-unknown}"
+    local version_id="${VERSION_ID:-0}"
+    local pretty="${PRETTY_NAME:-$id $version_id}"
+
+    case "$id" in
+        ubuntu)
+            if ! awk -v v="$version_id" 'BEGIN { exit !(v + 0 >= 22.04) }'; then
+                echo "❌ Unsupported Ubuntu version: $pretty" >&2
+                echo "   Genesis requires Ubuntu 22.04 or newer." >&2
+                exit 1
+            fi
+            ;;
+        debian)
+            if [ "${version_id%%.*}" -lt 12 ] 2>/dev/null; then
+                echo "❌ Unsupported Debian version: $pretty" >&2
+                echo "   Genesis requires Debian 12 (Bookworm) or newer." >&2
+                exit 1
+            fi
+            ;;
+        *)
+            echo "❌ Unsupported operating system: $pretty" >&2
+            echo "   Genesis only supports Ubuntu (22.04+) and Debian (12+)." >&2
+            exit 1
+            ;;
+    esac
+
+    echo "✅ Supported system detected: $pretty"
+}
+
+check_os_compatibility
+
 echo "🚀 Starting Genesis Workstation Setup..."
 
 # 1. Install basic dependencies
