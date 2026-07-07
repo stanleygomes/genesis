@@ -230,18 +230,6 @@
       export PATH="$HOME/.local/bin:$PATH"
   become: false
 
-- name: Ensure Java (SDKMAN) is at the end of bashrc
-  blockinfile:
-    path: "{{ ansible_env.HOME }}/.bashrc"
-    marker: "# {mark} JAVA CONFIGURATION"
-    insertafter: EOF
-    block: |
-      #THIS MUST BE AT THE END OF THE FILE FOR SDKMAN TO WORK!!!
-      export SDKMAN_DIR="$HOME/.sdkman"
-      [[ -s "$HOME/.sdkman/bin/sdkman-init.sh" ]] && source "$HOME/.sdkman/bin/sdkman-init.sh"
-    state: present
-  become: false
-
 - name: Add Starship initialization to shell configuration files
   blockinfile:
     path: "{{ ansible_env.HOME }}/{{ item.file }}"
