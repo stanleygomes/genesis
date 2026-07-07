@@ -99,6 +99,16 @@
   become: true
   ignore_errors: "{{ ansible_check_mode }}"
 
+- name: Install xh
+  shell: curl -sfL https://raw.githubusercontent.com/ducaale/xh/master/install.sh | sh
+  args:
+    executable: /bin/sh
+    creates: /usr/local/bin/xh
+  environment:
+    XH_BINDIR: /usr/local/bin
+  become: true
+  ignore_errors: "{{ ansible_check_mode }}"
+
 - name: Check if Atuin is installed
   stat:
     path: "{{ ansible_env.HOME }}/.atuin/bin/atuin"
