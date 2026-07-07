@@ -41,29 +41,6 @@
       # Alias para o bat/cat (no Ubuntu o comando é batcat)
       alias bat='batcat'
 
-      # Alias para o eza (substituto moderno do ls)
-      alias ls='eza --icons'
-      alias ll='eza -lh --icons --grid --group-directories-first'
-      alias la='eza -a --icons'
-      alias lt='eza --tree --icons'
-
-      # Alias para o dust (substituto moderno do du)
-      alias du='dust'
-
-      # Aliases para Neovim
-      alias vim='nvim'
-      alias nano='nvim'
-      alias vi='nvim'
-
-      # Intercepta 'docker ps' para executar o lazydocker
-      docker() {
-          if [ "$1" = "ps" ]; then
-              lazydocker
-          else
-              command docker "$@"
-          fi
-      }
-
       # Alias for installing/updating Genesis
       genesis() {
           curl -sSL https://raw.githubusercontent.com/stanleygomes/genesis/refs/heads/master/bootstrap.sh | bash

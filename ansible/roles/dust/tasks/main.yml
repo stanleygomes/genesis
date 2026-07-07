@@ -17,3 +17,17 @@
     creates: /usr/local/bin/dust
   become: true
   ignore_errors: "{{ ansible_check_mode }}"
+
+- name: Add dust aliases to shell configuration files
+  blockinfile:
+    path: "{{ ansible_env.HOME }}/{{ item }}"
+    marker: "# {mark} DUST ALIASES"
+    block: |
+      # Alias para o dust (substituto moderno do du)
+      alias du='dust'
+    state: present
+  become: false
+  loop:
+    - .bashrc
+    - .zshrc
+

@@ -15,3 +15,23 @@
     creates: /usr/local/bin/lazydocker
   become: true
   ignore_errors: "{{ ansible_check_mode }}"
+
+- name: Add LazyDocker function wrapper to shell configuration files
+  blockinfile:
+    path: "{{ ansible_env.HOME }}/{{ item }}"
+    marker: "# {mark} LAZYDOCKER ALIASES"
+    block: |
+      # Intercepta 'docker ps' para executar o lazydocker
+      docker() {
+          if [ "$1" = "ps" ]; then
+              lazydocker
+          else
+              command docker "$@"
+          fi
+      }
+    state: present
+  become: false
+  loop:
+    - .bashrc
+    - .zshrc
+

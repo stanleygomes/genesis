@@ -52,3 +52,19 @@
     mode: '0644'
   become: false
 
+- name: Add Neovim aliases to shell configuration files
+  blockinfile:
+    path: "{{ ansible_env.HOME }}/{{ item }}"
+    marker: "# {mark} NEOVIM ALIASES"
+    block: |
+      # Aliases para Neovim
+      alias vim='nvim'
+      alias nano='nvim'
+      alias vi='nvim'
+    state: present
+  become: false
+  loop:
+    - .bashrc
+    - .zshrc
+
+

@@ -31,3 +31,20 @@
     name: eza
     state: present
   become: true
+
+- name: Add eza aliases to shell configuration files
+  blockinfile:
+    path: "{{ ansible_env.HOME }}/{{ item }}"
+    marker: "# {mark} EZA ALIASES"
+    block: |
+      # Alias para o eza (substituto moderno do ls)
+      alias ls='eza --icons'
+      alias ll='eza -lh --icons --grid --group-directories-first'
+      alias la='eza -a --icons'
+      alias lt='eza --tree --icons'
+    state: present
+  become: false
+  loop:
+    - .bashrc
+    - .zshrc
+
