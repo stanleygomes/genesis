@@ -115,7 +115,8 @@ Here is a list of all roles available in this repository:
 | `proverbs`        | Mirrors the `proverbs` repo (Skills, Agents, rules) into `~/.claude` for Claude Code. Optional (`install_proverbs`).                                          |
 | `python`          | Installs Python runtime dependencies, Astral `uv` tool, and Python 3.14.                                                                                      |
 | `system`          | Installs GNOME Tweaks and GNOME Extension Manager.                                                                                                            |
-| `terminal`        | Installs modern shell utilities (bat, btop, jq, eza, dust, fd-find, starship, atuin) and sets up Zsh + Oh My Zsh with aliases.                                 |
+| `starship`        | Installs and configures Starship prompt for Bash and Zsh.                                                                                                     |
+| `terminal`        | Installs modern shell utilities (bat, btop, jq, eza, dust, fd-find, atuin) and sets up Zsh + Oh My Zsh with aliases.                                           |
 | `terraform`       | Installs Terraform CLI tool from HashiCorp releases.                                                                                                          |
 | `vscode`          | Installs VS Code, syncs user settings/keybindings, and installs extensions.                                                                                   |
 

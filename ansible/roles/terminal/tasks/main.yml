@@ -91,14 +91,6 @@
     state: present
   become: true
 
-- name: Install Starship
-  shell: curl -sS https://starship.rs/install.sh | sh -s -- -y
-  args:
-    executable: /bin/bash
-    creates: /usr/local/bin/starship
-  become: true
-  ignore_errors: "{{ ansible_check_mode }}"
-
 - name: Install xh
   shell: curl -sfL https://raw.githubusercontent.com/ducaale/xh/master/install.sh | sh
   args:
@@ -229,20 +221,6 @@
       # Python
       export PATH="$HOME/.local/bin:$PATH"
   become: false
-
-- name: Add Starship initialization to shell configuration files
-  blockinfile:
-    path: "{{ ansible_env.HOME }}/{{ item.file }}"
-    marker: "# {mark} STARSHIP CONFIGURATION"
-    insertafter: EOF
-    block: |
-      # Starship prompt initialization
-      eval "$(starship init {{ item.shell }})"
-    state: present
-  become: false
-  loop:
-    - { file: '.bashrc', shell: 'bash' }
-    - { file: '.zshrc', shell: 'zsh' }
 
 - name: Remove unmanaged Atuin lines from shell configuration files
   lineinfile:

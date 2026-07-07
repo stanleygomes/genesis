@@ -19,5 +19,6 @@
     - git
     - docker
     - terminal
+    - starship
     - neovim
     - { role: proverbs, when: install_proverbs | default(false) | bool }

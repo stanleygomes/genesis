@@ -19,6 +19,7 @@
     - git
     - docker
     - terminal
+    - starship
     - neovim
     - java
     - python

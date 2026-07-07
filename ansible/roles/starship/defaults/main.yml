@@ -1,0 +1,5 @@
+---
+# Defaults for starship role
+starship_shells:
+  - { file: '.bashrc', shell: 'bash' }
+  - { file: '.zshrc', shell: 'zsh' }

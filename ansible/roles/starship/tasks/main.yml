@@ -1,0 +1,23 @@
+---
+# Starship is a fast, customizable prompt for any shell.
+# We download and run the official installer to put the binary under /usr/local/bin.
+- name: Install Starship
+  shell: curl -sS https://starship.rs/install.sh | sh -s -- -y
+  args:
+    executable: /bin/bash
+    creates: /usr/local/bin/starship
+  become: true
+  ignore_errors: "{{ ansible_check_mode }}"
+
+# Append Starship evaluation initialization to the user's shell rc files.
+- name: Add Starship initialization to shell configuration files
+  blockinfile:
+    path: "{{ ansible_env.HOME }}/{{ item.file }}"
+    marker: "# {mark} STARSHIP CONFIGURATION"
+    insertafter: EOF
+    block: |
+      # Starship prompt initialization
+      eval "$(starship init {{ item.shell }})"
+    state: present
+  become: false
+  loop: "{{ starship_shells }}"
