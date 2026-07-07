@@ -35,9 +35,6 @@
     path: "{{ ansible_env.HOME }}/{{ item }}"
     marker: "# {mark} PERSONAL ALIASES"
     block: |
-      # Alias para abrir um novo terminal no diretório atual
-      alias terminal='{{ terminal_command }} --working-directory="$(pwd)" &'
-
       # Alias para o bat/cat (no Ubuntu o comando é batcat)
       alias bat='batcat'
 
@@ -50,8 +47,3 @@
   loop:
     - .bashrc
     - .zshrc
-
-# --- Shell Specific Initializations ---
-
-
-
