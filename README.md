@@ -119,7 +119,7 @@ Here is a list of all roles available in this repository:
 | `python`          | Installs Python runtime dependencies, Astral `uv` tool, and Python 3.14.                                                                                      |
 | `system`          | Installs GNOME Tweaks and GNOME Extension Manager.                                                                                                            |
 | `starship`        | Installs and configures Starship prompt for Bash and Zsh.                                                                                                     |
-| `terminal`        | Installs modern shell utilities (bat, btop, jq, dust, fd-find) and sets up Zsh + Oh My Zsh with aliases.                                                       |
+| `terminal`        | Installs modern shell utilities (bat, btop, jq, dust) and sets up Zsh + Oh My Zsh with aliases.                                                                 |
 | `terraform`       | Installs Terraform CLI tool from HashiCorp releases.                                                                                                          |
 | `vscode`          | Installs VS Code, syncs user settings/keybindings, and installs extensions.                                                                                   |
 | `xh`              | Installs xh HTTP client (a modern, fast alternative to cURL).                                                                                                 |
