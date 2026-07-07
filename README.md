@@ -96,6 +96,7 @@ Here is a list of all roles available in this repository:
 | :---------------- | :------------------------------------------------------------------------------------------------------------------------------------------------------------ |
 | `antigravity`     | Installs Antigravity IDE & Hub, configures workspace settings, keybindings, extensions, and desktop shortcuts.                                                |
 | `antigravity-cli` | Installs the Antigravity CLI client tool (`agy`).                                                                                                             |
+| `atuin`           | Installs and configures Atuin shell history search.                                                                                                           |
 | `bruno`           | Installs Bruno API client (open-source, Git-friendly alternative to Postman/Insomnia).                                                                        |
 | `dbeaver`         | Installs DBeaver Community Edition (SQL database explorer/client).                                                                                            |
 | `docker`          | Installs Docker Engine, Docker Compose, and sets permissions/user groups.                                                                                     |
@@ -116,7 +117,7 @@ Here is a list of all roles available in this repository:
 | `python`          | Installs Python runtime dependencies, Astral `uv` tool, and Python 3.14.                                                                                      |
 | `system`          | Installs GNOME Tweaks and GNOME Extension Manager.                                                                                                            |
 | `starship`        | Installs and configures Starship prompt for Bash and Zsh.                                                                                                     |
-| `terminal`        | Installs modern shell utilities (bat, btop, jq, eza, dust, fd-find, atuin) and sets up Zsh + Oh My Zsh with aliases.                                           |
+| `terminal`        | Installs modern shell utilities (bat, btop, jq, eza, dust, fd-find) and sets up Zsh + Oh My Zsh with aliases.                                                   |
 | `terraform`       | Installs Terraform CLI tool from HashiCorp releases.                                                                                                          |
 | `vscode`          | Installs VS Code, syncs user settings/keybindings, and installs extensions.                                                                                   |
 

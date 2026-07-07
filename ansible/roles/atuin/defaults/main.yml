@@ -1,0 +1,12 @@
+---
+# Defaults for atuin role
+atuin_unmanaged_lines:
+  - { file: '.bashrc', line: '. "$HOME/.atuin/bin/env"' }
+  - { file: '.bashrc', line: '[[ -f ~/.bash-preexec.sh ]] && source ~/.bash-preexec.sh' }
+  - { file: '.bashrc', line: 'eval "$(atuin init bash)"' }
+  - { file: '.zshrc', line: '. "$HOME/.atuin/bin/env"' }
+  - { file: '.zshrc', line: 'eval "$(atuin init zsh)"' }
+
+atuin_shells:
+  - { file: '.bashrc', shell: 'bash', preexec: '[[ -f ~/.bash-preexec.sh ]] && source ~/.bash-preexec.sh' }
+  - { file: '.zshrc', shell: 'zsh' }

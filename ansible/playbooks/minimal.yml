@@ -20,5 +20,6 @@
     - docker
     - terminal
     - starship
+    - atuin
     - neovim
     - { role: proverbs, when: install_proverbs | default(false) | bool }
