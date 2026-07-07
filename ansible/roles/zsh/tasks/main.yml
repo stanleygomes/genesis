@@ -22,11 +22,24 @@
   become: false
   when: not oh_my_zsh_stat.stat.exists
 
-- name: Set zsh as default shell
+- name: Check if user exists in /etc/passwd
+  shell: grep -q "^{{ ansible_user_id }}:" /etc/passwd && echo "yes" || echo "no"
+  register: user_in_passwd
+  changed_when: false
+  become: false
+
+- name: Set Zsh as default shell via user module (for local users)
   user:
     name: "{{ ansible_user_id }}"
     shell: /usr/bin/zsh
   become: true
+  when: user_in_passwd.stdout == "yes"
+
+- name: Set Zsh as default shell via chsh (fallback for non-local/LDAP users)
+  shell: chsh -s /usr/bin/zsh
+  become: false
+  when: user_in_passwd.stdout == "no"
+  ignore_errors: true
 
 # --- Shared Configurations (Aliases) ---
 
