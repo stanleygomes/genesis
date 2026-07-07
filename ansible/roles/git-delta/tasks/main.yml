@@ -1,10 +1,40 @@
 ---
 # git-delta provides syntax-highlighting pager for git, diff, and grep output.
-- name: Install git-delta
-  apt:
-    name: git-delta
-    state: present
-  become: true
+
+- name: Check if delta is installed
+  command: which delta
+  register: delta_check
+  ignore_errors: true
+  changed_when: false
+  become: false
+
+- name: Install git-delta via GitHub Release
+  block:
+    - name: Get latest git-delta version
+      shell: |
+        curl -s "https://api.github.com/repos/dandavison/delta/releases/latest" | grep -Po '"tag_name": "\K[^"]*'
+      register: git_delta_latest_version
+      changed_when: false
+      become: false
+
+    - name: Download git-delta deb package
+      get_url:
+        url: "https://github.com/dandavison/delta/releases/download/{{ git_delta_latest_version.stdout }}/git-delta_{{ git_delta_latest_version.stdout }}_amd64.deb"
+        dest: "/tmp/git-delta.deb"
+      become: false
+
+    - name: Install git-delta deb package
+      apt:
+        deb: "/tmp/git-delta.deb"
+      become: true
+
+    - name: Clean up temporary deb file
+      file:
+        path: "/tmp/git-delta.deb"
+        state: absent
+      become: false
+  when: delta_check.rc != 0
+
 
 # Configure git to use delta as the pager globally
 - name: Configure Git to use delta as pager
