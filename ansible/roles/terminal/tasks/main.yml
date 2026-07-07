@@ -91,16 +91,6 @@
     state: present
   become: true
 
-- name: Install xh
-  shell: curl -sfL https://raw.githubusercontent.com/ducaale/xh/master/install.sh | sh
-  args:
-    executable: /bin/sh
-    creates: /usr/local/bin/xh
-  environment:
-    XH_BINDIR: /usr/local/bin
-  become: true
-  ignore_errors: "{{ ansible_check_mode }}"
-
 # --- ZSH Specific Setup ---
 
 - name: Check if Oh My Zsh is installed
@@ -119,13 +109,6 @@
     name: "{{ ansible_user_id }}"
     shell: /usr/bin/zsh
   become: true
-
-- name: Set Oh My Zsh theme
-  lineinfile:
-    path: "{{ ansible_env.HOME }}/.zshrc"
-    regexp: "^ZSH_THEME="
-    line: 'ZSH_THEME="robbyrussell"'
-  become: false
 
 # --- Shared Configurations (Aliases) ---
 

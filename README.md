@@ -120,6 +120,7 @@ Here is a list of all roles available in this repository:
 | `terminal`        | Installs modern shell utilities (bat, btop, jq, eza, dust, fd-find) and sets up Zsh + Oh My Zsh with aliases.                                                   |
 | `terraform`       | Installs Terraform CLI tool from HashiCorp releases.                                                                                                          |
 | `vscode`          | Installs VS Code, syncs user settings/keybindings, and installs extensions.                                                                                   |
+| `xh`              | Installs xh HTTP client (a modern, fast alternative to cURL).                                                                                                 |
 
 ---
 
