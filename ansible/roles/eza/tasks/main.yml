@@ -1,0 +1,33 @@
+---
+# eza is a modern, featured-rich replacement for 'ls' written in Rust.
+# We configure its official APT repository and install the eza package.
+
+- name: Create directory for eza key
+  file:
+    path: /etc/apt/keyrings
+    state: directory
+    mode: "0755"
+  become: true
+
+- name: Add eza GPG key
+  shell: curl -fsSL https://raw.githubusercontent.com/eza-community/eza/main/deb.asc | gpg --dearmor --yes -o /etc/apt/keyrings/gierens.gpg
+  become: true
+
+- name: Add eza repository
+  apt_repository:
+    repo: "deb [signed-by=/etc/apt/keyrings/gierens.gpg] http://deb.gierens.de stable main"
+    state: present
+    filename: gierens
+    update_cache: no
+  become: true
+
+- name: Update apt cache manually (ignoring unreachable repos)
+  shell: apt-get update || true
+  become: true
+  changed_when: false
+
+- name: Install eza
+  apt:
+    name: eza
+    state: present
+  become: true

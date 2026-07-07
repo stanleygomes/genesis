@@ -100,6 +100,7 @@ Here is a list of all roles available in this repository:
 | `bruno`           | Installs Bruno API client (open-source, Git-friendly alternative to Postman/Insomnia).                                                                        |
 | `dbeaver`         | Installs DBeaver Community Edition (SQL database explorer/client).                                                                                            |
 | `docker`          | Installs Docker Engine, Docker Compose, and sets permissions/user groups.                                                                                     |
+| `eza`            | Installs and configures eza (a modern, feature-rich replacement for ls).                                                                                      |
 | `filezilla`       | Installs FileZilla FTP client.                                                                                                                                |
 | `ghostty`         | Installs Ghostty terminal emulator.                                                                                                                           |
 | `git`             | Installs Git, configures user credentials, and generates/sets GitHub SSH keys.                                                                                |
@@ -118,7 +119,7 @@ Here is a list of all roles available in this repository:
 | `python`          | Installs Python runtime dependencies, Astral `uv` tool, and Python 3.14.                                                                                      |
 | `system`          | Installs GNOME Tweaks and GNOME Extension Manager.                                                                                                            |
 | `starship`        | Installs and configures Starship prompt for Bash and Zsh.                                                                                                     |
-| `terminal`        | Installs modern shell utilities (bat, btop, jq, eza, dust, fd-find) and sets up Zsh + Oh My Zsh with aliases.                                                   |
+| `terminal`        | Installs modern shell utilities (bat, btop, jq, dust, fd-find) and sets up Zsh + Oh My Zsh with aliases.                                                       |
 | `terraform`       | Installs Terraform CLI tool from HashiCorp releases.                                                                                                          |
 | `vscode`          | Installs VS Code, syncs user settings/keybindings, and installs extensions.                                                                                   |
 | `xh`              | Installs xh HTTP client (a modern, fast alternative to cURL).                                                                                                 |

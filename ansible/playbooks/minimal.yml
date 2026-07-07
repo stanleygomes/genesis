@@ -20,6 +20,7 @@
     - git-delta
     - docker
     - terminal
+    - eza
     - starship
     - atuin
     - xh
