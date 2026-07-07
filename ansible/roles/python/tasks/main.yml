@@ -21,12 +21,15 @@
   args:
     executable: /bin/bash
 
-- name: Ensure uv is in bashrc
+- name: Ensure uv is in shell rc files
   lineinfile:
-    path: "{{ ansible_env.HOME }}/.bashrc"
+    path: "{{ ansible_env.HOME }}/{{ item }}"
     line: 'export PATH="$HOME/.local/bin:$PATH"'
     state: present
   become: false
+  loop:
+    - .bashrc
+    - .zshrc
 
 - name: Install recommended Python version (3.14)
   shell: |
