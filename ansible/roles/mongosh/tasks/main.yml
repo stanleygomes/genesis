@@ -30,10 +30,10 @@
     force: no
   become: false
 
-- name: Copy mongo-connect script
+- name: Copy mgcon script
   copy:
     src: "{{ playbook_dir }}/../configs/scripts/mongosh/mongosh.sh"
-    dest: "{{ ansible_env.HOME }}/.config/mongodb/mongo-connect"
+    dest: "{{ ansible_env.HOME }}/.config/mongodb/mgcon"
     mode: '0755'
   become: false
 
@@ -44,10 +44,10 @@
     mode: '0755'
   become: false
 
-- name: Create symlink for mongo-connect
+- name: Create symlink for mgcon
   file:
-    src: "{{ ansible_env.HOME }}/.config/mongodb/mongo-connect"
-    dest: "{{ ansible_env.HOME }}/.local/bin/mongo-connect"
+    src: "{{ ansible_env.HOME }}/.config/mongodb/mgcon"
+    dest: "{{ ansible_env.HOME }}/.local/bin/mgcon"
     state: link
   become: false
 

@@ -17,18 +17,18 @@ show_usage() {
   cat << HELP
 ${BLUE}📊 MongoDB Connection Manager${NC}
 
-Usage: mongo-connect [app-env] [command]
+Usage: mgcon [app-env] [command]
 
 Examples:
-  mongo-connect myapp-local      # Connect to local database
-  mongo-connect myapp-staging    # Connect to staging database
-  mongo-connect myapp-prod       # Connect to prod database (with SSH tunnel)
+  mgcon myapp-local      # Connect to local database
+  mgcon myapp-staging    # Connect to staging database
+  mgcon myapp-prod       # Connect to prod database (with SSH tunnel)
   
 Commands:
-  mongo-connect list               # List all available connections
-  mongo-connect config             # Edit configuration (.env) in vim
-  mongo-connect tunnel-close       # Close SSH tunnel
-  mongo-connect help               # Show this message
+  mgcon list               # List all available connections
+  mgcon config             # Edit configuration (.env) in vim
+  mgcon tunnel-close       # Close SSH tunnel
+  mgcon help               # Show this message
 
 HELP
 }
@@ -40,7 +40,7 @@ list_connections() {
   
   grep -E "^MONGO_" "$CONFIG_DIR/.env" | grep -v "^#" | while read line; do
     app_env=$(echo "$line" | cut -d'=' -f1 | sed 's/MONGO_//' | tr '[:upper:]' '[:lower:]' | sed 's/_/-/g')
-    echo -e "  ${GREEN}mongo-connect ${app_env}${NC}"
+    echo -e "  ${GREEN}mgcon ${app_env}${NC}"
   done
   
   echo ""
@@ -52,7 +52,7 @@ connect() {
   local env=$2
   
   if [ -z "$app" ] || [ -z "$env" ]; then
-    echo -e "${RED}❌ Invalid format. Use: mongo-connect app-env${NC}"
+    echo -e "${RED}❌ Invalid format. Use: mgcon app-env${NC}"
     show_usage
     exit 1
   fi
@@ -95,7 +95,7 @@ setup_tunnel() {
     sleep 2
     
     if nc -z 127.0.0.1 27017 &>/dev/null; then
-      echo -e "${GREEN}✅ Tunnel open! (To close: mongo-connect tunnel-close)${NC}"
+      echo -e "${GREEN}✅ Tunnel open! (To close: mgcon tunnel-close)${NC}"
     else
       echo -e "${RED}❌ Failed to open tunnel${NC}"
       kill $TUNNEL_PID 2>/dev/null || true
@@ -146,7 +146,7 @@ case "$1" in
       env="${app_env#*-}"
       connect "$app" "$env"
     else
-      echo -e "${RED}❌ Invalid format. Use: mongo-connect app-env (ex: myapp-local)${NC}"
+      echo -e "${RED}❌ Invalid format. Use: mgcon app-env (ex: myapp-local)${NC}"
       show_usage
       exit 1
     fi
