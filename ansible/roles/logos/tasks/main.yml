@@ -1,0 +1,44 @@
+---
+# Ensures the ~/.config/logos directory exists
+- name: Ensure ~/.config/logos directory exists
+  file:
+    path: "{{ logos_config_dir }}"
+    state: directory
+    mode: "0755"
+  become: false
+
+# Deploy verses.txt only if it is not already present, preserving user edits
+- name: Check if verses file already exists
+  stat:
+    path: "{{ logos_verses_file }}"
+  register: logos_verses_stat
+  become: false
+
+- name: Deploy biblical verses file (~/.config/logos/verses.txt)
+  copy:
+    src: "{{ playbook_dir }}/../configs/logos/verses.txt"
+    dest: "{{ logos_verses_file }}"
+    mode: "0644"
+  become: false
+  when: not logos_verses_stat.stat.exists
+
+# Deploy the logos display script
+- name: Deploy logos.sh display script (~/.config/logos/logos.sh)
+  copy:
+    src: "{{ playbook_dir }}/../configs/logos/logos.sh"
+    dest: "{{ logos_script_dest }}"
+    mode: "0755"
+  become: false
+
+# Wire logos.sh into .zshrc via a managed block
+- name: Source logos.sh in ~/.zshrc
+  blockinfile:
+    path: "{{ ansible_env.HOME }}/.zshrc"
+    marker: "# {mark} LOGOS — VERSÍCULO DO DIA"
+    block: |
+      # Exibe um versículo bíblico aleatório ao abrir o terminal (50 % de chance)
+      [[ -f "${HOME}/.config/logos/logos.sh" ]] && source "${HOME}/.config/logos/logos.sh"
+      (( RANDOM % 2 == 0 )) && _logos_show
+    state: present
+    create: true
+  become: false

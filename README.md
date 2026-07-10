@@ -111,6 +111,7 @@ Here is a list of all roles available in this repository:
 | `google-chrome`   | Installs Google Chrome web browser.                                                                                                                           |
 | `java`            | Installs SDKMAN and configures Java development dependencies.                                                                                                 |
 | `lazydocker`      | Installs LazyDocker TUI binary for Docker container monitoring.                                                                                               |
+| `logos`           | Deploys a Zsh script that displays a random biblical verse in an ANSI-styled box on every new terminal session.                                               |
 | `mongodb-compass` | Installs MongoDB Compass GUI client.                                                                                                                          |
 | `mongosh`         | Installs MongoDB Shell (`mongosh`) and configures `mongo-connect` credential management script.                                                               |
 | `neovim`          | Installs latest Neovim editor via its official AppImage (including `libfuse2`), configuring it with `lazy.nvim` and plugins (Gruvbox, Telescope, Treesitter). |
@@ -134,6 +135,10 @@ This project organises roles into the following playbooks:
 ### 1. Common Configuration (`common.yml`)
 
 > Target: Core command line utilities, runtimes and development tools required for any setup.
+
+### 2. Minimal Configuration (`minimal.yml`)
+
+> Target: Lean workstation baseline — Git, Docker, Zsh/Oh My Zsh, CLI tools, Neovim, and the `logos` biblical verse display.
 
 ### 2. Desktop Configuration (`desktop.yml`)
 
