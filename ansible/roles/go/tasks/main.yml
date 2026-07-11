@@ -31,9 +31,11 @@
   become: false
 
 - name: Ensure Go bin is in PATH via zshrc
-  lineinfile:
+  blockinfile:
     path: "{{ ansible_env.HOME }}/.zshrc"
-    line: 'export PATH=$PATH:{{ ansible_env.HOME }}/.local/go/bin:{{ ansible_env.HOME }}/go/bin'
+    marker: "# {mark} GO CONFIGURATION"
+    block: |
+      export PATH=$PATH:{{ ansible_env.HOME }}/.local/go/bin:{{ ansible_env.HOME }}/go/bin
     state: present
   become: false
 

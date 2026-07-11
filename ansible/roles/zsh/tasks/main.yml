@@ -18,7 +18,7 @@
   become: false
 
 - name: Install Oh My Zsh
-  shell: sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)" "" --unattended
+  shell: KEEP_ZSHRC=yes sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)" "" --unattended
   become: false
   when: not oh_my_zsh_stat.stat.exists
 

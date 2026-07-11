@@ -22,9 +22,11 @@
     executable: /bin/bash
 
 - name: Ensure uv is in .zshrc
-  lineinfile:
+  blockinfile:
     path: "{{ ansible_env.HOME }}/.zshrc"
-    line: 'export PATH="$HOME/.local/bin:$PATH"'
+    marker: "# {mark} PYTHON CONFIGURATION"
+    block: |
+      export PATH="$HOME/.local/bin:$PATH"
     state: present
   become: false
 

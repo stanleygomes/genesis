@@ -52,9 +52,11 @@
   become: false
 
 - name: Ensure ~/.local/bin is in PATH for zshrc
-  lineinfile:
+  blockinfile:
     path: "{{ ansible_env.HOME }}/.zshrc"
-    line: 'export PATH="$HOME/.local/bin:$PATH"'
+    marker: "# {mark} MONGOSH CONFIGURATION"
+    block: |
+      export PATH="$HOME/.local/bin:$PATH"
     state: present
     create: yes
   become: false
