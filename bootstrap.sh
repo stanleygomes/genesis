@@ -57,7 +57,7 @@ echo "🚀 Starting Genesis Workstation Setup..."
 echo "📦 Installing system requirements (git, whiptail, ansible, make)..."
 sudo apt update
 sudo apt upgrade -y
-sudo apt install -y git whiptail ansible make software-properties-common
+sudo apt install -y git whiptail ansible make software-properties-common sshpass
 
 # 2. Clone or update the repository
 if [ ! -d "$TARGET_DIR" ]; then
