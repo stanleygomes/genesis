@@ -26,5 +26,4 @@
     - atuin
     - xh
     - neovim
-    - logos
     - { role: proverbs, when: install_proverbs | default(false) | bool }

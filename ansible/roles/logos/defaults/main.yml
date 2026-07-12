@@ -1,4 +1,0 @@
----
-logos_config_dir: "{{ ansible_env.HOME }}/.config/logos"
-logos_verses_file: "{{ logos_config_dir }}/verses.txt"
-logos_script_dest: "{{ logos_config_dir }}/logos.sh"
