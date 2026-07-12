@@ -101,6 +101,7 @@ Here is a list of all roles available in this repository:
 | `dbeaver`         | Installs DBeaver Community Edition (SQL database explorer/client).                                                                                            |
 | `docker`          | Installs Docker Engine, Docker Compose, and sets permissions/user groups.                                                                                     |
 | `dust`           | Installs dust (a modern, intuitive version of du written in Rust).                                                                                            |
+| `evangelist`      | Installs [evangelist](https://github.com/stanleygomes/evangelist), which displays a random biblical verse on every new terminal session.                    |
 | `eza`            | Installs and configures eza (a modern, feature-rich replacement for ls).                                                                                      |
 | `filezilla`       | Installs FileZilla FTP client.                                                                                                                                |
 | `ghostty`         | Installs Ghostty terminal emulator.                                                                                                                           |
@@ -137,7 +138,7 @@ This project organises roles into the following playbooks:
 
 ### 2. Minimal Configuration (`minimal.yml`)
 
-> Target: Lean workstation baseline — Git, Docker, Zsh/Oh My Zsh, CLI tools, and Neovim.
+> Target: Lean workstation baseline — Git, Docker, Zsh/Oh My Zsh, CLI tools, Neovim, and the `evangelist` biblical verse display.
 
 ### 2. Desktop Configuration (`desktop.yml`)
 

@@ -26,4 +26,5 @@
     - atuin
     - xh
     - neovim
+    - evangelist
     - { role: proverbs, when: install_proverbs | default(false) | bool }

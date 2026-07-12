@@ -1,0 +1,10 @@
+---
+- name: Install Evangelist
+  shell: curl -fsSL https://raw.githubusercontent.com/stanleygomes/evangelist/master/install.sh | bash
+  args:
+    executable: /bin/bash
+    creates: "{{ ansible_env.HOME }}/.config/evangelist/terminal.sh"
+  environment:
+    SHELL: /usr/bin/zsh
+  become: false
+  ignore_errors: "{{ ansible_check_mode }}"
