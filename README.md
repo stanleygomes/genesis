@@ -103,7 +103,6 @@ Here is a list of all roles available in this repository:
 | `dust`           | Installs dust (a modern, intuitive version of du written in Rust).                                                                                            |
 | `evangelist`      | Installs [evangelist](https://github.com/stanleygomes/evangelist), which displays a random biblical verse on every new terminal session.                    |
 | `eza`            | Installs and configures eza (a modern, feature-rich replacement for ls).                                                                                      |
-| `filezilla`       | Installs FileZilla FTP client.                                                                                                                                |
 | `ghostty`         | Installs Ghostty terminal emulator.                                                                                                                           |
 | `git`             | Installs Git, configures user credentials, and generates/sets GitHub SSH keys.                                                                                |
 | `git-delta`       | Installs and configures git-delta (syntax-highlighting pager for git).                                                                                        |
