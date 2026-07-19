@@ -33,9 +33,13 @@
 
 - name: Ensure Neovim configuration directories exist
   file:
-    path: "{{ ansible_env.HOME }}/.config/nvim/lua"
+    path: "{{ ansible_env.HOME }}/.config/nvim/{{ item }}"
     state: directory
     mode: '0755'
+  loop:
+    - lua
+    - lua/config
+    - lua/plugins
   become: false
 
 - name: Copy Neovim init.lua configuration
@@ -45,13 +49,24 @@
     mode: '0644'
   become: false
 
-- name: Copy Neovim plugins.lua configuration
+- name: Copy Neovim config files
   copy:
-    src: lua/plugins.lua
-    dest: "{{ ansible_env.HOME }}/.config/nvim/lua/plugins.lua"
+    src: "lua/config/{{ item }}"
+    dest: "{{ ansible_env.HOME }}/.config/nvim/lua/config/{{ item }}"
     mode: '0644'
+  loop:
+    - lazy.lua
+    - options.lua
+    - keymaps.lua
+    - autocmds.lua
   become: false
 
+- name: Copy Neovim plugins files
+  copy:
+    src: lua/plugins/example.lua
+    dest: "{{ ansible_env.HOME }}/.config/nvim/lua/plugins/example.lua"
+    mode: '0644'
+  become: false
 - name: Add Neovim aliases to .zshrc
   blockinfile:
     path: "{{ ansible_env.HOME }}/.zshrc"
