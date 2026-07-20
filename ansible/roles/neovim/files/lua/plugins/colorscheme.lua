@@ -4,7 +4,7 @@ return {
     "navarasu/onedark.nvim",
     priority = 1000, -- Load before other plugins to avoid highlight issues
     opts = {
-      style = "dark", -- Options: 'dark', 'darker', 'cool', 'deep', 'warm', 'warmer', 'light'
+      style = "warmer", -- Options: 'dark', 'darker', 'cool', 'deep', 'warm', 'warmer', 'light'
     },
   },
 
