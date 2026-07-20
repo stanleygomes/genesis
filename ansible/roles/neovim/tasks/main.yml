@@ -67,6 +67,13 @@
     dest: "{{ ansible_env.HOME }}/.config/nvim/lua/plugins/example.lua"
     mode: '0644'
   become: false
+
+- name: Copy Neovim colorscheme plugin file
+  copy:
+    src: lua/plugins/colorscheme.lua
+    dest: "{{ ansible_env.HOME }}/.config/nvim/lua/plugins/colorscheme.lua"
+    mode: '0644'
+  become: false
 - name: Add Neovim aliases to .zshrc
   blockinfile:
     path: "{{ ansible_env.HOME }}/.zshrc"
