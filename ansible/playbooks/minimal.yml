@@ -27,4 +27,5 @@
     - xh
     - neovim
     - evangelist
+    - antigravity-cli
     - { role: proverbs, when: install_proverbs | default(false) | bool }
