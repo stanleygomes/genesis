@@ -111,11 +111,11 @@ Here is a list of all roles available in this repository:
 | `go`              | Installs Go language runtime and `golangci-lint` to `~/.local/go`.                                                                                            |
 | `google-chrome`   | Installs Google Chrome web browser.                                                                                                                           |
 | `java`            | Installs SDKMAN and configures Java development dependencies.                                                                                                 |
-| `lazydocker`      | Installs LazyDocker TUI binary for Docker container monitoring.                                                                                               |
 | `mongodb-compass` | Installs MongoDB Compass GUI client.                                                                                                                          |
 | `mongosh`         | Installs MongoDB Shell (`mongosh`) and configures `mongo-connect` credential management script.                                                               |
 | `neovim`          | Installs latest Neovim editor via its official AppImage (including `libfuse2`), configuring it with `lazy.nvim` and plugins (Gruvbox, Telescope, Treesitter). |
 | `node`            | Installs NVM, Node.js runtime, and the `pnpm` package manager.                                                                                                |
+| `oxker`           | Installs oxker TUI binary for Docker container monitoring and aliases `docker ps`.                                                                            |
 | `php`             | Installs PHP runtime, extensions, and Composer package manager.                                                                                               |
 | `proverbs`        | Mirrors the `proverbs` repo (Skills, Agents, rules) into `~/.claude` for Claude Code. Optional (`install_proverbs`).                                          |
 | `python`          | Installs Python runtime dependencies, Astral `uv` tool, and Python 3.14.                                                                                      |

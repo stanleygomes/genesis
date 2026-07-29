@@ -16,6 +16,7 @@
       changed_when: false
 
   roles:
+    - autoremove
     - git
     - git-delta
     - docker

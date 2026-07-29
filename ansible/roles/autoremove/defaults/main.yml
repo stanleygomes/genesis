@@ -16,6 +16,8 @@ autoremove_desktop_entries: []
 # List of custom paths (directories or files) to remove as superuser (become: true)
 autoremove_custom_paths:
   - /usr/local/bin/xh
+  - /usr/local/bin/lazydocker
+
 
 # List of user-space paths (directories or files) to remove (become: false)
 autoremove_user_paths:

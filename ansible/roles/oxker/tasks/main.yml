@@ -1,0 +1,33 @@
+---
+- name: Install oxker binary
+  shell: |
+    OXKER_VERSION=$(curl -s "https://api.github.com/repos/mrjackwilliamson/oxker/releases/latest" | grep -Po '"tag_name": "v?\K[^"]*')
+    if [ -z "$OXKER_VERSION" ]; then
+      echo "Failed to fetch oxker version. Using fallback 0.5.0"
+      OXKER_VERSION="0.5.0"
+    fi
+    curl -sLo /tmp/oxker.tar.gz "https://github.com/mrjackwilliamson/oxker/releases/download/v${OXKER_VERSION}/oxker_linux_x86_64.tar.gz"
+    cd /tmp
+    tar xf oxker.tar.gz oxker
+    install oxker /usr/local/bin
+  args:
+    executable: /bin/bash
+    creates: /usr/local/bin/oxker
+  become: true
+  ignore_errors: "{{ ansible_check_mode }}"
+
+- name: Add oxker alias wrapper to .zshrc
+  blockinfile:
+    path: "{{ ansible_env.HOME }}/.zshrc"
+    marker: "# {mark} OXKER ALIASES"
+    block: |
+      # Intercepta 'docker ps' para executar o oxker
+      docker() {
+          if [ "$1" = "ps" ]; then
+              oxker
+          else
+              command docker "$@"
+          fi
+      }
+    state: present
+  become: false
