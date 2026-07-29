@@ -1,0 +1,17 @@
+---
+# List of APT packages to purge
+autoremove_apt_packages:
+  - firefox
+  - filezilla
+
+# List of Flatpak packages to remove
+autoremove_flatpak_packages: []
+
+# List of Snap packages to remove
+autoremove_snap_packages: []
+
+# List of desktop shortcut filenames to remove from ~/.local/share/applications/
+autoremove_desktop_entries: []
+
+# List of custom paths (directories or files) to remove
+autoremove_custom_paths: []

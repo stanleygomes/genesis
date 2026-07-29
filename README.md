@@ -97,6 +97,7 @@ Here is a list of all roles available in this repository:
 | `antigravity`     | Installs Antigravity IDE & Hub, configures workspace settings, keybindings, extensions, and desktop shortcuts.                                                |
 | `antigravity-cli` | Installs the Antigravity CLI client tool (`agy`).                                                                                                             |
 | `atuin`           | Installs and configures Atuin shell history search.                                                                                                           |
+| `autoremove`      | Aggregates uninstallation and removal actions (APT, Flatpak, Snap packages, desktop shortcuts, custom paths/files). |
 | `bruno`           | Installs Bruno API client (open-source, Git-friendly alternative to Postman/Insomnia).                                                                        |
 | `dbeaver`         | Installs DBeaver Community Edition (SQL database explorer/client).                                                                                            |
 | `docker`          | Installs Docker Engine, Docker Compose, and sets permissions/user groups.                                                                                     |

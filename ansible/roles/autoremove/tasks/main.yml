@@ -1,0 +1,52 @@
+---
+# === APT PACKAGES ===
+- name: Remove APT packages
+  apt:
+    name: "{{ autoremove_apt_packages }}"
+    state: absent
+    purge: true
+  become: true
+  when: autoremove_apt_packages | default([]) | length > 0
+
+- name: Autoremove unused APT dependencies
+  apt:
+    autoremove: true
+    purge: true
+  become: true
+  when: autoremove_apt_packages | default([]) | length > 0
+
+# === FLATPAK PACKAGES ===
+- name: Remove Flatpak packages
+  community.general.flatpak:
+    name: "{{ item }}"
+    state: absent
+  loop: "{{ autoremove_flatpak_packages | default([]) }}"
+  become: true
+  when: autoremove_flatpak_packages | default([]) | length > 0
+
+# === SNAP PACKAGES ===
+- name: Remove Snap packages
+  community.general.snap:
+    name: "{{ item }}"
+    state: absent
+  loop: "{{ autoremove_snap_packages | default([]) }}"
+  become: true
+  when: autoremove_snap_packages | default([]) | length > 0
+
+# === DESKTOP ENTRIES & SHORTCUTS ===
+- name: Remove desktop entries
+  file:
+    path: "{{ ansible_env.HOME }}/.local/share/applications/{{ item }}"
+    state: absent
+  loop: "{{ autoremove_desktop_entries | default([]) }}"
+  become: false
+  when: autoremove_desktop_entries | default([]) | length > 0
+
+# === CUSTOM PATHS & FILES ===
+- name: Remove custom directories and files
+  file:
+    path: "{{ item }}"
+    state: absent
+  loop: "{{ autoremove_custom_paths | default([]) }}"
+  become: true
+  when: autoremove_custom_paths | default([]) | length > 0
