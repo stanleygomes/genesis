@@ -1,0 +1,15 @@
+---
+# tuicr is a terminal UI for code reviews (cr)
+- name: Install tuicr binary
+  shell: |
+    TUICR_VERSION=$(curl -s "https://api.github.com/repos/agavra/tuicr/releases/latest" | grep -Po '"tag_name": "v?\K[^"]*')
+    if [ -z "$TUICR_VERSION" ]; then
+      echo "Failed to get tuicr version. Retrying with fallback version {{ tuicr_fallback_version }}"
+      TUICR_VERSION="{{ tuicr_fallback_version }}"
+    fi
+    curl -fsSL https://tuicr.dev/install.sh | sh -s -- --dir /usr/local/bin
+  args:
+    executable: /bin/bash
+    creates: /usr/local/bin/tuicr
+  become: true
+  ignore_errors: "{{ ansible_check_mode }}"
