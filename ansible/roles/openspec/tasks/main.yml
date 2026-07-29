@@ -1,0 +1,11 @@
+---
+# OpenSpec CLI (@fission-ai/openspec)
+- name: Install OpenSpec CLI globally via NPM
+  shell: |
+    bash -c "source {{ ansible_env.HOME }}/.nvm/nvm.sh && npm install -g @fission-ai/openspec@latest"
+  args:
+    executable: /bin/bash
+  become: false
+  register: openspec_install
+  changed_when: "'added' in openspec_install.stdout or 'changed' in openspec_install.stdout or 'removed' in openspec_install.stdout"
+  ignore_errors: "{{ ansible_check_mode }}"
