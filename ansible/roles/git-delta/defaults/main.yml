@@ -1,3 +1,0 @@
----
-# Defaults for git-delta role
-git_delta_fallback_version: "0.19.2"

@@ -106,7 +106,6 @@ Here is a list of all roles available in this repository:
 | `eza`            | Installs and configures eza (a modern, feature-rich replacement for ls).                                                                                      |
 | `ghostty`         | Installs Ghostty terminal emulator.                                                                                                                           |
 | `git`             | Installs Git, configures user credentials, and generates/sets GitHub SSH keys.                                                                                |
-| `git-delta`       | Installs and configures git-delta (syntax-highlighting pager for git).                                                                                        |
 | `github-copilot`  | Installs GitHub Copilot CLI globally via NPM.                                                                                                                 |
 | `go`              | Installs Go language runtime and `golangci-lint` to `~/.local/go`.                                                                                            |
 | `google-chrome`   | Installs Google Chrome web browser.                                                                                                                           |

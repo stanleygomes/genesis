@@ -3,6 +3,8 @@
 autoremove_apt_packages:
   - firefox
   - filezilla
+  - git-delta
+
 
 # List of Flatpak packages to remove
 autoremove_flatpak_packages: []
