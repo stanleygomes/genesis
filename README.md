@@ -123,7 +123,6 @@ Here is a list of all roles available in this repository:
 | `starship`        | Installs and configures Starship prompt for Bash and Zsh.                                                                                                     |
 | `terraform`       | Installs Terraform CLI tool from HashiCorp releases.                                                                                                          |
 | `vscode`          | Installs VS Code, syncs user settings/keybindings, and installs extensions.                                                                                   |
-| `xh`              | Installs xh HTTP client (a modern, fast alternative to cURL).                                                                                                 |
 | `zsh`             | Installs Zsh and Oh My Zsh, sets Zsh as default shell, and configures core aliases/functions.                                                                 |
 
 ---

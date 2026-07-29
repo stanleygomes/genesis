@@ -14,4 +14,6 @@ autoremove_snap_packages: []
 autoremove_desktop_entries: []
 
 # List of custom paths (directories or files) to remove
-autoremove_custom_paths: []
+autoremove_custom_paths:
+  - /usr/local/bin/xh
+
