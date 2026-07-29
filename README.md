@@ -103,7 +103,7 @@ Here is a list of all roles available in this repository:
 | `dbeaver`         | Installs DBeaver Community Edition (SQL database explorer/client).                                                                                            |
 | `docker`          | Installs Docker Engine, Docker Compose, and sets permissions/user groups.                                                                                     |
 | `dust`           | Installs dust (a modern, intuitive version of du written in Rust).                                                                                            |
-| `evangelist`      | Installs [evangelist](https://github.com/stanleygomes/evangelist), which displays a random biblical verse on every new terminal session.                    |
+| `evangelist`      | Displays a random biblical verse on terminal session launch using local genesis files.                                       |
 | `eza`            | Installs and configures eza (a modern, feature-rich replacement for ls).                                                                                      |
 | `ghostty`         | Installs Ghostty terminal emulator.                                                                                                                           |
 | `git`             | Installs Git, configures user credentials, and generates/sets GitHub SSH keys.                                                                                |

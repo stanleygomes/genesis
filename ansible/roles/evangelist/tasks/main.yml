@@ -1,10 +1,37 @@
 ---
-- name: Install Evangelist
-  shell: curl -fsSL https://raw.githubusercontent.com/stanleygomes/evangelist/master/install.sh | bash
-  args:
-    executable: /bin/bash
-    creates: "{{ ansible_env.HOME }}/.config/evangelist/terminal.sh"
-  environment:
-    SHELL: /usr/bin/zsh
+- name: Ensure evangelist config directory exists
+  file:
+    path: "{{ evangelist_config_dir }}"
+    state: directory
+    mode: "0755"
   become: false
-  ignore_errors: "{{ ansible_check_mode }}"
+
+- name: Copy terminal.sh to evangelist config directory
+  copy:
+    src: terminal.sh
+    dest: "{{ evangelist_config_dir }}/terminal.sh"
+    mode: "0755"
+  become: false
+
+- name: Check if verses.txt exists in evangelist config directory
+  stat:
+    path: "{{ evangelist_config_dir }}/verses.txt"
+  register: evangelist_verses_stat
+  become: false
+
+- name: Copy verses.txt to evangelist config directory if missing
+  copy:
+    src: verses.txt
+    dest: "{{ evangelist_config_dir }}/verses.txt"
+    mode: "0644"
+  become: false
+  when: not evangelist_verses_stat.stat.exists
+
+- name: Add evangelist source block to .zshrc
+  blockinfile:
+    path: "{{ ansible_env.HOME }}/.zshrc"
+    marker: "# {mark} EVANGELIST"
+    block: |
+      source "{{ evangelist_config_dir }}/terminal.sh"
+    state: present
+  become: false

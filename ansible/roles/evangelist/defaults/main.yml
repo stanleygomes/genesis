@@ -1,2 +1,3 @@
 ---
-# Defaults for evangelist role
+# evangelist configuration defaults
+evangelist_config_dir: "{{ ansible_env.HOME }}/.config/evangelist"
