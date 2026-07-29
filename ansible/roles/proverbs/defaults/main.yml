@@ -1,4 +1,0 @@
----
-proverbs_repo_url: "https://github.com/stanleygomes/proverbs.git"
-proverbs_dir: "{{ ansible_env.HOME }}/.agents"
-claude_dir: "{{ ansible_env.HOME }}/.claude"

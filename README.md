@@ -94,6 +94,7 @@ Here is a list of all roles available in this repository:
 
 | Role              | Description                                                                                                                                                   |
 | :---------------- | :------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| `agents`          | Syncs local Genesis `.agents` (Skills, rules) into `~/.agents` and `~/.claude`.                                                             |
 | `antigravity`     | Installs Antigravity IDE & Hub, configures workspace settings, keybindings, extensions, and desktop shortcuts.                                                |
 | `antigravity-cli` | Installs the Antigravity CLI client tool (`agy`).                                                                                                             |
 | `atuin`           | Installs and configures Atuin shell history search.                                                                                                           |
@@ -117,7 +118,6 @@ Here is a list of all roles available in this repository:
 | `openspec`        | Installs OpenSpec CLI (`@fission-ai/openspec`) globally via NPM.                                                                                              |
 | `oxker`           | Installs oxker TUI binary for Docker container monitoring and aliases `docker ps`.                                                                            |
 | `php`             | Installs PHP runtime, extensions, and Composer package manager.                                                                                               |
-| `proverbs`        | Mirrors the `proverbs` repo (Skills, Agents, rules) into `~/.claude` for Claude Code. Optional (`install_proverbs`).                                          |
 | `python`          | Installs Python runtime dependencies, Astral `uv` tool, and Python 3.14.                                                                                      |
 | `system`          | Installs GNOME Tweaks and GNOME Extension Manager.                                                                                                            |
 | `starship`        | Installs and configures Starship prompt for Bash and Zsh.                                                                                                     |

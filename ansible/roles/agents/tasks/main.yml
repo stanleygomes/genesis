@@ -1,0 +1,78 @@
+---
+# Syncs local Genesis .agents (Skills, rules) into ~/.agents and ~/.claude.
+
+- name: Create ~/.agents directory
+  file:
+    path: "{{ agents_dir }}"
+    state: directory
+    mode: "0755"
+  become: false
+
+- name: Sync skills into ~/.agents/skills
+  copy:
+    src: "{{ playbook_dir }}/../.agents/skills/"
+    dest: "{{ agents_dir }}/skills/"
+    mode: "0755"
+  become: false
+
+- name: Sync rules into ~/.agents/rules
+  copy:
+    src: "{{ playbook_dir }}/../.agents/rules/"
+    dest: "{{ agents_dir }}/rules/"
+    mode: "0644"
+  become: false
+
+- name: Check for a skills folder in ~/.agents
+  stat:
+    path: "{{ agents_dir }}/skills"
+  register: agents_skills_stat
+  become: false
+
+- name: Check current state of ~/.claude/skills
+  stat:
+    path: "{{ claude_dir }}/skills"
+  register: claude_skills_stat
+  become: false
+
+- name: Ensure ~/.claude directory exists
+  file:
+    path: "{{ claude_dir }}"
+    state: directory
+    mode: "0755"
+  become: false
+
+- name: Symlink ~/.claude/skills to ~/.agents/skills
+  file:
+    src: "{{ agents_dir }}/skills"
+    dest: "{{ claude_dir }}/skills"
+    state: link
+  become: false
+  when:
+    - agents_skills_stat.stat.exists
+    - not claude_skills_stat.stat.exists or claude_skills_stat.stat.islnk | default(false)
+
+- name: Find rule files in ~/.agents/rules
+  find:
+    paths: "{{ agents_dir }}/rules"
+    patterns: "*.md"
+  register: agents_rule_files
+  become: false
+
+- name: Build rule sections
+  set_fact:
+    agents_rule_sections: "{{ agents_rule_sections | default([]) + ['### ' ~ (item.path | basename) ~ \"\\n\\n\" ~ lookup('file', item.path)] }}"
+  loop: "{{ agents_rule_files.files | default([]) | sort(attribute='path') }}"
+  loop_control:
+    label: "{{ item.path | basename }}"
+  become: false
+  when: agents_rule_files.matched | default(0) > 0
+
+- name: Sync rules into ~/.claude/CLAUDE.md
+  blockinfile:
+    path: "{{ claude_dir }}/CLAUDE.md"
+    create: true
+    mode: "0644"
+    marker: "<!-- {mark} AGENTS RULES (auto-synced from ~/.agents/rules, do not edit by hand) -->"
+    block: "{{ agents_rule_sections | join('\n\n') }}"
+  become: false
+  when: agents_rule_files.matched | default(0) > 0

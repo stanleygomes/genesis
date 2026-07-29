@@ -6,13 +6,6 @@ user_name: "{{ git_user_name }}"
 user_email: "{{ git_user_email }}"
 
 # ------------------------------------------------------------------------------
-# Optional Roles
-# ------------------------------------------------------------------------------
-# Mirrors the proverbs repo (Skills, Agents, rules) into ~/.claude. Off by
-# default since it's a personal AI-harness preference, not core workstation setup.
-install_proverbs: false
-
-# ------------------------------------------------------------------------------
 # Tool Versions
 # ------------------------------------------------------------------------------
 node_version: "24"

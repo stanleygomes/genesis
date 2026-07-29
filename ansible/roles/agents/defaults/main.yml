@@ -1,0 +1,3 @@
+---
+agents_dir: "{{ ansible_env.HOME }}/.agents"
+claude_dir: "{{ ansible_env.HOME }}/.claude"
