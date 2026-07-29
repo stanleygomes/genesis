@@ -13,7 +13,13 @@ autoremove_snap_packages: []
 # List of desktop shortcut filenames to remove from ~/.local/share/applications/
 autoremove_desktop_entries: []
 
-# List of custom paths (directories or files) to remove
+# List of custom paths (directories or files) to remove as superuser (become: true)
 autoremove_custom_paths:
   - /usr/local/bin/xh
 
+# List of user-space paths (directories or files) to remove (become: false)
+autoremove_user_paths:
+  - "{{ ansible_env.HOME }}/.config/nvim"
+  - "{{ ansible_env.HOME }}/.local/share/nvim"
+  - "{{ ansible_env.HOME }}/.local/state/nvim"
+  - "{{ ansible_env.HOME }}/.cache/nvim"

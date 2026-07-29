@@ -42,11 +42,20 @@
   become: false
   when: autoremove_desktop_entries | default([]) | length > 0
 
-# === CUSTOM PATHS & FILES ===
-- name: Remove custom directories and files
+# === CUSTOM SYSTEM PATHS & FILES (sudo) ===
+- name: Remove custom system directories and files
   file:
     path: "{{ item }}"
     state: absent
   loop: "{{ autoremove_custom_paths | default([]) }}"
   become: true
   when: autoremove_custom_paths | default([]) | length > 0
+
+# === USER PATHS & FILES (normal user) ===
+- name: Remove user directories and files
+  file:
+    path: "{{ item }}"
+    state: absent
+  loop: "{{ autoremove_user_paths | default([]) }}"
+  become: false
+  when: autoremove_user_paths | default([]) | length > 0
