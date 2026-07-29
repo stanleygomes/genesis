@@ -18,15 +18,14 @@
     - system
     - google-chrome
     - dbeaver
-    - java
-    - python
-    - php
-    - go
-    - antigravity
     - vscode
-    - oxker
+    - antigravity
     - antigravity-cli
     - github-copilot
     - ghostty
     - terraform
-
+    - java
+    - python
+    - php
+    - go
+    - node

@@ -19,11 +19,10 @@
     - google-chrome
     - mongodb-compass
     - mongosh
-    - docker
     - dbeaver
-    - java
-    - python
-    - go
     - bruno
     - github-copilot
     - ghostty
+    - java
+    - python
+    - node
