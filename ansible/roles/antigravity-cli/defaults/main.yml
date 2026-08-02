@@ -1,0 +1,3 @@
+---
+antigravity_cli_statusline_script_dest: "{{ ansible_env.HOME }}/.config/agy/statusline.sh"
+antigravity_cli_settings_dest: "{{ ansible_env.HOME }}/.gemini/antigravity-cli/settings.json"

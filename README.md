@@ -96,7 +96,7 @@ Here is a list of all roles available in this repository:
 | :---------------- | :------------------------------------------------------------------------------------------------------------------------------------------------------------ |
 | `agents`          | Syncs local Genesis `.agents` (Skills, rules) into `~/.agents` and `~/.claude`.                                                             |
 | `antigravity`     | Installs Antigravity IDE & Hub, configures workspace settings, keybindings, extensions, and desktop shortcuts.                                                |
-| `antigravity-cli` | Installs the Antigravity CLI client tool (`agy`).                                                                                                             |
+| `antigravity-cli` | Installs the Antigravity CLI client tool (`agy`) and configures custom statusLine settings. |
 | `atuin`           | Installs and configures Atuin shell history search.                                                                                                           |
 | `autoremove`      | Aggregates uninstallation and removal actions (APT, Flatpak, Snap packages, desktop shortcuts, custom paths/files). |
 | `bruno`           | Installs Bruno API client (open-source, Git-friendly alternative to Postman/Insomnia).                                                                        |

@@ -6,3 +6,60 @@
     executable: /bin/bash
     creates: "{{ ansible_env.HOME }}/.local/bin/agy"
   become: false
+
+- name: Ensure ~/.config/agy directory exists
+  file:
+    path: "{{ ansible_env.HOME }}/.config/agy"
+    state: directory
+    mode: "0755"
+  become: false
+
+- name: Ensure ~/.gemini/antigravity-cli directory exists
+  file:
+    path: "{{ ansible_env.HOME }}/.gemini/antigravity-cli"
+    state: directory
+    mode: "0755"
+  become: false
+
+- name: Copy statusline script
+  copy:
+    src: "{{ playbook_dir }}/../configs/agy/statusline.sh"
+    dest: "{{ antigravity_cli_statusline_script_dest }}"
+    mode: "0755"
+  become: false
+
+- name: Check if Antigravity CLI settings.json exists
+  stat:
+    path: "{{ antigravity_cli_settings_dest }}"
+  register: settings_stat
+  become: false
+
+- name: Create default settings.json if missing
+  copy:
+    dest: "{{ antigravity_cli_settings_dest }}"
+    mode: "0644"
+    content: "{}\n"
+  when: not settings_stat.stat.exists
+  become: false
+
+- name: Configure statusLine in settings.json
+  shell: |
+    python3 -c '
+    import json
+    path = "{{ antigravity_cli_settings_dest }}"
+    script_path = "{{ antigravity_cli_statusline_script_dest }}"
+    with open(path, "r") as f:
+        try:
+            data = json.load(f)
+        except Exception:
+            data = {}
+    data["statusLine"] = {
+        "type": "command",
+        "command": script_path,
+        "enabled": True
+    }
+    with open(path, "w") as f:
+        json.dump(data, f, indent=2)
+    '
+  become: false
+  changed_when: false
