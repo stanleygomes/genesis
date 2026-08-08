@@ -16,13 +16,6 @@
   become: true
   ignore_errors: "{{ ansible_check_mode }}"
 
-- name: Ensure ~/.zshrc file exists
-  file:
-    path: "{{ ansible_env.HOME }}/.zshrc"
-    state: touch
-    mode: '0644'
-  become: false
-
 - name: Add oxker alias wrapper to .zshrc
   blockinfile:
     path: "{{ ansible_env.HOME }}/.zshrc"

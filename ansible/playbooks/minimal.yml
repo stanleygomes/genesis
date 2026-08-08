@@ -18,9 +18,9 @@
   roles:
     - autoremove
     - git
+    - zsh
     - docker
     - oxker
-    - zsh
     - eza
     - dust
     - starship
