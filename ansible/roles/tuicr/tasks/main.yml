@@ -7,7 +7,10 @@
       echo "Failed to get tuicr version. Retrying with fallback version {{ tuicr_fallback_version }}"
       TUICR_VERSION="{{ tuicr_fallback_version }}"
     fi
-    curl -fsSL https://tuicr.dev/install.sh | sh -s -- --dir /usr/local/bin
+    curl -sLo /tmp/tuicr.tar.gz "https://github.com/agavra/tuicr/releases/download/v${TUICR_VERSION}/tuicr-${TUICR_VERSION}-x86_64-unknown-linux-gnu.tar.gz"
+    cd /tmp
+    tar xf tuicr.tar.gz tuicr
+    install tuicr /usr/local/bin
   args:
     executable: /bin/bash
     creates: /usr/local/bin/tuicr
