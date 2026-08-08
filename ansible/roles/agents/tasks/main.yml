@@ -8,12 +8,19 @@
     mode: "0755"
   become: false
 
+- name: Check if repo .agents directory exists
+  stat:
+    path: "{{ playbook_dir }}/../.agents"
+  register: repo_agents_stat
+  become: false
+
 - name: Sync skills into ~/.agents/skills
   copy:
     src: "{{ playbook_dir }}/../.agents/skills/"
     dest: "{{ agents_dir }}/skills/"
     mode: "0755"
   become: false
+  when: repo_agents_stat.stat.exists
 
 - name: Sync rules into ~/.agents/rules
   copy:
@@ -21,6 +28,7 @@
     dest: "{{ agents_dir }}/rules/"
     mode: "0644"
   become: false
+  when: repo_agents_stat.stat.exists
 
 - name: Check for a skills folder in ~/.agents
   stat:
