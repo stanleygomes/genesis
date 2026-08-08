@@ -1,12 +1,12 @@
 ---
 - name: Install oxker binary
   shell: |
-    OXKER_VERSION=$(curl -s "https://api.github.com/repos/mrjackwilliamson/oxker/releases/latest" | grep -Po '"tag_name": "v?\K[^"]*')
+    OXKER_VERSION=$(curl -s "https://api.github.com/repos/mrjackwills/oxker/releases/latest" | grep -Po '"tag_name": "v?\K[^"]*')
     if [ -z "$OXKER_VERSION" ]; then
-      echo "Failed to fetch oxker version. Using fallback 0.5.0"
-      OXKER_VERSION="0.5.0"
+      echo "Failed to fetch oxker version. Using fallback 0.13.3"
+      OXKER_VERSION="0.13.3"
     fi
-    curl -sLo /tmp/oxker.tar.gz "https://github.com/mrjackwilliamson/oxker/releases/download/v${OXKER_VERSION}/oxker_linux_x86_64.tar.gz"
+    curl -sLo /tmp/oxker.tar.gz "https://github.com/mrjackwills/oxker/releases/download/v${OXKER_VERSION}/oxker_linux_x86_64.tar.gz"
     cd /tmp
     tar xf oxker.tar.gz oxker
     install oxker /usr/local/bin
