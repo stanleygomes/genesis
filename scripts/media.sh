@@ -15,10 +15,11 @@ show_help() {
     echo "  ./media.sh optimize [TARGET_DIR]"
     echo ""
     echo "Subcomandos e Exemplos:"
-    echo "  download  - Baixa vídeo ou áudio do YouTube / playlists via yt-dlp"
-    echo "              Formatos aceitos: mp4 (vídeo), mp3 (áudio)"
+    echo "  download  - Baixa mídia de qualquer plataforma (YouTube via yt-dlp ou Spotify via spotdl)"
+    echo "              Formatos para YouTube: mp4 (vídeo), mp3 (áudio)"
+    echo "              URLs do Spotify (spotify.com) são identificadas e baixadas via spotDL automaticamente."
     echo "              Ex: ./media.sh download \"https://youtube.com/...\" mp4 ./downloads chrome"
-    echo "              Ex: ./media.sh download \"https://youtube.com/...\" mp3 ./downloads chrome"
+    echo "              Ex: ./media.sh download \"https://open.spotify.com/track/...\""
     echo ""
     echo "  optimize  - Transcodifica e otimiza mídias de uma pasta para H.264 + AAC (.mp4)"
     echo "              Valida se o vídeo já está em H.264/AAC no container .mp4."
@@ -27,7 +28,40 @@ show_help() {
     echo "=========================================="
 }
 
-# --- Module: YouTube Download ---
+# --- Module: Spotify Download via spotdl ---
+do_spotify() {
+    local url="${1:-}"
+    local dest_dir="${2:-./downloads}"
+
+    if [ -z "${url}" ]; then
+        echo "❌ Erro: Informe a URL da faixa, álbum ou playlist do Spotify."
+        echo "Exemplo: ./media.sh spotify \"https://open.spotify.com/track/...\""
+        exit 1
+    fi
+
+    # Check dependencies
+    if ! command -v spotdl &> /dev/null; then
+        echo "❌ Erro: 'spotdl' não está instalado no sistema."
+        echo "Rode 'pip install spotdl' ou 'make install' para instalar as dependências."
+        exit 1
+    fi
+
+    mkdir -p "${dest_dir}"
+
+    echo "=========================================="
+    echo "🎵 Iniciando download do Spotify (spotDL)"
+    echo "🌐 URL: ${url}"
+    echo "📂 Destino: ${dest_dir}"
+    echo "=========================================="
+
+    spotdl download "${url}" --output "${dest_dir}"
+
+    echo "=========================================="
+    echo "✅ Download do Spotify concluído com sucesso!"
+    echo "=========================================="
+}
+
+# --- Module: YouTube / General Download ---
 do_download() {
     local url="${1:-}"
     local format="${2:-mp4}"
@@ -35,9 +69,16 @@ do_download() {
     local browser="${4:-chrome}"
 
     if [ -z "${url}" ]; then
-        echo "❌ Erro: Informe a URL do vídeo ou playlist."
+        echo "❌ Erro: Informe a URL do vídeo, música ou playlist."
         echo "Exemplo: ./media.sh download \"https://www.youtube.com/watch?v=...\" mp4"
         exit 1
+    fi
+
+    # Auto-detect Spotify URLs
+    if [[ "${url}" =~ spotify\.com ]]; then
+        echo "💡 URL do Spotify detectada! Redirecionando para o módulo spotDL..."
+        do_spotify "${url}" "${dest_dir}"
+        return 0
     fi
 
     # Check dependencies
