@@ -281,23 +281,23 @@
 
 - name: Deploy Definitive Nginx site config for Jellyfin (Separate domains)
   copy:
-    dest: "/etc/nginx/sites-available/{{ domain_jellyfin | default(DOMAIN_JELLYFIN) }}.conf"
+    dest: "/etc/nginx/sites-available/{{ domain_jellyfin }}.conf"
     mode: "0644"
     content: |
       server {
           listen 80;
           listen [::]:80;
-          server_name {{ domain_jellyfin | default(DOMAIN_JELLYFIN) }};
+          server_name {{ domain_jellyfin }};
           return 301 https://$host$request_uri;
       }
 
       server {
           listen 443 ssl http2;
           listen [::]:443 ssl http2;
-          server_name {{ domain_jellyfin | default(DOMAIN_JELLYFIN) }};
+          server_name {{ domain_jellyfin }};
 
-          ssl_certificate /etc/letsencrypt/live/{{ domain_jellyfin | default(DOMAIN_JELLYFIN) }}/fullchain.pem;
-          ssl_certificate_key /etc/letsencrypt/live/{{ domain_jellyfin | default(DOMAIN_JELLYFIN) }}/privkey.pem;
+          ssl_certificate /etc/letsencrypt/live/{{ domain_jellyfin }}/fullchain.pem;
+          ssl_certificate_key /etc/letsencrypt/live/{{ domain_jellyfin }}/privkey.pem;
           ssl_protocols TLSv1.2 TLSv1.3;
           ssl_ciphers HIGH:!aNULL:!MD5;
 
@@ -322,28 +322,28 @@
       }
   become: true
   when:
-    - (domain_jellyfin is defined and domain_jellyfin != '') or (DOMAIN_JELLYFIN is defined and DOMAIN_JELLYFIN != '')
+    - domain_jellyfin != ''
     - not (same_domain | bool)
 
 - name: Deploy Definitive Nginx site config for Navidrome (Separate domains)
   copy:
-    dest: "/etc/nginx/sites-available/{{ domain_navidrome | default(DOMAIN_NAVIDROME) }}.conf"
+    dest: "/etc/nginx/sites-available/{{ domain_navidrome }}.conf"
     mode: "0644"
     content: |
       server {
           listen 80;
           listen [::]:80;
-          server_name {{ domain_navidrome | default(DOMAIN_NAVIDROME) }};
+          server_name {{ domain_navidrome }};
           return 301 https://$host$request_uri;
       }
 
       server {
           listen 443 ssl http2;
           listen [::]:443 ssl http2;
-          server_name {{ domain_navidrome | default(DOMAIN_NAVIDROME) }};
+          server_name {{ domain_navidrome }};
 
-          ssl_certificate /etc/letsencrypt/live/{{ domain_navidrome | default(DOMAIN_NAVIDROME) }}/fullchain.pem;
-          ssl_certificate_key /etc/letsencrypt/live/{{ domain_navidrome | default(DOMAIN_NAVIDROME) }}/privkey.pem;
+          ssl_certificate /etc/letsencrypt/live/{{ domain_navidrome }}/fullchain.pem;
+          ssl_certificate_key /etc/letsencrypt/live/{{ domain_navidrome }}/privkey.pem;
           ssl_protocols TLSv1.2 TLSv1.3;
           ssl_ciphers HIGH:!aNULL:!MD5;
 
@@ -366,7 +366,7 @@
       }
   become: true
   when:
-    - (domain_navidrome is defined and domain_navidrome != '') or (DOMAIN_NAVIDROME is defined and DOMAIN_NAVIDROME != '')
+    - domain_navidrome != ''
     - not (same_domain | bool)
 
 - name: Enable Definitive Nginx site link for Jellyfin / Main Domain
