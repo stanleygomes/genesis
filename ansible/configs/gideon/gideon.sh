@@ -117,15 +117,9 @@ do_download() {
     local target_output_dir="${dest_dir}"
     local output_template="%(title)s.%(ext)s"
 
-    if [ -n "${playlist_title}" ] && [ "${playlist_title}" != "NA" ]; then
-        local safe_folder_name
-        safe_folder_name=$(sanitize_folder_name "${playlist_title}")
-        if [ -z "${safe_folder_name}" ]; then
-            safe_folder_name="Playlist"
-        fi
-        target_output_dir="${dest_dir}/${safe_folder_name}"
-        output_template="%(playlist_index)s - %(title)s.%(ext)s"
-        echo "📁 Playlist detected: '${playlist_title}' -> Creating folder: '${target_output_dir}'"
+    if [[ "${url}" =~ playlist\?list= ]] || [[ "${url}" =~ \&list= ]] || [ -n "${playlist_title}" -a "${playlist_title}" != "NA" ]; then
+        output_template="%(playlist_title,playlist)s/%(playlist_index)s - %(title)s.%(ext)s"
+        echo "📁 Playlist detected -> Output pattern set to subfolder: %(playlist_title,playlist)s/"
     else
         echo "🎵 Single item detected."
     fi
