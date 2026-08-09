@@ -17,9 +17,10 @@ show_help() {
     echo ""
     echo "Subcomandos e Exemplos:"
     echo "  install   - Instala as dependências do sistema (yt-dlp, ffmpeg, spotdl, etc.)"
-    echo "  download  - Baixa mídia de qualquer plataforma (YouTube via yt-dlp ou Spotify via spotdl)"
-    echo "              Formatos para YouTube: mp4 (vídeo), mp3 (áudio)"
-    echo "              URLs do Spotify (spotify.com) são identificadas e baixadas via spotDL automaticamente."
+    echo "  download  - Baixa vídeo ou áudio (YouTube via yt-dlp ou Spotify via spotdl)"
+    echo "              Detecta automaticamente se é item único ou playlist."
+    echo "              Para playlists, cria uma subpasta com o nome da playlist."
+    echo "              Executa validação automática de Chromecast (H.264/AAC) em downloads MP4."
     echo "              Ex: ./gideon.sh download \"https://youtube.com/...\" mp4 ./downloads chrome"
     echo "              Ex: ./gideon.sh download \"https://open.spotify.com/track/...\""
     echo ""
@@ -30,12 +31,9 @@ show_help() {
     echo "=========================================="
 }
 
-# --- Module: System Dependency Installation ---
-do_install() {
-    echo "📦 Instalando yt-dlp, ffmpeg, spotdl e dependências no sistema..."
-    sudo apt update && sudo apt install -y yt-dlp ffmpeg python3-pip python3-secretstorage python3-cryptography
-    pip3 install --break-system-packages spotdl || pip3 install spotdl
-    echo "✅ Dependências do Gideon instaladas com sucesso!"
+# --- Helper: Sanitize folder name ---
+sanitize_folder_name() {
+    echo "$1" | sed -e 's/[^A-Za-z0-9 _-]/_/g' -e 's/_+/_/g' -e 's/^ *//;s/ *$//'
 }
 
 # --- Module: Spotify Download via spotdl ---
@@ -96,13 +94,33 @@ do_download() {
         exit 1
     fi
 
-    mkdir -p "${dest_dir}"
+    echo "🔍 Verificando URL (Item único vs Playlist)..."
+    local playlist_title
+    playlist_title=$(yt-dlp --print playlist_title --playlist-items 1 --no-warnings "${url}" 2>/dev/null | head -n 1 || true)
+
+    local target_output_dir="${dest_dir}"
+    local output_template="%(title)s.%(ext)s"
+
+    if [ -n "${playlist_title}" ] && [ "${playlist_title}" != "NA" ]; then
+        local safe_folder_name
+        safe_folder_name=$(sanitize_folder_name "${playlist_title}")
+        if [ -z "${safe_folder_name}" ]; then
+            safe_folder_name="Playlist"
+        fi
+        target_output_dir="${dest_dir}/${safe_folder_name}"
+        output_template="%(playlist_index)s - %(title)s.%(ext)s"
+        echo "📁 Playlist identificada: '${playlist_title}' -> Criando pasta: '${target_output_dir}'"
+    else
+        echo "🎵 Item único identificado."
+    fi
+
+    mkdir -p "${target_output_dir}"
 
     echo "=========================================="
     echo "⬇️  Iniciando download do YouTube"
     echo "🌐 URL: ${url}"
     echo "🎞️  Formato: ${format}"
-    echo "📂 Destino: ${dest_dir}"
+    echo "📂 Destino: ${target_output_dir}"
     echo "🌐 Navegador para cookies: ${browser}"
     echo "=========================================="
 
@@ -111,33 +129,38 @@ do_download() {
             --js-runtimes node \
             --remote-components ejs:github \
             --cookies-from-browser "${browser}" \
-            --download-archive "${dest_dir}/archive.txt" \
+            --download-archive "${target_output_dir}/archive.txt" \
             --no-update \
             --ignore-errors \
             --progress \
             --console-title \
             --embed-thumbnail \
             --embed-metadata \
-            -o "${dest_dir}/%(playlist_index)s - %(title)s.%(ext)s" \
+            -o "${target_output_dir}/${output_template}" \
             "${url}"
     else
         yt-dlp -f "bv*[ext=mp4]+ba[ext=m4a]/b[ext=mp4]/mp4" \
             --js-runtimes node \
             --remote-components ejs:github \
             --cookies-from-browser "${browser}" \
-            --download-archive "${dest_dir}/archive.txt" \
+            --download-archive "${target_output_dir}/archive.txt" \
             --no-update \
             --ignore-errors \
             --progress \
             --console-title \
             --embed-thumbnail \
             --embed-metadata \
-            -o "${dest_dir}/%(playlist_index)s - %(title)s.%(ext)s" \
+            -o "${target_output_dir}/${output_template}" \
             "${url}"
+
+        echo "=========================================="
+        echo "🔍 Executando validação automática dos padrões de Cast (H.264 + AAC)..."
+        echo "=========================================="
+        do_convert "${target_output_dir}"
     fi
 
     echo "=========================================="
-    echo "✅ Download concluído com sucesso!"
+    echo "✅ Download e processamento concluídos com sucesso!"
     echo "=========================================="
 }
 
