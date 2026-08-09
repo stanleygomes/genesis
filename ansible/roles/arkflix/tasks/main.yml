@@ -140,7 +140,7 @@
       server {
           listen 80;
           listen [::]:80;
-          server_name {{ domain_jellyfin | default(DOMAIN_JELLYFIN | default('_')) }} {{ domain_navidrome | default(DOMAIN_NAVIDROME | default('_')) }};
+          server_name {{ [domain_jellyfin | default(DOMAIN_JELLYFIN | default('')), domain_navidrome | default(DOMAIN_NAVIDROME | default(''))] | reject('eq', '') | unique | join(' ') }};
 
           location /.well-known/acme-challenge/ {
               root /var/www/html;
