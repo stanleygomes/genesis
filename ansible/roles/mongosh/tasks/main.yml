@@ -24,7 +24,7 @@
 
 - name: Copy mongo-connect credentials configuration template
   copy:
-    src: "{{ playbook_dir }}/../configs/scripts/mongosh/.env"
+    src: "{{ playbook_dir }}/../configs/mongosh/.env"
     dest: "{{ ansible_env.HOME }}/.config/mongodb/.env"
     mode: '0600'
     force: no
@@ -32,7 +32,7 @@
 
 - name: Copy mgcon script
   copy:
-    src: "{{ playbook_dir }}/../configs/scripts/mongosh/mongosh.sh"
+    src: "{{ playbook_dir }}/../configs/mongosh/mongosh.sh"
     dest: "{{ ansible_env.HOME }}/.config/mongodb/mgcon"
     mode: '0755'
   become: false
