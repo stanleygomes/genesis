@@ -95,6 +95,13 @@
     update_cache: true
   become: true
 
+- name: Ensure Nginx service is started and enabled
+  systemd:
+    name: nginx
+    state: started
+    enabled: true
+  become: true
+
 - name: Configure UFW firewall rules
   ufw:
     rule: allow
@@ -165,10 +172,17 @@
     state: absent
   become: true
 
-- name: Reload Nginx for temporary ACME challenge configuration
+- name: Test Nginx temporary configuration syntax
+  command: nginx -t
+  become: true
+  when: >
+    ((domain_jellyfin is defined and domain_jellyfin != '') or (DOMAIN_JELLYFIN is defined and DOMAIN_JELLYFIN != '') and not (cert_jellyfin_stat.stat.exists | default(false))) or
+    ((domain_navidrome is defined and domain_navidrome != '') or (DOMAIN_NAVIDROME is defined and DOMAIN_NAVIDROME != '') and not (cert_navidrome_stat.stat.exists | default(false)))
+
+- name: Ensure Nginx is running and reloaded for temporary ACME challenge configuration
   service:
     name: nginx
-    state: reloaded
+    state: restarted
   become: true
   when: >
     ((domain_jellyfin is defined and domain_jellyfin != '') or (DOMAIN_JELLYFIN is defined and DOMAIN_JELLYFIN != '') and not (cert_jellyfin_stat.stat.exists | default(false))) or
