@@ -5,6 +5,9 @@
   become: true
   gather_facts: false
 
+  vars_files:
+    - "../configs/arkflix/.env"
+
   pre_tasks:
     - name: Gather facts as normal user to set ansible_env correctly
       setup:

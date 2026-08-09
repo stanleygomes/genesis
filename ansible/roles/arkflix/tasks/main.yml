@@ -113,17 +113,17 @@
 
 - name: Check if SSL certificate exists for Jellyfin
   stat:
-    path: "/etc/letsencrypt/live/{{ domain_jellyfin }}/fullchain.pem"
+    path: "/etc/letsencrypt/live/{{ domain_jellyfin | default(DOMAIN_JELLYFIN | default('')) }}/fullchain.pem"
   register: cert_jellyfin_stat
   become: true
-  when: domain_jellyfin is defined and domain_jellyfin != ''
+  when: (domain_jellyfin is defined and domain_jellyfin != '') or (DOMAIN_JELLYFIN is defined and DOMAIN_JELLYFIN != '')
 
 - name: Check if SSL certificate exists for Navidrome
   stat:
-    path: "/etc/letsencrypt/live/{{ domain_navidrome }}/fullchain.pem"
+    path: "/etc/letsencrypt/live/{{ domain_navidrome | default(DOMAIN_NAVIDROME | default('')) }}/fullchain.pem"
   register: cert_navidrome_stat
   become: true
-  when: domain_navidrome is defined and domain_navidrome != ''
+  when: (domain_navidrome is defined and domain_navidrome != '') or (DOMAIN_NAVIDROME is defined and DOMAIN_NAVIDROME != '')
 
 - name: Deploy Temporary HTTP Nginx config for Certbot challenge
   copy:
@@ -133,7 +133,7 @@
       server {
           listen 80;
           listen [::]:80;
-          server_name {{ domain_jellyfin | default('_') }} {{ domain_navidrome | default('_') }};
+          server_name {{ domain_jellyfin | default(DOMAIN_JELLYFIN | default('_')) }} {{ domain_navidrome | default(DOMAIN_NAVIDROME | default('_')) }};
 
           location /.well-known/acme-challenge/ {
               root /var/www/html;
@@ -146,8 +146,8 @@
       }
   become: true
   when: >
-    (domain_jellyfin is defined and domain_jellyfin != '' and not (cert_jellyfin_stat.stat.exists | default(false))) or
-    (domain_navidrome is defined and domain_navidrome != '' and not (cert_navidrome_stat.stat.exists | default(false)))
+    ((domain_jellyfin is defined and domain_jellyfin != '') or (DOMAIN_JELLYFIN is defined and DOMAIN_JELLYFIN != '') and not (cert_jellyfin_stat.stat.exists | default(false))) or
+    ((domain_navidrome is defined and domain_navidrome != '') or (DOMAIN_NAVIDROME is defined and DOMAIN_NAVIDROME != '') and not (cert_navidrome_stat.stat.exists | default(false)))
 
 - name: Enable Temporary HTTP Nginx config
   file:
@@ -156,8 +156,8 @@
     state: link
   become: true
   when: >
-    (domain_jellyfin is defined and domain_jellyfin != '' and not (cert_jellyfin_stat.stat.exists | default(false))) or
-    (domain_navidrome is defined and domain_navidrome != '' and not (cert_navidrome_stat.stat.exists | default(false)))
+    ((domain_jellyfin is defined and domain_jellyfin != '') or (DOMAIN_JELLYFIN is defined and DOMAIN_JELLYFIN != '') and not (cert_jellyfin_stat.stat.exists | default(false))) or
+    ((domain_navidrome is defined and domain_navidrome != '') or (DOMAIN_NAVIDROME is defined and DOMAIN_NAVIDROME != '') and not (cert_navidrome_stat.stat.exists | default(false)))
 
 - name: Remove Nginx default site link
   file:
@@ -171,52 +171,52 @@
     state: reloaded
   become: true
   when: >
-    (domain_jellyfin is defined and domain_jellyfin != '' and not (cert_jellyfin_stat.stat.exists | default(false))) or
-    (domain_navidrome is defined and domain_navidrome != '' and not (cert_navidrome_stat.stat.exists | default(false)))
+    ((domain_jellyfin is defined and domain_jellyfin != '') or (DOMAIN_JELLYFIN is defined and DOMAIN_JELLYFIN != '') and not (cert_jellyfin_stat.stat.exists | default(false))) or
+    ((domain_navidrome is defined and domain_navidrome != '') or (DOMAIN_NAVIDROME is defined and DOMAIN_NAVIDROME != '') and not (cert_navidrome_stat.stat.exists | default(false)))
 
 - name: Issue Let's Encrypt SSL certificate for Jellyfin
   command: >
     certbot certonly --webroot -w /var/www/html
-    -d {{ domain_jellyfin }}
-    --email {{ email }}
+    -d {{ domain_jellyfin | default(DOMAIN_JELLYFIN) }}
+    --email {{ email | default(EMAIL) }}
     --agree-tos --non-interactive --keep-until-expiring
   become: true
   when:
-    - domain_jellyfin is defined and domain_jellyfin != ''
-    - email is defined and email != ''
+    - (domain_jellyfin is defined and domain_jellyfin != '') or (DOMAIN_JELLYFIN is defined and DOMAIN_JELLYFIN != '')
+    - (email is defined and email != '') or (EMAIL is defined and EMAIL != '')
     - not (cert_jellyfin_stat.stat.exists | default(false))
 
 - name: Issue Let's Encrypt SSL certificate for Navidrome
   command: >
     certbot certonly --webroot -w /var/www/html
-    -d {{ domain_navidrome }}
-    --email {{ email }}
+    -d {{ domain_navidrome | default(DOMAIN_NAVIDROME) }}
+    --email {{ email | default(EMAIL) }}
     --agree-tos --non-interactive --keep-until-expiring
   become: true
   when:
-    - domain_navidrome is defined and domain_navidrome != ''
-    - email is defined and email != ''
+    - (domain_navidrome is defined and domain_navidrome != '') or (DOMAIN_NAVIDROME is defined and DOMAIN_NAVIDROME != '')
+    - (email is defined and email != '') or (EMAIL is defined and EMAIL != '')
     - not (cert_navidrome_stat.stat.exists | default(false))
 
 - name: Deploy Definitive Nginx site config for Jellyfin
   copy:
-    dest: "/etc/nginx/sites-available/{{ domain_jellyfin }}.conf"
+    dest: "/etc/nginx/sites-available/{{ domain_jellyfin | default(DOMAIN_JELLYFIN) }}.conf"
     mode: "0644"
     content: |
       server {
           listen 80;
           listen [::]:80;
-          server_name {{ domain_jellyfin }};
+          server_name {{ domain_jellyfin | default(DOMAIN_JELLYFIN) }};
           return 301 https://$host$request_uri;
       }
 
       server {
           listen 443 ssl http2;
           listen [::]:443 ssl http2;
-          server_name {{ domain_jellyfin }};
+          server_name {{ domain_jellyfin | default(DOMAIN_JELLYFIN) }};
 
-          ssl_certificate /etc/letsencrypt/live/{{ domain_jellyfin }}/fullchain.pem;
-          ssl_certificate_key /etc/letsencrypt/live/{{ domain_jellyfin }}/privkey.pem;
+          ssl_certificate /etc/letsencrypt/live/{{ domain_jellyfin | default(DOMAIN_JELLYFIN) }}/fullchain.pem;
+          ssl_certificate_key /etc/letsencrypt/live/{{ domain_jellyfin | default(DOMAIN_JELLYFIN) }}/privkey.pem;
           ssl_protocols TLSv1.2 TLSv1.3;
           ssl_ciphers HIGH:!aNULL:!MD5;
 
@@ -240,27 +240,27 @@
           }
       }
   become: true
-  when: domain_jellyfin is defined and domain_jellyfin != ''
+  when: (domain_jellyfin is defined and domain_jellyfin != '') or (DOMAIN_JELLYFIN is defined and DOMAIN_JELLYFIN != '')
 
 - name: Deploy Definitive Nginx site config for Navidrome
   copy:
-    dest: "/etc/nginx/sites-available/{{ domain_navidrome }}.conf"
+    dest: "/etc/nginx/sites-available/{{ domain_navidrome | default(DOMAIN_NAVIDROME) }}.conf"
     mode: "0644"
     content: |
       server {
           listen 80;
           listen [::]:80;
-          server_name {{ domain_navidrome }};
+          server_name {{ domain_navidrome | default(DOMAIN_NAVIDROME) }};
           return 301 https://$host$request_uri;
       }
 
       server {
           listen 443 ssl http2;
           listen [::]:443 ssl http2;
-          server_name {{ domain_navidrome }};
+          server_name {{ domain_navidrome | default(DOMAIN_NAVIDROME) }};
 
-          ssl_certificate /etc/letsencrypt/live/{{ domain_navidrome }}/fullchain.pem;
-          ssl_certificate_key /etc/letsencrypt/live/{{ domain_navidrome }}/privkey.pem;
+          ssl_certificate /etc/letsencrypt/live/{{ domain_navidrome | default(DOMAIN_NAVIDROME) }}/fullchain.pem;
+          ssl_certificate_key /etc/letsencrypt/live/{{ domain_navidrome | default(DOMAIN_NAVIDROME) }}/privkey.pem;
           ssl_protocols TLSv1.2 TLSv1.3;
           ssl_ciphers HIGH:!aNULL:!MD5;
 
@@ -282,23 +282,23 @@
           }
       }
   become: true
-  when: domain_navidrome is defined and domain_navidrome != ''
+  when: (domain_navidrome is defined and domain_navidrome != '') or (DOMAIN_NAVIDROME is defined and DOMAIN_NAVIDROME != '')
 
 - name: Enable Definitive Nginx site link for Jellyfin
   file:
-    src: "/etc/nginx/sites-available/{{ domain_jellyfin }}.conf"
-    dest: "/etc/nginx/sites-enabled/{{ domain_jellyfin }}.conf"
+    src: "/etc/nginx/sites-available/{{ domain_jellyfin | default(DOMAIN_JELLYFIN) }}.conf"
+    dest: "/etc/nginx/sites-enabled/{{ domain_jellyfin | default(DOMAIN_JELLYFIN) }}.conf"
     state: link
   become: true
-  when: domain_jellyfin is defined and domain_jellyfin != ''
+  when: (domain_jellyfin is defined and domain_jellyfin != '') or (DOMAIN_JELLYFIN is defined and DOMAIN_JELLYFIN != '')
 
 - name: Enable Definitive Nginx site link for Navidrome
   file:
-    src: "/etc/nginx/sites-available/{{ domain_navidrome }}.conf"
-    dest: "/etc/nginx/sites-enabled/{{ domain_navidrome }}.conf"
+    src: "/etc/nginx/sites-available/{{ domain_navidrome | default(DOMAIN_NAVIDROME) }}.conf"
+    dest: "/etc/nginx/sites-enabled/{{ domain_navidrome | default(DOMAIN_NAVIDROME) }}.conf"
     state: link
   become: true
-  when: domain_navidrome is defined and domain_navidrome != ''
+  when: (domain_navidrome is defined and domain_navidrome != '') or (DOMAIN_NAVIDROME is defined and DOMAIN_NAVIDROME != '')
 
 - name: Remove Temporary Nginx config link
   file:
@@ -311,7 +311,7 @@
     name: nginx
     state: reloaded
   become: true
-  when: (domain_jellyfin is defined and domain_jellyfin != '') or (domain_navidrome is defined and domain_navidrome != '')
+  when: (domain_jellyfin is defined and domain_jellyfin != '') or (DOMAIN_JELLYFIN is defined and DOMAIN_JELLYFIN != '') or (domain_navidrome is defined and domain_navidrome != '') or (DOMAIN_NAVIDROME is defined and DOMAIN_NAVIDROME != '')
 
 - name: Configure Automatic SSL Renewal Cron Job
   copy:
