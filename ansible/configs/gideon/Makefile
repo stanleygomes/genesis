@@ -32,7 +32,14 @@ install:
 # Download Module (YouTube via yt-dlp or Spotify via spotdl with auto-detection)
 download:
 	@chmod +x ./gideon.sh
-	@./gideon.sh download "$(URL)" "$(FORMAT)" "$(DEST_DIR)" "$(BROWSER)"
+	@URL_VAL="$(URL)"; \
+	if [ -z "$$URL_VAL" ]; then \
+		URL_VAL="$(filter-out download,$(MAKECMDGOALS))"; \
+	fi; \
+	./gideon.sh download "$$URL_VAL" "$(FORMAT)" "$(DEST_DIR)" "$(BROWSER)"
+
+%:
+	@:
 
 # Smart Transcoding Module (Chromecast Validation: H.264 + AAC + .mp4)
 convert:
