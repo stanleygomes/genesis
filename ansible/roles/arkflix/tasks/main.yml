@@ -118,19 +118,25 @@
     state: enabled
   become: true
 
+- name: Consolidate domain and email variables
+  set_fact:
+    domain_jellyfin: "{{ domain_jellyfin | default(DOMAIN_JELLYFIN | default('')) }}"
+    domain_navidrome: "{{ domain_navidrome | default(DOMAIN_NAVIDROME | default('')) }}"
+    email: "{{ email | default(EMAIL | default('')) }}"
+
 - name: Check if SSL certificate exists for Jellyfin
   stat:
-    path: "/etc/letsencrypt/live/{{ domain_jellyfin | default(DOMAIN_JELLYFIN | default('')) }}/fullchain.pem"
+    path: "/etc/letsencrypt/live/{{ domain_jellyfin }}/fullchain.pem"
   register: cert_jellyfin_stat
   become: true
-  when: (domain_jellyfin is defined and domain_jellyfin != '') or (DOMAIN_JELLYFIN is defined and DOMAIN_JELLYFIN != '')
+  when: domain_jellyfin != ''
 
 - name: Check if SSL certificate exists for Navidrome
   stat:
-    path: "/etc/letsencrypt/live/{{ domain_navidrome | default(DOMAIN_NAVIDROME | default('')) }}/fullchain.pem"
+    path: "/etc/letsencrypt/live/{{ domain_navidrome }}/fullchain.pem"
   register: cert_navidrome_stat
   become: true
-  when: (domain_navidrome is defined and domain_navidrome != '') or (DOMAIN_NAVIDROME is defined and DOMAIN_NAVIDROME != '')
+  when: domain_navidrome != ''
 
 - name: Clean up existing links in /etc/nginx/sites-enabled/ to avoid Nginx syntax conflicts
   shell: rm -f /etc/nginx/sites-enabled/*
@@ -187,25 +193,25 @@
 - name: Issue Let's Encrypt SSL certificate for Jellyfin
   command: >
     certbot certonly --webroot -w /var/www/html
-    -d {{ domain_jellyfin | default(DOMAIN_JELLYFIN) }}
-    --email {{ email | default(EMAIL) }}
+    -d {{ domain_jellyfin }}
+    --email {{ email }}
     --agree-tos --non-interactive --keep-until-expiring
   become: true
   when:
-    - (domain_jellyfin is defined and domain_jellyfin != '') or (DOMAIN_JELLYFIN is defined and DOMAIN_JELLYFIN != '')
-    - (email is defined and email != '') or (EMAIL is defined and EMAIL != '')
+    - domain_jellyfin != ''
+    - email != ''
     - not (cert_jellyfin_stat.stat.exists | default(false))
 
 - name: Issue Let's Encrypt SSL certificate for Navidrome
   command: >
     certbot certonly --webroot -w /var/www/html
-    -d {{ domain_navidrome | default(DOMAIN_NAVIDROME) }}
-    --email {{ email | default(EMAIL) }}
+    -d {{ domain_navidrome }}
+    --email {{ email }}
     --agree-tos --non-interactive --keep-until-expiring
   become: true
   when:
-    - (domain_navidrome is defined and domain_navidrome != '') or (DOMAIN_NAVIDROME is defined and DOMAIN_NAVIDROME != '')
-    - (email is defined and email != '') or (EMAIL is defined and EMAIL != '')
+    - domain_navidrome != ''
+    - email != ''
     - not (cert_navidrome_stat.stat.exists | default(false))
 
 - name: Check if Jellyfin and Navidrome share the same domain
