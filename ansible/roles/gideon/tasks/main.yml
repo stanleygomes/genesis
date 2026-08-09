@@ -1,0 +1,60 @@
+---
+# Gideon role main tasks
+
+- name: Create ~/.config/gideon directory
+  file:
+    path: "{{ gideon_dir }}"
+    state: directory
+    mode: "0755"
+  become: false
+
+- name: Deploy Gideon Makefile and gideon.sh to ~/.config/gideon
+  copy:
+    src: "{{ playbook_dir }}/../configs/gideon/{{ item }}"
+    dest: "{{ gideon_dir }}/{{ item }}"
+    mode: "0755"
+  loop:
+    - Makefile
+    - gideon.sh
+  become: false
+
+- name: Add gideon function to .zshrc
+  blockinfile:
+    path: "{{ ansible_env.HOME }}/.zshrc"
+    marker: "# {mark} GIDEON CLI FUNCTION"
+    block: |
+      # Gideon Media Tools CLI Wrapper
+      gideon() { make -C "$HOME/.config/gideon" DIR="$PWD" "$@"; }
+    state: present
+  become: false
+
+# --- On-Demand Execution Tasks ---
+
+- name: Run Gideon install action via Ansible
+  command: "make -C {{ gideon_dir }} install"
+  become: true
+  when:
+    - gideon_action is defined
+    - gideon_action == 'install'
+
+- name: Run Gideon download action via Ansible
+  command: >
+    make -C {{ gideon_dir }} download
+    URL="{{ gideon_url }}"
+    FORMAT="{{ gideon_format | default('mp4') }}"
+    {% if gideon_target_dir is defined and gideon_target_dir != '' %}DIR="{{ gideon_target_dir }}"{% endif %}
+  become: false
+  when:
+    - gideon_action is defined
+    - gideon_action == 'download'
+    - gideon_url is defined
+    - gideon_url != ''
+
+- name: Run Gideon convert action via Ansible
+  command: >
+    make -C {{ gideon_dir }} convert
+    {% if gideon_target_dir is defined and gideon_target_dir != '' %}DIR="{{ gideon_target_dir }}"{% endif %}
+  become: false
+  when:
+    - gideon_action is defined
+    - gideon_action in ['convert', 'optimize']

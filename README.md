@@ -76,15 +76,13 @@ make check CONFIG="desktop"
 
 ```text
 ⚙️ ansible/            # Ansible configuration and deployment files
-  ├── configs/         # Specific tool configurations (VS Code, etc.)
+  ├── configs/         # Specific tool configurations (VS Code, Gideon, etc.)
+  │     └── gideon/    # Gideon Media Tools (Makefile, gideon.sh)
   ├── group_vars/      # Global configuration variables (all.yml)
   ├── playbooks/       # Setup playbooks (common.yml, desktop.yml, etc.)
-  ├── roles/           # Modular Ansible roles (zsh, docker, etc.)
+  ├── roles/           # Modular Ansible roles (gideon, zsh, docker, etc.)
   ├── ansible.cfg      # Ansible configuration settings
   └── inventory        # Ansible host definition (localhost)
-🎬 scripts/            # Unified Media CLI tools (YouTube download & Chromecast smart transcoding)
-  ├── Makefile         # Centralized Makefile target commands (install, download, optimize)
-  └── media.sh         # Shell CLI script with ffprobe/ffmpeg & yt-dlp logic
 🛠️ Makefile            # Helper tasks to run, check, list playbooks
 🐚 bootstrap.sh        # One-liner script to bootstrap environment (playbook selection via whiptail)
 ```
@@ -109,6 +107,7 @@ Here is a list of all roles available in this repository:
 | `evangelist`      | Displays a random biblical verse on terminal session launch using local genesis files.                                       |
 | `eza`            | Installs and configures eza (a modern, feature-rich replacement for ls).                                                                                      |
 | `ghostty`         | Installs Ghostty terminal emulator.                                                                                                                           |
+| `gideon`          | Deploys Gideon Media Tools CLI (`~/.config/gideon`), configures `gideon` shell wrapper in `~/.zshrc`, and handles media downloads & Chromecast conversion.   |
 | `git`             | Installs Git, configures user credentials, and generates/sets GitHub SSH keys.                                                                                |
 | `github-copilot`  | Installs GitHub Copilot CLI globally via NPM.                                                                                                                 |
 | `go`              | Installs Go language runtime and `golangci-lint` to `~/.local/go`.                                                                                            |

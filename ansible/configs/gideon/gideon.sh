@@ -8,41 +8,50 @@ COMMAND="${1:-help}"
 # Helper function to display usage help
 show_help() {
     echo "=========================================="
-    echo "🎬 Genesis Media Tools CLI"
+    echo "🎬 Gideon Media Tools CLI"
     echo "=========================================="
     echo "Uso:"
-    echo "  ./media.sh download [URL] [FORMAT] [DEST_DIR] [BROWSER]"
-    echo "  ./media.sh optimize [TARGET_DIR]"
+    echo "  ./gideon.sh install"
+    echo "  ./gideon.sh download [URL] [FORMAT] [DEST_DIR] [BROWSER]"
+    echo "  ./gideon.sh convert [TARGET_DIR]"
     echo ""
     echo "Subcomandos e Exemplos:"
+    echo "  install   - Instala as dependências do sistema (yt-dlp, ffmpeg, spotdl, etc.)"
     echo "  download  - Baixa mídia de qualquer plataforma (YouTube via yt-dlp ou Spotify via spotdl)"
     echo "              Formatos para YouTube: mp4 (vídeo), mp3 (áudio)"
     echo "              URLs do Spotify (spotify.com) são identificadas e baixadas via spotDL automaticamente."
-    echo "              Ex: ./media.sh download \"https://youtube.com/...\" mp4 ./downloads chrome"
-    echo "              Ex: ./media.sh download \"https://open.spotify.com/track/...\""
+    echo "              Ex: ./gideon.sh download \"https://youtube.com/...\" mp4 ./downloads chrome"
+    echo "              Ex: ./gideon.sh download \"https://open.spotify.com/track/...\""
     echo ""
-    echo "  optimize  - Transcodifica e otimiza mídias de uma pasta para H.264 + AAC (.mp4)"
+    echo "  convert   - Transcodifica e otimiza mídias de uma pasta para H.264 + AAC (.mp4)"
     echo "              Valida se o vídeo já está em H.264/AAC no container .mp4."
     echo "              Se já estiver válido, ignora o re-encode mantendo compatibilidade Chromecast."
-    echo "              Ex: ./media.sh optimize \"/caminho/para/pasta\""
+    echo "              Ex: ./gideon.sh convert \"/caminho/para/pasta\""
     echo "=========================================="
+}
+
+# --- Module: System Dependency Installation ---
+do_install() {
+    echo "📦 Instalando yt-dlp, ffmpeg, spotdl e dependências no sistema..."
+    sudo apt update && sudo apt install -y yt-dlp ffmpeg python3-pip python3-secretstorage python3-cryptography
+    pip3 install --break-system-packages spotdl || pip3 install spotdl
+    echo "✅ Dependências do Gideon instaladas com sucesso!"
 }
 
 # --- Module: Spotify Download via spotdl ---
 do_spotify() {
     local url="${1:-}"
-    local dest_dir="${2:-./downloads}"
+    local dest_dir="${2:-.}"
 
     if [ -z "${url}" ]; then
         echo "❌ Erro: Informe a URL da faixa, álbum ou playlist do Spotify."
-        echo "Exemplo: ./media.sh spotify \"https://open.spotify.com/track/...\""
+        echo "Exemplo: ./gideon.sh download \"https://open.spotify.com/track/...\""
         exit 1
     fi
 
-    # Check dependencies
     if ! command -v spotdl &> /dev/null; then
         echo "❌ Erro: 'spotdl' não está instalado no sistema."
-        echo "Rode 'pip install spotdl' ou 'make install' para instalar as dependências."
+        echo "Rode 'gideon install' para instalar as dependências."
         exit 1
     fi
 
@@ -65,12 +74,12 @@ do_spotify() {
 do_download() {
     local url="${1:-}"
     local format="${2:-mp4}"
-    local dest_dir="${3:-./downloads}"
+    local dest_dir="${3:-.}"
     local browser="${4:-chrome}"
 
     if [ -z "${url}" ]; then
         echo "❌ Erro: Informe a URL do vídeo, música ou playlist."
-        echo "Exemplo: ./media.sh download \"https://www.youtube.com/watch?v=...\" mp4"
+        echo "Exemplo: ./gideon.sh download \"https://www.youtube.com/watch?v=...\" mp4"
         exit 1
     fi
 
@@ -81,10 +90,9 @@ do_download() {
         return 0
     fi
 
-    # Check dependencies
     if ! command -v yt-dlp &> /dev/null; then
         echo "❌ Erro: 'yt-dlp' não está instalado no sistema."
-        echo "Rode 'make install' para instalar o yt-dlp e ffmpeg."
+        echo "Rode 'gideon install' para instalar as dependências."
         exit 1
     fi
 
@@ -134,13 +142,13 @@ do_download() {
 }
 
 # --- Module: Smart Transcoding / Optimization (Chromecast Validation) ---
-do_optimize() {
+do_convert() {
     local target_dir="${1:-.}"
     local output_dir="${target_dir}/optimized"
 
     if ! command -v ffmpeg &> /dev/null || ! command -v ffprobe &> /dev/null; then
         echo "❌ Erro: 'ffmpeg' e/ou 'ffprobe' não estão instalados no sistema."
-        echo "Rode 'make install' para instalar as dependências."
+        echo "Rode 'gideon install' para instalar as dependências."
         exit 1
     fi
 
@@ -221,11 +229,14 @@ do_optimize() {
 }
 
 case "${COMMAND}" in
-    download)
-        do_download "${2:-}" "${3:-mp4}" "${4:-./downloads}" "${5:-chrome}"
+    install)
+        do_install
         ;;
-    optimize)
-        do_optimize "${2:-.}"
+    download)
+        do_download "${2:-}" "${3:-mp4}" "${4:-.}" "${5:-chrome}"
+        ;;
+    convert|optimize)
+        do_convert "${2:-.}"
         ;;
     help|--help|-h)
         show_help
