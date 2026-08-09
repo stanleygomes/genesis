@@ -41,6 +41,8 @@ do_install() {
     echo "📦 Installing system dependencies (yt-dlp, ffmpeg, spotdl)..."
     sudo apt update && sudo apt install -y yt-dlp ffmpeg python3-pip python3-secretstorage python3-cryptography
     pip3 install --break-system-packages spotdl || pip3 install spotdl
+    echo "📦 Setting up Deno JS engine for spotDL..."
+    spotdl --download-deno || true
     echo "✅ Gideon dependencies installed successfully!"
 }
 
@@ -61,15 +63,21 @@ do_spotify() {
         exit 1
     fi
 
+    local output_template="{list-name}/{artist} - {title}.{output-ext}"
+    if [[ "${url}" =~ /track/ ]]; then
+        output_template="{artist} - {title}.{output-ext}"
+    fi
+
     mkdir -p "${dest_dir}"
 
     echo "=========================================="
     echo "🎵 Starting Spotify download (spotDL)"
     echo "🌐 URL: ${url}"
-    echo "📂 Destination: ${dest_dir}"
+    echo "📂 Base Destination: ${dest_dir}"
+    echo "📁 Output Pattern: ${output_template}"
     echo "=========================================="
 
-    spotdl download "${url}" --output "${dest_dir}"
+    spotdl download "${url}" --output "${dest_dir}/${output_template}"
 
     echo "=========================================="
     echo "✅ Spotify download completed successfully!"
