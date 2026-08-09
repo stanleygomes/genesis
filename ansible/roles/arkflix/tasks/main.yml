@@ -145,11 +145,7 @@
       server {
           listen 80;
           listen [::]:80;
-          {% if (domain_jellyfin | default(DOMAIN_JELLYFIN)) == (domain_navidrome | default(DOMAIN_NAVIDROME)) %}
-          server_name {{ domain_jellyfin | default(DOMAIN_JELLYFIN) }};
-          {% else %}
-          server_name {{ domain_jellyfin | default(DOMAIN_JELLYFIN) }} {{ domain_navidrome | default(DOMAIN_NAVIDROME) }};
-          {% endif %}
+          server_name {{ (domain_jellyfin is defined and domain_jellyfin != '') | ternary(domain_jellyfin, DOMAIN_JELLYFIN | default('')) }} {{ (domain_navidrome is defined and domain_navidrome != '' and domain_navidrome != domain_jellyfin) | ternary(domain_navidrome, (DOMAIN_NAVIDROME is defined and DOMAIN_NAVIDROME != DOMAIN_JELLYFIN) | ternary(DOMAIN_NAVIDROME | default(''), '')) }};
 
           location /.well-known/acme-challenge/ {
               root /var/www/html;
@@ -161,9 +157,6 @@
           }
       }
   become: true
-  when: >
-    ((domain_jellyfin is defined and domain_jellyfin != '') or (DOMAIN_JELLYFIN is defined and DOMAIN_JELLYFIN != '') and not (cert_jellyfin_stat.stat.exists | default(false))) or
-    ((domain_navidrome is defined and domain_navidrome != '') or (DOMAIN_NAVIDROME is defined and DOMAIN_NAVIDROME != '') and not (cert_navidrome_stat.stat.exists | default(false)))
 
 - name: Enable Temporary HTTP Nginx config
   file:
