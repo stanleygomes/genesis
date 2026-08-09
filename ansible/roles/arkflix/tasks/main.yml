@@ -145,7 +145,11 @@
       server {
           listen 80;
           listen [::]:80;
+          {% if (domain_jellyfin | default(DOMAIN_JELLYFIN)) == (domain_navidrome | default(DOMAIN_NAVIDROME)) %}
+          server_name {{ domain_jellyfin | default(DOMAIN_JELLYFIN) }};
+          {% else %}
           server_name {{ domain_jellyfin | default(DOMAIN_JELLYFIN) }} {{ domain_navidrome | default(DOMAIN_NAVIDROME) }};
+          {% endif %}
 
           location /.well-known/acme-challenge/ {
               root /var/www/html;
