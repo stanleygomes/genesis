@@ -44,7 +44,12 @@ download:
 # Smart Transcoding Module (Chromecast Validation: H.264 + AAC + .mp4)
 convert:
 	@chmod +x ./gideon.sh
-	@./gideon.sh convert "$(DIR)"
+	@DIR_VAL="$(DIR)"; \
+	if [ "$$DIR_VAL" = "." ]; then \
+		POS_ARG="$(filter-out convert optimize,$(MAKECMDGOALS))"; \
+		if [ -n "$$POS_ARG" ]; then DIR_VAL="$$POS_ARG"; fi; \
+	fi; \
+	./gideon.sh convert "$$DIR_VAL"
 
 # Compatibility alias for convert
 optimize: convert
