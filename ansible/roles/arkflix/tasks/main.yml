@@ -200,7 +200,7 @@
   when:
     - domain_jellyfin != ''
     - email != ''
-    - not (cert_jellyfin_stat.stat.exists | default(false))
+    - cert_jellyfin_stat.stat is defined and not cert_jellyfin_stat.stat.exists
 
 - name: Issue Let's Encrypt SSL certificate for Navidrome
   command: >
@@ -212,7 +212,7 @@
   when:
     - domain_navidrome != ''
     - email != ''
-    - not (cert_navidrome_stat.stat.exists | default(false))
+    - cert_navidrome_stat.stat is defined and not cert_navidrome_stat.stat.exists
 
 - name: Check if Jellyfin and Navidrome share the same domain
   set_fact:
