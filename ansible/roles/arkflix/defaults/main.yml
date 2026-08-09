@@ -1,0 +1,5 @@
+---
+# Arkflix role default variables
+domain_jellyfin: ""
+domain_navidrome: ""
+email: ""

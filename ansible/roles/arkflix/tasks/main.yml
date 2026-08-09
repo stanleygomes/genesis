@@ -1,0 +1,330 @@
+---
+# Arkflix role main tasks (Idempotent step-by-step implementation)
+
+- name: Create media directories
+  file:
+    path: "{{ item }}"
+    state: directory
+    mode: "0755"
+  loop:
+    - /var/media/desenhos
+    - /var/media/filmes
+    - /var/media/series
+    - /var/media/musicas
+    - /var/lib/navidrome
+    - /var/lib/jellyfin/config
+    - /var/lib/jellyfin/cache
+    - /opt/media-stack
+    - /var/www/html/.well-known/acme-challenge
+  become: true
+
+- name: Check if Docker service is running
+  systemd:
+    name: docker
+    state: started
+    enabled: true
+  become: true
+
+- name: Ensure Docker media-network exists
+  docker_network:
+    name: media-network
+    state: present
+  become: true
+  ignore_errors: true
+
+- name: Alternative Docker media-network creation via command
+  command: docker network create media-network
+  become: true
+  register: docker_net_res
+  failed_when: false
+  changed_when: "'created' in docker_net_res.stdout or docker_net_res.rc == 0"
+
+- name: Deploy docker-compose.yml to /opt/media-stack/
+  copy:
+    dest: /opt/media-stack/docker-compose.yml
+    mode: "0644"
+    content: |
+      services:
+        jellyfin:
+          image: jellyfin/jellyfin:latest
+          container_name: jellyfin
+          restart: unless-stopped
+          ports:
+            - "127.0.0.1:8096:8096"
+          volumes:
+            - /var/lib/jellyfin/config:/config
+            - /var/lib/jellyfin/cache:/cache
+            - /var/media:/media:ro
+          networks:
+            - media-network
+
+        navidrome:
+          image: deluan/navidrome:latest
+          container_name: navidrome
+          restart: unless-stopped
+          ports:
+            - "127.0.0.1:4533:4533"
+          environment:
+            ND_SCANSCHEDULE: 1h
+            ND_LOGLEVEL: info
+            ND_SESSIONTIMEOUT: 24h
+            ND_BASEURL: ""
+          volumes:
+            - /var/lib/navidrome:/data
+            - /var/media/musicas:/music:ro
+          networks:
+            - media-network
+
+      networks:
+        media-network:
+          external: true
+  become: true
+
+- name: Ensure Docker Compose media stack services are running
+  command: docker compose -f /opt/media-stack/docker-compose.yml up -d
+  become: true
+
+- name: Install Nginx, Certbot, Python3-Certbot-Nginx and UFW packages
+  apt:
+    name:
+      - nginx
+      - certbot
+      - python3-certbot-nginx
+      - ufw
+    state: present
+    update_cache: true
+  become: true
+
+- name: Configure UFW firewall rules
+  ufw:
+    rule: allow
+    port: "{{ item }}"
+    proto: tcp
+  loop:
+    - "22"
+    - "80"
+    - "443"
+  become: true
+
+- name: Enable UFW firewall
+  ufw:
+    state: enabled
+  become: true
+
+- name: Check if SSL certificate exists for Jellyfin
+  stat:
+    path: "/etc/letsencrypt/live/{{ domain_jellyfin }}/fullchain.pem"
+  register: cert_jellyfin_stat
+  become: true
+  when: domain_jellyfin is defined and domain_jellyfin != ''
+
+- name: Check if SSL certificate exists for Navidrome
+  stat:
+    path: "/etc/letsencrypt/live/{{ domain_navidrome }}/fullchain.pem"
+  register: cert_navidrome_stat
+  become: true
+  when: domain_navidrome is defined and domain_navidrome != ''
+
+- name: Deploy Temporary HTTP Nginx config for Certbot challenge
+  copy:
+    dest: /etc/nginx/sites-available/arkflix-temp.conf
+    mode: "0644"
+    content: |
+      server {
+          listen 80;
+          listen [::]:80;
+          server_name {{ domain_jellyfin | default('_') }} {{ domain_navidrome | default('_') }};
+
+          location /.well-known/acme-challenge/ {
+              root /var/www/html;
+          }
+
+          location / {
+              return 200 'Arkflix Provisioning ACME Challenge Endpoint';
+              add_header Content-Type text/plain;
+          }
+      }
+  become: true
+  when: >
+    (domain_jellyfin is defined and domain_jellyfin != '' and not (cert_jellyfin_stat.stat.exists | default(false))) or
+    (domain_navidrome is defined and domain_navidrome != '' and not (cert_navidrome_stat.stat.exists | default(false)))
+
+- name: Enable Temporary HTTP Nginx config
+  file:
+    src: /etc/nginx/sites-available/arkflix-temp.conf
+    dest: /etc/nginx/sites-enabled/arkflix-temp.conf
+    state: link
+  become: true
+  when: >
+    (domain_jellyfin is defined and domain_jellyfin != '' and not (cert_jellyfin_stat.stat.exists | default(false))) or
+    (domain_navidrome is defined and domain_navidrome != '' and not (cert_navidrome_stat.stat.exists | default(false)))
+
+- name: Remove Nginx default site link
+  file:
+    path: /etc/nginx/sites-enabled/default
+    state: absent
+  become: true
+
+- name: Reload Nginx for temporary ACME challenge configuration
+  service:
+    name: nginx
+    state: reloaded
+  become: true
+  when: >
+    (domain_jellyfin is defined and domain_jellyfin != '' and not (cert_jellyfin_stat.stat.exists | default(false))) or
+    (domain_navidrome is defined and domain_navidrome != '' and not (cert_navidrome_stat.stat.exists | default(false)))
+
+- name: Issue Let's Encrypt SSL certificate for Jellyfin
+  command: >
+    certbot certonly --webroot -w /var/www/html
+    -d {{ domain_jellyfin }}
+    --email {{ email }}
+    --agree-tos --non-interactive --keep-until-expiring
+  become: true
+  when:
+    - domain_jellyfin is defined and domain_jellyfin != ''
+    - email is defined and email != ''
+    - not (cert_jellyfin_stat.stat.exists | default(false))
+
+- name: Issue Let's Encrypt SSL certificate for Navidrome
+  command: >
+    certbot certonly --webroot -w /var/www/html
+    -d {{ domain_navidrome }}
+    --email {{ email }}
+    --agree-tos --non-interactive --keep-until-expiring
+  become: true
+  when:
+    - domain_navidrome is defined and domain_navidrome != ''
+    - email is defined and email != ''
+    - not (cert_navidrome_stat.stat.exists | default(false))
+
+- name: Deploy Definitive Nginx site config for Jellyfin
+  copy:
+    dest: "/etc/nginx/sites-available/{{ domain_jellyfin }}.conf"
+    mode: "0644"
+    content: |
+      server {
+          listen 80;
+          listen [::]:80;
+          server_name {{ domain_jellyfin }};
+          return 301 https://$host$request_uri;
+      }
+
+      server {
+          listen 443 ssl http2;
+          listen [::]:443 ssl http2;
+          server_name {{ domain_jellyfin }};
+
+          ssl_certificate /etc/letsencrypt/live/{{ domain_jellyfin }}/fullchain.pem;
+          ssl_certificate_key /etc/letsencrypt/live/{{ domain_jellyfin }}/privkey.pem;
+          ssl_protocols TLSv1.2 TLSv1.3;
+          ssl_ciphers HIGH:!aNULL:!MD5;
+
+          client_max_body_size 20M;
+          proxy_buffers 100 32k;
+          proxy_buffer_size 32k;
+
+          location / {
+              proxy_pass http://127.0.0.1:8096;
+              proxy_set_header Host $host;
+              proxy_set_header X-Real-IP $remote_addr;
+              proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+              proxy_set_header X-Forwarded-Proto $scheme;
+              proxy_set_header X-Forwarded-Protocol $scheme;
+              proxy_set_header X-Forwarded-Host $http_host;
+
+              # WebSockets
+              proxy_http_version 1.1;
+              proxy_set_header Upgrade $http_upgrade;
+              proxy_set_header Connection "upgrade";
+          }
+      }
+  become: true
+  when: domain_jellyfin is defined and domain_jellyfin != ''
+
+- name: Deploy Definitive Nginx site config for Navidrome
+  copy:
+    dest: "/etc/nginx/sites-available/{{ domain_navidrome }}.conf"
+    mode: "0644"
+    content: |
+      server {
+          listen 80;
+          listen [::]:80;
+          server_name {{ domain_navidrome }};
+          return 301 https://$host$request_uri;
+      }
+
+      server {
+          listen 443 ssl http2;
+          listen [::]:443 ssl http2;
+          server_name {{ domain_navidrome }};
+
+          ssl_certificate /etc/letsencrypt/live/{{ domain_navidrome }}/fullchain.pem;
+          ssl_certificate_key /etc/letsencrypt/live/{{ domain_navidrome }}/privkey.pem;
+          ssl_protocols TLSv1.2 TLSv1.3;
+          ssl_ciphers HIGH:!aNULL:!MD5;
+
+          client_max_body_size 100M;
+          proxy_buffers 100 32k;
+          proxy_buffer_size 32k;
+
+          location / {
+              proxy_pass http://127.0.0.1:4533;
+              proxy_set_header Host $host;
+              proxy_set_header X-Real-IP $remote_addr;
+              proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+              proxy_set_header X-Forwarded-Proto $scheme;
+
+              # WebSockets
+              proxy_http_version 1.1;
+              proxy_set_header Upgrade $http_upgrade;
+              proxy_set_header Connection "upgrade";
+          }
+      }
+  become: true
+  when: domain_navidrome is defined and domain_navidrome != ''
+
+- name: Enable Definitive Nginx site link for Jellyfin
+  file:
+    src: "/etc/nginx/sites-available/{{ domain_jellyfin }}.conf"
+    dest: "/etc/nginx/sites-enabled/{{ domain_jellyfin }}.conf"
+    state: link
+  become: true
+  when: domain_jellyfin is defined and domain_jellyfin != ''
+
+- name: Enable Definitive Nginx site link for Navidrome
+  file:
+    src: "/etc/nginx/sites-available/{{ domain_navidrome }}.conf"
+    dest: "/etc/nginx/sites-enabled/{{ domain_navidrome }}.conf"
+    state: link
+  become: true
+  when: domain_navidrome is defined and domain_navidrome != ''
+
+- name: Remove Temporary Nginx config link
+  file:
+    path: /etc/nginx/sites-enabled/arkflix-temp.conf
+    state: absent
+  become: true
+
+- name: Reload Nginx with definitive SSL configuration
+  service:
+    name: nginx
+    state: reloaded
+  become: true
+  when: (domain_jellyfin is defined and domain_jellyfin != '') or (domain_navidrome is defined and domain_navidrome != '')
+
+- name: Configure Automatic SSL Renewal Cron Job
+  copy:
+    dest: /etc/cron.d/certbot-renew
+    mode: "0644"
+    content: |
+      0 3 * * * root certbot renew --quiet --deploy-hook "systemctl reload nginx"
+  become: true
+
+- name: Enable certbot.timer systemd service
+  systemd:
+    name: certbot.timer
+    state: started
+    enabled: true
+  become: true
+  ignore_errors: true

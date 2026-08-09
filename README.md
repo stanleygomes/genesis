@@ -98,6 +98,7 @@ Here is a list of all roles available in this repository:
 | `agents`          | Syncs local Genesis `.agents` (Skills, rules) into `~/.agents` and `~/.claude`.                                                             |
 | `antigravity`     | Installs Antigravity IDE & Hub, configures workspace settings, keybindings, extensions, and desktop shortcuts.                                                |
 | `antigravity-cli` | Installs the Antigravity CLI client tool (`agy`) and configures custom statusLine settings. |
+| `arkflix`         | Provisions self-hosted media server stack (Jellyfin, Navidrome, Nginx reverse proxy, Let's Encrypt SSL, and UFW firewall).                                     |
 | `atuin`           | Installs and configures Atuin shell history search.                                                                                                           |
 | `autoremove`      | Aggregates uninstallation and removal actions (APT, Flatpak, Snap packages, desktop shortcuts, custom paths/files). |
 | `bruno`           | Installs Bruno API client (open-source, Git-friendly alternative to Postman/Insomnia).                                                                        |
@@ -149,3 +150,7 @@ This project organises roles into the following playbooks:
 ### 3. Custom Setup 1 (`custom1.yml`)
 
 > Target: Custom bundle containing browsers, Bruno, and databases.
+
+### 4. Arkflix Media Server (`arkflix.yml`)
+
+> Target: Provisioning of self-hosted media server stack (Jellyfin, Navidrome, Nginx SSL reverse proxy, Let's Encrypt renewal, UFW).

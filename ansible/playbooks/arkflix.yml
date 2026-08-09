@@ -1,0 +1,19 @@
+---
+- name: Arkflix Media Server Provisioning
+  hosts: localhost
+  connection: local
+  become: true
+  gather_facts: false
+
+  pre_tasks:
+    - name: Gather facts as normal user to set ansible_env correctly
+      setup:
+      become: false
+
+    - name: Update apt cache (ignoring unreachable repos)
+      shell: apt-get update || true
+      become: true
+      changed_when: false
+
+  roles:
+    - arkflix
