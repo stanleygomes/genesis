@@ -132,6 +132,11 @@
   become: true
   when: (domain_navidrome is defined and domain_navidrome != '') or (DOMAIN_NAVIDROME is defined and DOMAIN_NAVIDROME != '')
 
+- name: Clean up existing links in /etc/nginx/sites-enabled/ to avoid Nginx syntax conflicts
+  shell: rm -f /etc/nginx/sites-enabled/*
+  become: true
+  changed_when: false
+
 - name: Deploy Temporary HTTP Nginx config for Certbot challenge
   copy:
     dest: /etc/nginx/sites-available/arkflix-temp.conf
@@ -140,7 +145,7 @@
       server {
           listen 80;
           listen [::]:80;
-          server_name {{ [domain_jellyfin | default(DOMAIN_JELLYFIN | default('')), domain_navidrome | default(DOMAIN_NAVIDROME | default(''))] | reject('eq', '') | unique | join(' ') }};
+          server_name {{ domain_jellyfin | default(DOMAIN_JELLYFIN) }} {{ domain_navidrome | default(DOMAIN_NAVIDROME) }};
 
           location /.well-known/acme-challenge/ {
               root /var/www/html;
