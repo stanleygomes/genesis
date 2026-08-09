@@ -216,7 +216,7 @@
 
 - name: Check if Jellyfin and Navidrome share the same domain
   set_fact:
-    same_domain: "{{ (domain_jellyfin | default(DOMAIN_JELLYFIN | default(''))) == (domain_navidrome | default(DOMAIN_NAVIDROME | default(''))) }}"
+    same_domain: "{{ domain_jellyfin == domain_navidrome }}"
 
 - name: Deploy Single Nginx site config when Jellyfin and Navidrome share the same domain
   copy:
