@@ -82,6 +82,9 @@ make check CONFIG="desktop"
   ├── roles/           # Modular Ansible roles (zsh, docker, etc.)
   ├── ansible.cfg      # Ansible configuration settings
   └── inventory        # Ansible host definition (localhost)
+🎬 scripts/            # Unified Media CLI tools (YouTube download & Chromecast smart transcoding)
+  ├── Makefile         # Centralized Makefile target commands (install, download, optimize)
+  └── media.sh         # Shell CLI script with ffprobe/ffmpeg & yt-dlp logic
 🛠️ Makefile            # Helper tasks to run, check, list playbooks
 🐚 bootstrap.sh        # One-liner script to bootstrap environment (playbook selection via whiptail)
 ```
