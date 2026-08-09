@@ -10,24 +10,24 @@ show_help() {
     echo "=========================================="
     echo "🎬 Gideon Media Tools CLI"
     echo "=========================================="
-    echo "Uso:"
+    echo "Usage:"
     echo "  ./gideon.sh install"
     echo "  ./gideon.sh download [URL] [FORMAT] [DEST_DIR] [BROWSER]"
     echo "  ./gideon.sh convert [TARGET_DIR]"
     echo ""
-    echo "Subcomandos e Exemplos:"
-    echo "  install   - Instala as dependências do sistema (yt-dlp, ffmpeg, spotdl, etc.)"
-    echo "  download  - Baixa vídeo ou áudio (YouTube via yt-dlp ou Spotify via spotdl)"
-    echo "              Detecta automaticamente se é item único ou playlist."
-    echo "              Para playlists, cria uma subpasta com o nome da playlist."
-    echo "              Executa validação automática de Chromecast (H.264/AAC) em downloads MP4."
+    echo "Subcommands & Examples:"
+    echo "  install   - Install system dependencies (yt-dlp, ffmpeg, spotdl, etc.)"
+    echo "  download  - Download video or audio (YouTube via yt-dlp or Spotify via spotdl)"
+    echo "              Automatically detects single item vs playlist."
+    echo "              For playlists, creates a subfolder named after the playlist."
+    echo "              Executes automatic Chromecast validation (H.264/AAC) on MP4 downloads."
     echo "              Ex: ./gideon.sh download \"https://youtube.com/...\" mp4 ./downloads chrome"
     echo "              Ex: ./gideon.sh download \"https://open.spotify.com/track/...\""
     echo ""
-    echo "  convert   - Transcodifica e otimiza mídias de uma pasta para H.264 + AAC (.mp4)"
-    echo "              Valida se o vídeo já está em H.264/AAC no container .mp4."
-    echo "              Se já estiver válido, ignora o re-encode mantendo compatibilidade Chromecast."
-    echo "              Ex: ./gideon.sh convert \"/caminho/para/pasta\""
+    echo "  convert   - Transcode and optimize media files in a directory to H.264 + AAC (.mp4)"
+    echo "              Validates if video is already H.264/AAC inside an .mp4 container."
+    echo "              If valid, skips re-encoding while preserving Chromecast compatibility."
+    echo "              Ex: ./gideon.sh convert \"/path/to/folder\""
     echo "=========================================="
 }
 
@@ -36,35 +36,43 @@ sanitize_folder_name() {
     echo "$1" | sed -e 's/[^A-Za-z0-9 _-]/_/g' -e 's/_+/_/g' -e 's/^ *//;s/ *$//'
 }
 
+# --- Module: System Dependency Installation ---
+do_install() {
+    echo "📦 Installing system dependencies (yt-dlp, ffmpeg, spotdl)..."
+    sudo apt update && sudo apt install -y yt-dlp ffmpeg python3-pip python3-secretstorage python3-cryptography
+    pip3 install --break-system-packages spotdl || pip3 install spotdl
+    echo "✅ Gideon dependencies installed successfully!"
+}
+
 # --- Module: Spotify Download via spotdl ---
 do_spotify() {
     local url="${1:-}"
     local dest_dir="${2:-.}"
 
     if [ -z "${url}" ]; then
-        echo "❌ Erro: Informe a URL da faixa, álbum ou playlist do Spotify."
-        echo "Exemplo: ./gideon.sh download \"https://open.spotify.com/track/...\""
+        echo "❌ Error: Please specify a Spotify track, album, or playlist URL."
+        echo "Example: ./gideon.sh download \"https://open.spotify.com/track/...\""
         exit 1
     fi
 
     if ! command -v spotdl &> /dev/null; then
-        echo "❌ Erro: 'spotdl' não está instalado no sistema."
-        echo "Rode 'gideon install' para instalar as dependências."
+        echo "❌ Error: 'spotdl' is not installed."
+        echo "Run 'gideon install' to install dependencies."
         exit 1
     fi
 
     mkdir -p "${dest_dir}"
 
     echo "=========================================="
-    echo "🎵 Iniciando download do Spotify (spotDL)"
+    echo "🎵 Starting Spotify download (spotDL)"
     echo "🌐 URL: ${url}"
-    echo "📂 Destino: ${dest_dir}"
+    echo "📂 Destination: ${dest_dir}"
     echo "=========================================="
 
     spotdl download "${url}" --output "${dest_dir}"
 
     echo "=========================================="
-    echo "✅ Download do Spotify concluído com sucesso!"
+    echo "✅ Spotify download completed successfully!"
     echo "=========================================="
 }
 
@@ -76,25 +84,25 @@ do_download() {
     local browser="${4:-chrome}"
 
     if [ -z "${url}" ]; then
-        echo "❌ Erro: Informe a URL do vídeo, música ou playlist."
-        echo "Exemplo: ./gideon.sh download \"https://www.youtube.com/watch?v=...\" mp4"
+        echo "❌ Error: Please specify a video, track, or playlist URL."
+        echo "Example: ./gideon.sh download \"https://www.youtube.com/watch?v=...\" mp4"
         exit 1
     fi
 
     # Auto-detect Spotify URLs
     if [[ "${url}" =~ spotify\.com ]]; then
-        echo "💡 URL do Spotify detectada! Redirecionando para o módulo spotDL..."
+        echo "💡 Spotify URL detected! Redirecting to spotDL module..."
         do_spotify "${url}" "${dest_dir}"
         return 0
     fi
 
     if ! command -v yt-dlp &> /dev/null; then
-        echo "❌ Erro: 'yt-dlp' não está instalado no sistema."
-        echo "Rode 'gideon install' para instalar as dependências."
+        echo "❌ Error: 'yt-dlp' is not installed."
+        echo "Run 'gideon install' to install dependencies."
         exit 1
     fi
 
-    echo "🔍 Verificando URL (Item único vs Playlist)..."
+    echo "🔍 Checking URL (Single item vs Playlist)..."
     local playlist_title
     playlist_title=$(yt-dlp --print playlist_title --playlist-items 1 --no-warnings "${url}" 2>/dev/null | head -n 1 || true)
 
@@ -109,19 +117,19 @@ do_download() {
         fi
         target_output_dir="${dest_dir}/${safe_folder_name}"
         output_template="%(playlist_index)s - %(title)s.%(ext)s"
-        echo "📁 Playlist identificada: '${playlist_title}' -> Criando pasta: '${target_output_dir}'"
+        echo "📁 Playlist detected: '${playlist_title}' -> Creating folder: '${target_output_dir}'"
     else
-        echo "🎵 Item único identificado."
+        echo "🎵 Single item detected."
     fi
 
     mkdir -p "${target_output_dir}"
 
     echo "=========================================="
-    echo "⬇️  Iniciando download do YouTube"
+    echo "⬇️  Starting YouTube download"
     echo "🌐 URL: ${url}"
-    echo "🎞️  Formato: ${format}"
-    echo "📂 Destino: ${target_output_dir}"
-    echo "🌐 Navegador para cookies: ${browser}"
+    echo "🎞️  Format: ${format}"
+    echo "📂 Destination: ${target_output_dir}"
+    echo "🌐 Browser for cookies: ${browser}"
     echo "=========================================="
 
     if [ "${format}" = "mp3" ]; then
@@ -154,13 +162,13 @@ do_download() {
             "${url}"
 
         echo "=========================================="
-        echo "🔍 Executando validação automática dos padrões de Cast (H.264 + AAC)..."
+        echo "🔍 Running automatic Chromecast validation (H.264 + AAC)..."
         echo "=========================================="
         do_convert "${target_output_dir}"
     fi
 
     echo "=========================================="
-    echo "✅ Download e processamento concluídos com sucesso!"
+    echo "✅ Download and processing completed successfully!"
     echo "=========================================="
 }
 
@@ -170,8 +178,8 @@ do_convert() {
     local output_dir="${target_dir}/optimized"
 
     if ! command -v ffmpeg &> /dev/null || ! command -v ffprobe &> /dev/null; then
-        echo "❌ Erro: 'ffmpeg' e/ou 'ffprobe' não estão instalados no sistema."
-        echo "Rode 'gideon install' para instalar as dependências."
+        echo "❌ Error: 'ffmpeg' and/or 'ffprobe' are not installed."
+        echo "Run 'gideon install' to install dependencies."
         exit 1
     fi
 
@@ -181,14 +189,14 @@ do_convert() {
     local files=("${target_dir}"/*.mp4 "${target_dir}"/*.MP4 "${target_dir}"/*.mkv "${target_dir}"/*.MKV "${target_dir}"/*.avi "${target_dir}"/*.AVI "${target_dir}"/*.mov "${target_dir}"/*.MOV "${target_dir}"/*.webm "${target_dir}"/*.WEBM)
 
     if [ ${#files[@]} -eq 0 ]; then
-        echo "⚠️  Nenhum arquivo de mídia encontrado no diretório '${target_dir}'."
+        echo "⚠️  No media files found in directory '${target_dir}'."
         exit 0
     fi
 
     echo "=========================================="
-    echo "🎬 Iniciando inspeção e otimização inteligente de mídia"
-    echo "📂 Diretório alvo: ${target_dir}"
-    echo "📁 Subpasta de saída: ${output_dir}"
+    echo "🎬 Starting smart media inspection & optimization"
+    echo "📂 Target directory: ${target_dir}"
+    echo "📁 Output subfolder: ${output_dir}"
     echo "=========================================="
 
     for file in "${files[@]}"; do
@@ -205,11 +213,11 @@ do_convert() {
 
         # Skip if output file already exists in optimized/
         if [ -f "${output_file}" ]; then
-            echo "⏭️  Pulando '${filename}': Arquivo já processado existe em 'optimized/'."
+            echo "⏭️  Skipping '${filename}': Processed file already exists in 'optimized/'."
             continue
         fi
 
-        echo "⚙️  Inspecionando: ${filename} ..."
+        echo "⚙️  Inspecting: ${filename} ..."
 
         # Extract video and audio codecs using ffprobe
         local video_codec
@@ -217,23 +225,23 @@ do_convert() {
         video_codec=$(ffprobe -v error -select_streams v:0 -show_entries stream=codec_name -of default=noprint_wrappers=1:keyvalue=1 "${file}" | cut -d= -f2 || true)
         audio_codec=$(ffprobe -v error -select_streams a:0 -show_entries stream=codec_name -of default=noprint_wrappers=1:keyvalue=1 "${file}" | cut -d= -f2 || true)
 
-        # Regra de Validação Chromecast: Video == h264 && Audio == aac && Extensão == mp4
+        # Chromecast Validation Rule: Video == h264 && Audio == aac && Extension == mp4
         if [ "${video_codec}" = "h264" ] && [ "${audio_codec}" = "aac" ] && [ "${ext_lc}" = "mp4" ]; then
-            echo "✅ '${filename}' já está em H.264 + AAC (.mp4). Nenhuma transcodificação necessária!"
+            echo "✅ '${filename}' is already H.264 + AAC (.mp4). No transcoding needed!"
             continue
         fi
 
-        echo "🚀 Transcodificando '${filename}' [Vídeo: ${video_codec:-desconhecido} -> h264 | Áudio: ${audio_codec:-desconhecido} -> aac] ..."
+        echo "🚀 Transcoding '${filename}' [Video: ${video_codec:-unknown} -> h264 | Audio: ${audio_codec:-unknown} -> aac] ..."
 
         local vcodec_arg="libx264 -crf 24 -preset fast"
         if [ "${video_codec}" = "h264" ]; then
-            echo "⚡ Vídeo já está em H.264. Copiando stream de vídeo sem re-encode..."
+            echo "⚡ Video is already H.264. Copying video stream without re-encode..."
             vcodec_arg="copy"
         fi
 
         local acodec_arg="aac -b:a 192k"
         if [ "${audio_codec}" = "aac" ]; then
-            echo "⚡ Áudio já está em AAC. Copiando stream de áudio sem re-encode..."
+            echo "⚡ Audio is already AAC. Copying audio stream without re-encode..."
             acodec_arg="copy"
         fi
 
@@ -244,11 +252,11 @@ do_convert() {
         local new_size
         orig_size=$(du -h "${file}" | cut -f1)
         new_size=$(du -h "${output_file}" | cut -f1)
-        echo "✅ Concluído: ${filename} -> ${filename_no_ext}.mp4 [Original: ${orig_size} -> Otimizado: ${new_size}]"
+        echo "✅ Completed: ${filename} -> ${filename_no_ext}.mp4 [Original: ${orig_size} -> Optimized: ${new_size}]"
         echo "------------------------------------------"
     done
 
-    echo "🎉 Otimização inteligente concluída com sucesso!"
+    echo "🎉 Smart optimization completed successfully!"
 }
 
 case "${COMMAND}" in
@@ -265,7 +273,7 @@ case "${COMMAND}" in
         show_help
         ;;
     *)
-        echo "❌ Subcomando desconhecido: '${COMMAND}'"
+        echo "❌ Unknown subcommand: '${COMMAND}'"
         show_help
         exit 1
         ;;

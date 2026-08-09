@@ -1,7 +1,7 @@
 # Gideon Media Tools Makefile
-# Provisionado em ~/.config/gideon/ via Genesis Ansible
+# Provisioned at ~/.config/gideon/ via Genesis Ansible
 
-# Variáveis configuráveis
+# Configurable variables
 URL ?= ""
 FORMAT ?= mp4
 DIR ?= .
@@ -10,34 +10,34 @@ BROWSER ?= chrome
 
 .PHONY: help install download convert optimize
 
-# Ajuda padrão
+# Default help
 help:
 	@echo "=========================================="
 	@echo "🎬 Gideon Media Tools Makefile"
 	@echo "=========================================="
-	@echo "Uso:"
-	@echo "  make install                                         - Instala yt-dlp, ffmpeg, spotdl e dependências via apt/pip"
-	@echo "  make download URL=\"...\" FORMAT=mp4                  - Baixa vídeo em MP4 no diretório alvo (padrão)"
-	@echo "  make download URL=\"...\" FORMAT=mp3                  - Baixa áudio em MP3 no diretório alvo"
-	@echo "  make download URL=\"https://open.spotify.com/...\"    - Baixa do Spotify em MP3 via spotDL (Auto-detect)"
-	@echo "  make convert                                         - Converte/Otimiza mídias da pasta atual para H.264+AAC (.mp4)"
-	@echo "  make convert DIR=\"/caminho/para/pasta\"               - Converte mídias da pasta especificada"
+	@echo "Usage:"
+	@echo "  make install                                         - Install yt-dlp, ffmpeg, spotdl and system dependencies"
+	@echo "  make download URL=\"...\" FORMAT=mp4                  - Download MP4 video in target directory (default)"
+	@echo "  make download URL=\"...\" FORMAT=mp3                  - Download MP3 audio in target directory"
+	@echo "  make download URL=\"https://open.spotify.com/...\"    - Download Spotify in MP3 via spotDL (Auto-detect)"
+	@echo "  make convert                                         - Convert/Optimize media files in current folder to H.264+AAC (.mp4)"
+	@echo "  make convert DIR=\"/path/to/folder\"                  - Convert media files in specified folder"
 	@echo "=========================================="
 
-# Instala todas as dependências necessárias via apt e pip (incluindo spotdl)
+# Install dependencies
 install:
 	@chmod +x ./gideon.sh
 	@./gideon.sh install
 
-# Módulo de Download Geral (YouTube via yt-dlp ou Spotify via spotdl com detecção automática)
+# Download Module (YouTube via yt-dlp or Spotify via spotdl with auto-detection)
 download:
 	@chmod +x ./gideon.sh
 	@./gideon.sh download "$(URL)" "$(FORMAT)" "$(DEST_DIR)" "$(BROWSER)"
 
-# Módulo de Transcodificação Inteligente (Validação Chromecast: H.264 + AAC + .mp4)
+# Smart Transcoding Module (Chromecast Validation: H.264 + AAC + .mp4)
 convert:
 	@chmod +x ./gideon.sh
 	@./gideon.sh convert "$(DIR)"
 
-# Alias de compatibilidade para convert
+# Compatibility alias for convert
 optimize: convert
