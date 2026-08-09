@@ -129,14 +129,12 @@
     path: "/etc/letsencrypt/live/{{ domain_jellyfin }}/fullchain.pem"
   register: cert_jellyfin_stat
   become: true
-  when: domain_jellyfin != ''
 
 - name: Check if SSL certificate exists for Navidrome
   stat:
     path: "/etc/letsencrypt/live/{{ domain_navidrome }}/fullchain.pem"
   register: cert_navidrome_stat
   become: true
-  when: domain_navidrome != ''
 
 - name: Clean up existing links in /etc/nginx/sites-enabled/ to avoid Nginx syntax conflicts
   shell: rm -f /etc/nginx/sites-enabled/*
