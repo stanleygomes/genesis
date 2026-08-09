@@ -120,9 +120,9 @@
 
 - name: Consolidate domain and email variables
   set_fact:
-    domain_jellyfin: "{{ domain_jellyfin | default(DOMAIN_JELLYFIN | default('')) }}"
-    domain_navidrome: "{{ domain_navidrome | default(DOMAIN_NAVIDROME | default('')) }}"
-    email: "{{ email | default(EMAIL | default('')) }}"
+    domain_jellyfin: "{{ DOMAIN_JELLYFIN | default(domain_jellyfin | default('')) }}"
+    domain_navidrome: "{{ DOMAIN_NAVIDROME | default(domain_navidrome | default('')) }}"
+    email: "{{ EMAIL | default(email | default('')) }}"
 
 - name: Check if SSL certificate exists for Jellyfin
   stat:
