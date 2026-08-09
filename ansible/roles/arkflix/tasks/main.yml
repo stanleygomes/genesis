@@ -1,6 +1,15 @@
 ---
 # Arkflix role main tasks (Idempotent step-by-step implementation)
 
+- name: Mount attached media volume /dev/vdb to /var/media if present
+  mount:
+    path: /var/media
+    src: /dev/vdb
+    fstype: ext4
+    state: mounted
+  become: true
+  ignore_errors: true
+
 - name: Create media directories
   file:
     path: "{{ item }}"
