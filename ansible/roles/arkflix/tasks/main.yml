@@ -171,12 +171,6 @@
     ((domain_jellyfin is defined and domain_jellyfin != '') or (DOMAIN_JELLYFIN is defined and DOMAIN_JELLYFIN != '') and not (cert_jellyfin_stat.stat.exists | default(false))) or
     ((domain_navidrome is defined and domain_navidrome != '') or (DOMAIN_NAVIDROME is defined and DOMAIN_NAVIDROME != '') and not (cert_navidrome_stat.stat.exists | default(false)))
 
-- name: Remove Nginx default site link
-  file:
-    path: /etc/nginx/sites-enabled/default
-    state: absent
-  become: true
-
 - name: Test Nginx temporary configuration syntax
   command: nginx -t
   become: true
