@@ -371,20 +371,20 @@
 
 - name: Enable Definitive Nginx site link for Jellyfin / Main Domain
   file:
-    src: "/etc/nginx/sites-available/{{ domain_jellyfin | default(DOMAIN_JELLYFIN) }}.conf"
-    dest: "/etc/nginx/sites-enabled/{{ domain_jellyfin | default(DOMAIN_JELLYFIN) }}.conf"
+    src: "/etc/nginx/sites-available/{{ domain_jellyfin }}.conf"
+    dest: "/etc/nginx/sites-enabled/{{ domain_jellyfin }}.conf"
     state: link
   become: true
-  when: (domain_jellyfin is defined and domain_jellyfin != '') or (DOMAIN_JELLYFIN is defined and DOMAIN_JELLYFIN != '')
+  when: domain_jellyfin != ''
 
 - name: Enable Definitive Nginx site link for Navidrome (Separate domain)
   file:
-    src: "/etc/nginx/sites-available/{{ domain_navidrome | default(DOMAIN_NAVIDROME) }}.conf"
-    dest: "/etc/nginx/sites-enabled/{{ domain_navidrome | default(DOMAIN_NAVIDROME) }}.conf"
+    src: "/etc/nginx/sites-available/{{ domain_navidrome }}.conf"
+    dest: "/etc/nginx/sites-enabled/{{ domain_navidrome }}.conf"
     state: link
   become: true
   when:
-    - (domain_navidrome is defined and domain_navidrome != '') or (DOMAIN_NAVIDROME is defined and DOMAIN_NAVIDROME != '')
+    - domain_navidrome != ''
     - not (same_domain | bool)
 
 - name: Remove Temporary Nginx config link
