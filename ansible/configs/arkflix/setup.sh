@@ -28,14 +28,11 @@ error() {
 
 info "Starting Arkflix Media Server Provisioning..."
 
-# Load .env file if present in the script directory
+# Load .env file if present in the script directory (supports YAML format key: "value")
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 if [ -f "${SCRIPT_DIR}/.env" ]; then
     info "Loading environment variables from ${SCRIPT_DIR}/.env"
-    # shellcheck disable=SC1090
-    set -a
-    source "${SCRIPT_DIR}/.env"
-    set +a
+    eval "$(grep -E '^[A-Za-z0-9_]+:' "${SCRIPT_DIR}/.env" | sed -E 's/^([A-Za-z0-9_]+):[[:space:]]*/export \1=/')"
 fi
 
 # --- 0. Interactive / Environment Variables ---

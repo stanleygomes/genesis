@@ -198,7 +198,72 @@
     - (email is defined and email != '') or (EMAIL is defined and EMAIL != '')
     - not (cert_navidrome_stat.stat.exists | default(false))
 
-- name: Deploy Definitive Nginx site config for Jellyfin
+- name: Check if Jellyfin and Navidrome share the same domain
+  set_fact:
+    same_domain: "{{ (domain_jellyfin | default(DOMAIN_JELLYFIN | default(''))) == (domain_navidrome | default(DOMAIN_NAVIDROME | default(''))) }}"
+
+- name: Deploy Single Nginx site config when Jellyfin and Navidrome share the same domain
+  copy:
+    dest: "/etc/nginx/sites-available/{{ domain_jellyfin | default(DOMAIN_JELLYFIN) }}.conf"
+    mode: "0644"
+    content: |
+      server {
+          listen 80;
+          listen [::]:80;
+          server_name {{ domain_jellyfin | default(DOMAIN_JELLYFIN) }};
+          return 301 https://$host$request_uri;
+      }
+
+      server {
+          listen 443 ssl http2;
+          listen [::]:443 ssl http2;
+          server_name {{ domain_jellyfin | default(DOMAIN_JELLYFIN) }};
+
+          ssl_certificate /etc/letsencrypt/live/{{ domain_jellyfin | default(DOMAIN_JELLYFIN) }}/fullchain.pem;
+          ssl_certificate_key /etc/letsencrypt/live/{{ domain_jellyfin | default(DOMAIN_JELLYFIN) }}/privkey.pem;
+          ssl_protocols TLSv1.2 TLSv1.3;
+          ssl_ciphers HIGH:!aNULL:!MD5;
+
+          client_max_body_size 100M;
+          proxy_buffers 100 32k;
+          proxy_buffer_size 32k;
+
+          # Jellyfin (Default root path /)
+          location / {
+              proxy_pass http://127.0.0.1:8096;
+              proxy_set_header Host $host;
+              proxy_set_header X-Real-IP $remote_addr;
+              proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+              proxy_set_header X-Forwarded-Proto $scheme;
+              proxy_set_header X-Forwarded-Protocol $scheme;
+              proxy_set_header X-Forwarded-Host $http_host;
+
+              # WebSockets
+              proxy_http_version 1.1;
+              proxy_set_header Upgrade $http_upgrade;
+              proxy_set_header Connection "upgrade";
+          }
+
+          # Navidrome (Subpath /music)
+          location /music/ {
+              proxy_pass http://127.0.0.1:4533/;
+              proxy_set_header Host $host;
+              proxy_set_header X-Real-IP $remote_addr;
+              proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+              proxy_set_header X-Forwarded-Proto $scheme;
+
+              # WebSockets
+              proxy_http_version 1.1;
+              proxy_set_header Upgrade $http_upgrade;
+              proxy_set_header Connection "upgrade";
+          }
+      }
+  become: true
+  when:
+    - (domain_jellyfin is defined and domain_jellyfin != '') or (DOMAIN_JELLYFIN is defined and DOMAIN_JELLYFIN != '')
+    - same_domain | bool
+
+- name: Deploy Definitive Nginx site config for Jellyfin (Separate domains)
   copy:
     dest: "/etc/nginx/sites-available/{{ domain_jellyfin | default(DOMAIN_JELLYFIN) }}.conf"
     mode: "0644"
@@ -240,9 +305,11 @@
           }
       }
   become: true
-  when: (domain_jellyfin is defined and domain_jellyfin != '') or (DOMAIN_JELLYFIN is defined and DOMAIN_JELLYFIN != '')
+  when:
+    - (domain_jellyfin is defined and domain_jellyfin != '') or (DOMAIN_JELLYFIN is defined and DOMAIN_JELLYFIN != '')
+    - not (same_domain | bool)
 
-- name: Deploy Definitive Nginx site config for Navidrome
+- name: Deploy Definitive Nginx site config for Navidrome (Separate domains)
   copy:
     dest: "/etc/nginx/sites-available/{{ domain_navidrome | default(DOMAIN_NAVIDROME) }}.conf"
     mode: "0644"
@@ -282,9 +349,11 @@
           }
       }
   become: true
-  when: (domain_navidrome is defined and domain_navidrome != '') or (DOMAIN_NAVIDROME is defined and DOMAIN_NAVIDROME != '')
+  when:
+    - (domain_navidrome is defined and domain_navidrome != '') or (DOMAIN_NAVIDROME is defined and DOMAIN_NAVIDROME != '')
+    - not (same_domain | bool)
 
-- name: Enable Definitive Nginx site link for Jellyfin
+- name: Enable Definitive Nginx site link for Jellyfin / Main Domain
   file:
     src: "/etc/nginx/sites-available/{{ domain_jellyfin | default(DOMAIN_JELLYFIN) }}.conf"
     dest: "/etc/nginx/sites-enabled/{{ domain_jellyfin | default(DOMAIN_JELLYFIN) }}.conf"
@@ -292,13 +361,15 @@
   become: true
   when: (domain_jellyfin is defined and domain_jellyfin != '') or (DOMAIN_JELLYFIN is defined and DOMAIN_JELLYFIN != '')
 
-- name: Enable Definitive Nginx site link for Navidrome
+- name: Enable Definitive Nginx site link for Navidrome (Separate domain)
   file:
     src: "/etc/nginx/sites-available/{{ domain_navidrome | default(DOMAIN_NAVIDROME) }}.conf"
     dest: "/etc/nginx/sites-enabled/{{ domain_navidrome | default(DOMAIN_NAVIDROME) }}.conf"
     state: link
   become: true
-  when: (domain_navidrome is defined and domain_navidrome != '') or (DOMAIN_NAVIDROME is defined and DOMAIN_NAVIDROME != '')
+  when:
+    - (domain_navidrome is defined and domain_navidrome != '') or (DOMAIN_NAVIDROME is defined and DOMAIN_NAVIDROME != '')
+    - not (same_domain | bool)
 
 - name: Remove Temporary Nginx config link
   file:
