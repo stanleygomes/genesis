@@ -16,3 +16,11 @@
     creates: /usr/local/bin/tuicr
   become: true
   ignore_errors: "{{ ansible_check_mode }}"
+
+- name: Configure Git alias for tuicr
+  git_config:
+    name: "alias.{{ tuicr_git_alias_name }}"
+    value: "tuicr -w"
+    scope: global
+  become: false
+  when: tuicr_configure_git_alias | default(true) | bool

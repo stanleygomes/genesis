@@ -1,3 +1,6 @@
 ---
 # tuicr installation defaults
 tuicr_fallback_version: "0.1.0"
+tuicr_configure_git_alias: true
+tuicr_git_alias_name: "d"
+
