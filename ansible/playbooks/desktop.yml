@@ -15,11 +15,11 @@
       become: true
       changed_when: false
   roles:
+    - autoremove
     - system
     - google-chrome
     - dbeaver
     - vscode
-    - antigravity
     - antigravity-cli
     - github-copilot
     - openspec
