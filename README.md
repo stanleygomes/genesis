@@ -117,6 +117,7 @@ Here is a list of all roles available in this repository:
 | `mongodb-compass` | Installs MongoDB Compass GUI client.                                                                                                                          |
 | `mongosh`         | Installs MongoDB Shell (`mongosh`) and configures `mongo-connect` credential management script.                                                               |
 | `neovim`          | Installs latest Neovim editor via its official AppImage (including `libfuse2`), configuring it with `lazy.nvim` and plugins (Gruvbox, Telescope, Treesitter). |
+| `nocturne`        | Installs Nocturne ambient sound and music player application via Flatpak.                                                                                     |
 | `node`            | Installs NVM, Node.js runtime, and the `pnpm` package manager.                                                                                                |
 | `openspec`        | Installs OpenSpec CLI (`@fission-ai/openspec`) globally via NPM.                                                                                              |
 | `oxker`           | Installs oxker TUI binary for Docker container monitoring and aliases `docker ps`.                                                                            |

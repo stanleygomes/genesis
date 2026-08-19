@@ -1,0 +1,34 @@
+---
+# Check if flatpak is installed before attempting to manage Flatpak applications
+- name: Check if Flatpak is installed
+  command: which flatpak
+  register: flatpak_check
+  ignore_errors: true
+  changed_when: false
+  become: false
+
+# Ensure the flatpak package manager is available on the host system
+- name: Install Flatpak package manager
+  apt:
+    name: flatpak
+    state: present
+  become: true
+  when: flatpak_check.rc != 0
+
+# Flathub remote repository is required to resolve and download the application package
+- name: Ensure Flathub repository is configured
+  community.general.flatpak_remote:
+    name: "{{ nocturne_flatpak_remote_name }}"
+    flatpakrepo_url: "{{ nocturne_flatpak_remote_url }}"
+    state: present
+    method: system
+  become: true
+
+# Deploy the Nocturne Flatpak application from the Flathub repository
+- name: Install Nocturne Flatpak application
+  community.general.flatpak:
+    name: "{{ nocturne_flatpak_app }}"
+    remote: "{{ nocturne_flatpak_remote_name }}"
+    state: present
+    method: system
+  become: true

@@ -1,0 +1,5 @@
+---
+# Defaults for Nocturne role
+nocturne_flatpak_app: "com.jeffser.Nocturne"
+nocturne_flatpak_remote_name: "flathub"
+nocturne_flatpak_remote_url: "https://dl.flathub.org/repo/flathub.flatpakrepo"
