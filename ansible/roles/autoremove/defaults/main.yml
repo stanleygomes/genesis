@@ -4,6 +4,7 @@ autoremove_apt_packages:
   - firefox
   - filezilla
   - git-delta
+  - claude-desktop
 
 
 # List of Flatpak packages to remove
@@ -16,6 +17,7 @@ autoremove_snap_packages: []
 autoremove_desktop_entries:
   - antigravity-ide.desktop
   - antigravity-url-handler.desktop
+  - claude-code-url-handler.desktop
 
 # List of custom paths (directories or files) to remove as superuser (become: true)
 autoremove_custom_paths:
@@ -25,6 +27,8 @@ autoremove_custom_paths:
   - /usr/bin/antigravity-ide
   - /usr/bin/antigravity
   - /usr/share/pixmaps/antigravity-ide.png
+  - /etc/apt/sources.list.d/claude-desktop.list
+  - /usr/share/keyrings/claude-desktop-archive-keyring.asc
 
 
 # List of user-space paths (directories or files) to remove (become: false)
@@ -35,3 +39,6 @@ autoremove_user_paths:
   - "{{ ansible_env.HOME }}/.cache/nvim"
   - "{{ ansible_env.HOME }}/.config/Antigravity IDE"
   - "{{ ansible_env.HOME }}/.antigravity"
+  - "{{ ansible_env.HOME }}/.config/Claude"
+  - "{{ ansible_env.HOME }}/.local/bin/claude"
+  - "{{ ansible_env.HOME }}/.local/share/claude"
