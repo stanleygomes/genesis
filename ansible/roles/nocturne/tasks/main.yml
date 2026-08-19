@@ -32,3 +32,38 @@
     state: present
     method: system
   become: true
+
+# Ensure the application desktop shortcut is visible immediately in the user desktop menu
+- name: Link Nocturne desktop entry to user applications
+  file:
+    src: "/var/lib/flatpak/exports/share/applications/{{ nocturne_flatpak_app }}.desktop"
+    dest: "{{ ansible_env.HOME }}/.local/share/applications/{{ nocturne_flatpak_app }}.desktop"
+    state: link
+    force: yes
+  become: false
+
+# Ensure user icon directories exist so the icon can be resolved without a full session restart
+- name: Ensure user icon directories exist
+  file:
+    path: "{{ ansible_env.HOME }}/.local/share/icons/hicolor/{{ item }}/apps"
+    state: directory
+    mode: "0755"
+  loop:
+    - scalable
+    - symbolic
+  become: false
+
+# Link application icons to user-space icons directory for immediate GNOME Shell availability
+- name: Link Nocturne icons to user icons directory
+  file:
+    src: "/var/lib/flatpak/exports/share/icons/hicolor/scalable/apps/{{ nocturne_flatpak_app }}.svg"
+    dest: "{{ ansible_env.HOME }}/.local/share/icons/hicolor/scalable/apps/{{ nocturne_flatpak_app }}.svg"
+    state: link
+    force: yes
+  become: false
+
+# Update the local desktop application index to make the new entry searchable immediately
+- name: Update user desktop database
+  command: update-desktop-database "{{ ansible_env.HOME }}/.local/share/applications"
+  changed_when: false
+  become: false
