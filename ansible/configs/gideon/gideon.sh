@@ -89,7 +89,11 @@ do_download() {
     local url="${1:-}"
     local format="${2:-mp4}"
     local dest_dir="${3:-.}"
-    local browser="${4:-chrome}"
+    local browser="${4:-none}"
+    local cookie_args=()
+    if [ -n "${browser}" ] && [ "${browser}" != "none" ] && [ "${browser}" != "false" ]; then
+        cookie_args=(--cookies-from-browser "${browser}")
+    fi
 
     if [ -z "${url}" ]; then
         echo "❌ Error: Please specify a video, track, or playlist URL."
@@ -131,14 +135,16 @@ do_download() {
     echo "🌐 URL: ${url}"
     echo "🎞️  Format: ${format}"
     echo "📂 Destination: ${target_output_dir}"
-    echo "🌐 Browser for cookies: ${browser}"
+    if [ ${#cookie_args[@]} -gt 0 ]; then
+        echo "🌐 Browser for cookies: ${browser}"
+    fi
     echo "=========================================="
 
     if [ "${format}" = "mp3" ]; then
         yt-dlp -x --audio-format mp3 --audio-quality 0 \
             --js-runtimes node \
             --remote-components ejs:github \
-            --cookies-from-browser "${browser}" \
+            "${cookie_args[@]}" \
             --download-archive "${target_output_dir}/archive.txt" \
             --no-update \
             --ignore-errors \
@@ -152,7 +158,7 @@ do_download() {
         yt-dlp -f "bv*[ext=mp4]+ba[ext=m4a]/b[ext=mp4]/mp4" \
             --js-runtimes node \
             --remote-components ejs:github \
-            --cookies-from-browser "${browser}" \
+            "${cookie_args[@]}" \
             --download-archive "${target_output_dir}/archive.txt" \
             --no-update \
             --ignore-errors \

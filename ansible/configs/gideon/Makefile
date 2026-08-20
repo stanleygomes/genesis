@@ -6,7 +6,7 @@ URL ?= ""
 FORMAT ?= mp4
 DIR ?= .
 DEST_DIR ?= $(DIR)
-BROWSER ?= chrome
+BROWSER ?= none
 
 .PHONY: help install download convert optimize
 
