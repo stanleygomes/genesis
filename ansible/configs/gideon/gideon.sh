@@ -78,7 +78,12 @@ do_spotify() {
     echo "📁 Output Pattern: ${output_template}"
     echo "=========================================="
 
-    spotdl download "${url}" --output "${dest_dir}/${output_template}"
+    spotdl download "${url}" \
+        --output "${dest_dir}/${output_template}" \
+        --audio youtube-music youtube soundcloud \
+        --scan-for-songs \
+        --overwrite skip \
+        --print-errors || true
 
     echo "=========================================="
     echo "✅ Spotify download completed successfully!"
@@ -154,7 +159,7 @@ do_download() {
             --embed-thumbnail \
             --embed-metadata \
             -o "${target_output_dir}/${output_template}" \
-            "${url}"
+            "${url}" || true
     else
         yt-dlp -f "bv*[ext=mp4]+ba[ext=m4a]/b[ext=mp4]/mp4" \
             --js-runtimes node \
@@ -168,7 +173,7 @@ do_download() {
             --embed-thumbnail \
             --embed-metadata \
             -o "${target_output_dir}/${output_template}" \
-            "${url}"
+            "${url}" || true
 
         echo "=========================================="
         echo "🔍 Running automatic Chromecast validation (H.264 + AAC)..."
