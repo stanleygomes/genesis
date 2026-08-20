@@ -65,7 +65,7 @@ do_spotify() {
     fi
 
     local output_template="{list-name}/{artist} - {title}.{output-ext}"
-    if [[ "${url}" =~ /track/ ]]; then
+    if [[ "${url}" =~ /track/ ]] || [ "${dest_dir}" != "." ]; then
         output_template="{artist} - {title}.{output-ext}"
     fi
 
