@@ -40,6 +40,7 @@ sanitize_folder_name() {
 do_install() {
     echo "📦 Installing system dependencies (yt-dlp, ffmpeg, spotdl)..."
     sudo apt update && sudo apt install -y yt-dlp ffmpeg python3-pip python3-secretstorage python3-cryptography
+    pip3 install --break-system-packages -U yt-dlp || pip3 install -U yt-dlp
     pip3 install --break-system-packages spotdl || pip3 install spotdl
     echo "📦 Setting up Deno JS engine for spotDL..."
     spotdl --download-deno || true
