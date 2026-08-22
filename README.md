@@ -101,6 +101,7 @@ Here is a list of all roles available in this repository:
 | `atuin`           | Installs and configures Atuin shell history search.                                                                                                           |
 | `autoremove`      | Aggregates uninstallation and removal actions (APT, Flatpak, Snap packages, desktop shortcuts, custom paths/files). |
 | `bruno`           | Installs Bruno API client (open-source, Git-friendly alternative to Postman/Insomnia).                                                                        |
+| `darktable`       | Installs Darktable photography workflow application and RAW developer.                                                                                        |
 | `dbeaver`         | Installs DBeaver Community Edition (SQL database explorer/client).                                                                                            |
 | `docker`          | Installs Docker Engine, Docker Compose, and sets permissions/user groups.                                                                                     |
 | `dust`           | Installs dust (a modern, intuitive version of du written in Rust).                                                                                            |

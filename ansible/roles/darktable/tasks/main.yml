@@ -1,0 +1,15 @@
+---
+# Probing first preserves idempotency and avoids unnecessary package manager calls
+- name: Check if Darktable is installed
+  command: dpkg -s darktable
+  register: darktable_check
+  ignore_errors: true
+  changed_when: false
+  become: false
+
+- name: Install Darktable
+  apt:
+    name: darktable
+    state: present
+  become: true
+  when: darktable_check.rc != 0
