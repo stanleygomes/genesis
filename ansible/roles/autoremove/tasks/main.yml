@@ -59,3 +59,10 @@
   loop: "{{ autoremove_user_paths | default([]) }}"
   become: false
   when: autoremove_user_paths | default([]) | length > 0
+
+- name: Clean up obsolete Gideon function from .zshrc
+  blockinfile:
+    path: "{{ ansible_env.HOME }}/.zshrc"
+    marker: "# {mark} GIDEON CLI FUNCTION"
+    state: absent
+  become: false

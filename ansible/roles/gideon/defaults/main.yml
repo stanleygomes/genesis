@@ -1,9 +1,0 @@
----
-# Gideon role defaults
-gideon_dir: "{{ ansible_env.HOME }}/.config/gideon"
-
-# Optional Ansible on-demand execution variables
-gideon_action: ""        # Options: install, download, convert
-gideon_url: ""           # Video/Playlist URL for download action
-gideon_format: "mp4"     # mp4 or mp3
-gideon_target_dir: ""    # Directory to execute convert or download on

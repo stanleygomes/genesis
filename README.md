@@ -76,11 +76,12 @@ make check CONFIG="desktop"
 
 ```text
 ⚙️ ansible/            # Ansible configuration and deployment files
-  ├── configs/         # Specific tool configurations (VS Code, Gideon, etc.)
-  │     └── gideon/    # Gideon Media Tools (Makefile, gideon.sh)
+  ├── configs/         # Specific tool configurations (VS Code, Arkflix CLI, etc.)
+  │     ├── arkflix/   # Arkflix Media Server configs
+  │     └── arkflix-cli/ # Arkflix Media Tools CLI (Makefile, arkflix.sh)
   ├── group_vars/      # Global configuration variables (all.yml)
-  ├── playbooks/       # Setup playbooks (common.yml, desktop.yml, etc.)
-  ├── roles/           # Modular Ansible roles (gideon, zsh, docker, etc.)
+  ├── playbooks/       # Setup playbooks (minimal.yml, desktop.yml, arkflix.yml, etc.)
+  ├── roles/           # Modular Ansible roles (arkflix, arkflix-cli, zsh, docker, etc.)
   ├── ansible.cfg      # Ansible configuration settings
   └── inventory        # Ansible host definition (localhost)
 🛠️ Makefile            # Helper tasks to run, check, list playbooks
@@ -98,6 +99,7 @@ Here is a list of all roles available in this repository:
 | `agents`          | Syncs local Genesis `.agents` (Skills, rules) into `~/.agents` and `~/.claude`.                                                             |
 | `antigravity-cli` | Installs the Antigravity CLI client tool (`agy`) and configures custom statusLine settings. |
 | `arkflix`         | Provisions self-hosted media server stack (Jellyfin, Navidrome, Nginx reverse proxy, Let's Encrypt SSL, and UFW firewall).                                     |
+| `arkflix-cli`     | Deploys Arkflix Media Tools CLI (`~/.config/arkflix`), configures `arkflix` shell wrapper in `~/.zshrc`, and handles media downloads & Chromecast conversion. |
 | `atuin`           | Installs and configures Atuin shell history search.                                                                                                           |
 | `autoremove`      | Aggregates uninstallation and removal actions (APT, Flatpak, Snap packages, desktop shortcuts, custom paths/files). |
 | `bruno`           | Installs Bruno API client (open-source, Git-friendly alternative to Postman/Insomnia).                                                                        |
@@ -108,7 +110,6 @@ Here is a list of all roles available in this repository:
 | `evangelist`      | Displays a random biblical verse on terminal session launch using local genesis files.                                       |
 | `eza`            | Installs and configures eza (a modern, feature-rich replacement for ls).                                                                                      |
 | `ghostty`         | Installs Ghostty terminal emulator.                                                                                                                           |
-| `gideon`          | Deploys Gideon Media Tools CLI (`~/.config/gideon`), configures `gideon` shell wrapper in `~/.zshrc`, and handles media downloads & Chromecast conversion.   |
 | `git`             | Installs Git, configures user credentials, and generates/sets GitHub SSH keys.                                                                                |
 | `github-copilot`  | Installs GitHub Copilot CLI globally via NPM.                                                                                                                 |
 | `go`              | Installs Go language runtime and `golangci-lint` to `~/.local/go`.                                                                                            |
@@ -136,13 +137,9 @@ Here is a list of all roles available in this repository:
 
 This project organises roles into the following playbooks:
 
-### 1. Common Configuration (`common.yml`)
+### 1. Minimal Configuration (`minimal.yml`)
 
-> Target: Core command line utilities, runtimes and development tools required for any setup.
-
-### 2. Minimal Configuration (`minimal.yml`)
-
-> Target: Lean workstation baseline — Git, Docker, Zsh/Oh My Zsh, CLI tools, Neovim, and the `evangelist` biblical verse display.
+> Target: Lean workstation baseline — Git, Docker, Zsh/Oh My Zsh, CLI tools, Neovim, Arkflix CLI, and the `evangelist` biblical verse display.
 
 ### 2. Desktop Configuration (`desktop.yml`)
 
@@ -155,3 +152,4 @@ This project organises roles into the following playbooks:
 ### 4. Arkflix Media Server (`arkflix.yml`)
 
 > Target: Provisioning of self-hosted media server stack (Jellyfin, Navidrome, Nginx SSL reverse proxy, Let's Encrypt renewal, UFW).
+

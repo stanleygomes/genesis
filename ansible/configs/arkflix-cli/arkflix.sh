@@ -8,12 +8,12 @@ COMMAND="${1:-help}"
 # Helper function to display usage help
 show_help() {
     echo "=========================================="
-    echo "🎬 Gideon Media Tools CLI"
+    echo "🎬 Arkflix Media Tools CLI"
     echo "=========================================="
     echo "Usage:"
-    echo "  ./gideon.sh install"
-    echo "  ./gideon.sh download [URL] [FORMAT] [DEST_DIR] [BROWSER]"
-    echo "  ./gideon.sh convert [TARGET_DIR]"
+    echo "  ./arkflix.sh install"
+    echo "  ./arkflix.sh download [URL] [FORMAT] [DEST_DIR] [BROWSER]"
+    echo "  ./arkflix.sh convert [TARGET_DIR]"
     echo ""
     echo "Subcommands & Examples:"
     echo "  install   - Install system dependencies (yt-dlp, ffmpeg, spotdl, etc.)"
@@ -21,13 +21,13 @@ show_help() {
     echo "              Automatically detects single item vs playlist."
     echo "              For playlists, creates a subfolder named after the playlist."
     echo "              Executes automatic Chromecast validation (H.264/AAC) on MP4 downloads."
-    echo "              Ex: ./gideon.sh download \"https://youtube.com/...\" mp4 ./downloads chrome"
-    echo "              Ex: ./gideon.sh download \"https://open.spotify.com/track/...\""
+    echo "              Ex: ./arkflix.sh download \"https://youtube.com/...\" mp4 ./downloads chrome"
+    echo "              Ex: ./arkflix.sh download \"https://open.spotify.com/track/...\""
     echo ""
     echo "  convert   - Transcode and optimize media files in a directory to H.264 + AAC (.mp4)"
     echo "              Validates if video is already H.264/AAC inside an .mp4 container."
     echo "              If valid, skips re-encoding while preserving Chromecast compatibility."
-    echo "              Ex: ./gideon.sh convert \"/path/to/folder\""
+    echo "              Ex: ./arkflix.sh convert \"/path/to/folder\""
     echo "=========================================="
 }
 
@@ -44,7 +44,7 @@ do_install() {
     pip3 install --break-system-packages spotdl || pip3 install spotdl
     echo "📦 Setting up Deno JS engine for spotDL..."
     spotdl --download-deno || true
-    echo "✅ Gideon dependencies installed successfully!"
+    echo "✅ Arkflix dependencies installed successfully!"
 }
 
 # --- Module: Spotify Download via spotdl ---
@@ -54,13 +54,13 @@ do_spotify() {
 
     if [ -z "${url}" ]; then
         echo "❌ Error: Please specify a Spotify track, album, or playlist URL."
-        echo "Example: ./gideon.sh download \"https://open.spotify.com/track/...\""
+        echo "Example: ./arkflix.sh download \"https://open.spotify.com/track/...\""
         exit 1
     fi
 
     if ! command -v spotdl &> /dev/null; then
         echo "❌ Error: 'spotdl' is not installed."
-        echo "Run 'gideon install' to install dependencies."
+        echo "Run 'arkflix install' to install dependencies."
         exit 1
     fi
 
@@ -103,7 +103,7 @@ do_download() {
 
     if [ -z "${url}" ]; then
         echo "❌ Error: Please specify a video, track, or playlist URL."
-        echo "Example: ./gideon.sh download \"https://www.youtube.com/watch?v=...\" mp4"
+        echo "Example: ./arkflix.sh download \"https://www.youtube.com/watch?v=...\" mp4"
         exit 1
     fi
 
@@ -116,7 +116,7 @@ do_download() {
 
     if ! command -v yt-dlp &> /dev/null; then
         echo "❌ Error: 'yt-dlp' is not installed."
-        echo "Run 'gideon install' to install dependencies."
+        echo "Run 'arkflix install' to install dependencies."
         exit 1
     fi
 
@@ -193,7 +193,7 @@ do_convert() {
 
     if ! command -v ffmpeg &> /dev/null || ! command -v ffprobe &> /dev/null; then
         echo "❌ Error: 'ffmpeg' and/or 'ffprobe' are not installed."
-        echo "Run 'gideon install' to install dependencies."
+        echo "Run 'arkflix install' to install dependencies."
         exit 1
     fi
 

@@ -1,5 +1,5 @@
-# Gideon Media Tools Makefile
-# Provisioned at ~/.config/gideon/ via Genesis Ansible
+# Arkflix Media Tools Makefile
+# Provisioned at ~/.config/arkflix/ via Genesis Ansible
 
 # Configurable variables
 URL ?= ""
@@ -13,7 +13,7 @@ BROWSER ?= none
 # Default help
 help:
 	@echo "=========================================="
-	@echo "🎬 Gideon Media Tools Makefile"
+	@echo "🎬 Arkflix Media Tools Makefile"
 	@echo "=========================================="
 	@echo "Usage:"
 	@echo "  make install                                         - Install yt-dlp, ffmpeg, spotdl and system dependencies"
@@ -26,30 +26,30 @@ help:
 
 # Install dependencies
 install:
-	@chmod +x ./gideon.sh
-	@./gideon.sh install
+	@chmod +x ./arkflix.sh
+	@./arkflix.sh install
 
 # Download Module (YouTube via yt-dlp or Spotify via spotdl with auto-detection)
 download:
-	@chmod +x ./gideon.sh
+	@chmod +x ./arkflix.sh
 	@URL_VAL="$(URL)"; \
 	if [ -z "$$URL_VAL" ]; then \
 		URL_VAL="$(filter-out download,$(MAKECMDGOALS))"; \
 	fi; \
-	./gideon.sh download "$$URL_VAL" "$(FORMAT)" "$(DEST_DIR)" "$(BROWSER)"
+	./arkflix.sh download "$$URL_VAL" "$(FORMAT)" "$(DEST_DIR)" "$(BROWSER)"
 
 %:
 	@:
 
 # Smart Transcoding Module (Chromecast Validation: H.264 + AAC + .mp4)
 convert:
-	@chmod +x ./gideon.sh
+	@chmod +x ./arkflix.sh
 	@DIR_VAL="$(DIR)"; \
 	if [ "$$DIR_VAL" = "." ]; then \
 		POS_ARG="$(filter-out convert optimize,$(MAKECMDGOALS))"; \
 		if [ -n "$$POS_ARG" ]; then DIR_VAL="$$POS_ARG"; fi; \
 	fi; \
-	./gideon.sh convert "$$DIR_VAL"
+	./arkflix.sh convert "$$DIR_VAL"
 
 # Compatibility alias for convert
 optimize: convert

@@ -42,3 +42,4 @@ autoremove_user_paths:
   - "{{ ansible_env.HOME }}/.config/Claude"
   - "{{ ansible_env.HOME }}/.local/bin/claude"
   - "{{ ansible_env.HOME }}/.local/share/claude"
+  - "{{ ansible_env.HOME }}/.config/gideon"

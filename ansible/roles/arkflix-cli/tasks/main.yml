@@ -1,0 +1,60 @@
+---
+# Arkflix-CLI role main tasks
+
+- name: Create ~/.config/arkflix directory
+  file:
+    path: "{{ arkflix_cli_dir }}"
+    state: directory
+    mode: "0755"
+  become: false
+
+- name: Deploy Arkflix Makefile and arkflix.sh to ~/.config/arkflix
+  copy:
+    src: "{{ playbook_dir }}/../configs/arkflix-cli/{{ item }}"
+    dest: "{{ arkflix_cli_dir }}/{{ item }}"
+    mode: "0755"
+  loop:
+    - Makefile
+    - arkflix.sh
+  become: false
+
+- name: Add arkflix function to .zshrc
+  blockinfile:
+    path: "{{ ansible_env.HOME }}/.zshrc"
+    marker: "# {mark} ARKFLIX CLI FUNCTION"
+    block: |
+      # Arkflix Media Tools CLI Wrapper
+      arkflix() { make -C "$HOME/.config/arkflix" DIR="$PWD" "$@"; }
+    state: present
+  become: false
+
+# --- On-Demand Execution Tasks ---
+
+- name: Run Arkflix install action via Ansible
+  command: "make -C {{ arkflix_cli_dir }} install"
+  become: true
+  when:
+    - arkflix_cli_action is defined
+    - arkflix_cli_action == 'install'
+
+- name: Run Arkflix download action via Ansible
+  command: >
+    make -C {{ arkflix_cli_dir }} download
+    URL="{{ arkflix_cli_url }}"
+    FORMAT="{{ arkflix_cli_format | default('mp4') }}"
+    {% if arkflix_cli_target_dir is defined and arkflix_cli_target_dir != '' %}DIR="{{ arkflix_cli_target_dir }}"{% endif %}
+  become: false
+  when:
+    - arkflix_cli_action is defined
+    - arkflix_cli_action == 'download'
+    - arkflix_cli_url is defined
+    - arkflix_cli_url != ''
+
+- name: Run Arkflix convert action via Ansible
+  command: >
+    make -C {{ arkflix_cli_dir }} convert
+    {% if arkflix_cli_target_dir is defined and arkflix_cli_target_dir != '' %}DIR="{{ arkflix_cli_target_dir }}"{% endif %}
+  become: false
+  when:
+    - arkflix_cli_action is defined
+    - arkflix_cli_action in ['convert', 'optimize']

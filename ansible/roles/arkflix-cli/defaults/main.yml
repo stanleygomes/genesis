@@ -1,0 +1,9 @@
+---
+# Arkflix-CLI role defaults
+arkflix_cli_dir: "{{ ansible_env.HOME }}/.config/arkflix"
+
+# Optional Ansible on-demand execution variables
+arkflix_cli_action: ""        # Options: install, download, convert
+arkflix_cli_url: ""           # Video/Playlist URL for download action
+arkflix_cli_format: "mp4"     # mp4 or mp3
+arkflix_cli_target_dir: ""    # Directory to execute convert or download on
