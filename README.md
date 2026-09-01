@@ -121,6 +121,7 @@ Here is a list of all roles available in this repository:
 | `nocturne`        | Installs Nocturne ambient sound and music player application via Flatpak.                                                                                     |
 | `node`            | Installs NVM, Node.js runtime, and the `pnpm` package manager.                                                                                                |
 | `openspec`        | Installs OpenSpec CLI (`@fission-ai/openspec`) globally via NPM.                                                                                              |
+| `orca`            | Installs Orca AI agent desktop environment via AppImage and configures desktop entry and icon.                                                                |
 | `oxker`           | Installs oxker TUI binary for Docker container monitoring and aliases `docker ps`.                                                                            |
 | `php`             | Installs PHP runtime, extensions, and Composer package manager.                                                                                               |
 | `python`          | Installs Python runtime dependencies, Astral `uv` tool, and Python 3.14.                                                                                      |

@@ -1,0 +1,71 @@
+---
+- name: Install libfuse2 for AppImage support
+  apt:
+    name: libfuse2
+    state: present
+  become: true
+
+- name: Check if Orca AppImage is installed
+  stat:
+    path: "{{ orca_bin_path }}"
+  register: orca_bin
+  become: false
+
+- name: Download Orca AppImage
+  get_url:
+    url: "{{ orca_appimage_url }}"
+    dest: "{{ orca_bin_path }}"
+    mode: '0755'
+    owner: root
+    group: root
+  become: true
+  when: not orca_bin.stat.exists
+
+- name: Ensure user icons directory exists
+  file:
+    path: "{{ ansible_env.HOME }}/.local/share/icons/hicolor/512x512/apps"
+    state: directory
+    mode: '0755'
+  become: false
+
+- name: Check if Orca icon exists
+  stat:
+    path: "{{ ansible_env.HOME }}/.local/share/icons/hicolor/512x512/apps/orca.png"
+  register: orca_icon
+  become: false
+
+- name: Download Orca icon
+  get_url:
+    url: "{{ orca_icon_url }}"
+    dest: "{{ ansible_env.HOME }}/.local/share/icons/hicolor/512x512/apps/orca.png"
+    mode: '0644'
+  become: false
+  when: not orca_icon.stat.exists
+
+- name: Ensure user applications directory exists
+  file:
+    path: "{{ ansible_env.HOME }}/.local/share/applications"
+    state: directory
+    mode: '0755'
+  become: false
+
+- name: Create Orca desktop entry
+  copy:
+    dest: "{{ ansible_env.HOME }}/.local/share/applications/orca.desktop"
+    mode: '0644'
+    content: |
+      [Desktop Entry]
+      Name=Orca
+      Comment=A fast, AI-powered desktop client and agent environment
+      Exec={{ orca_bin_path }} %U
+      Icon={{ ansible_env.HOME }}/.local/share/icons/hicolor/512x512/apps/orca.png
+      Terminal=false
+      Type=Application
+      Categories=Development;Utility;
+      StartupNotify=true
+  become: false
+
+- name: Update user desktop database
+  command: update-desktop-database "{{ ansible_env.HOME }}/.local/share/applications"
+  changed_when: false
+  become: false
