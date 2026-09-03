@@ -3,3 +3,4 @@
 ghostty_theme: "Monokai Soda"
 ghostty_window_inherit_working_directory: true
 ghostty_window_save_state: "always"
+ghostty_use_zellij: true

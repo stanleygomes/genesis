@@ -1,0 +1,3 @@
+---
+# Defaults for zellij role
+zellij_fallback_version: "0.45.1"

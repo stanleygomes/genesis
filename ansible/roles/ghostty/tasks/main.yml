@@ -97,3 +97,14 @@
     create: yes
     mode: '0644'
   become: false
+
+# Configure Ghostty to start Zellij session for persistent tabs and state
+- name: Configure Ghostty to use Zellij session
+  lineinfile:
+    path: "{{ ansible_env.HOME }}/.config/ghostty/config"
+    regexp: "^command\\s*="
+    line: "command = zellij attach --create default"
+    create: yes
+    mode: '0644'
+  become: false
+  when: ghostty_use_zellij | default(false) | bool
