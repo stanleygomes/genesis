@@ -1,6 +1,13 @@
 ---
 # zellij is a modern terminal multiplexer written in Rust.
 # We download the latest binary release from GitHub.
+- name: Ensure ~/.local/bin directory exists
+  file:
+    path: "{{ ansible_env.HOME }}/.local/bin"
+    state: directory
+    mode: '0755'
+  become: false
+
 - name: Install Zellij binary
   shell: |
     ZELLIJ_VERSION=$(curl -s "https://api.github.com/repos/zellij-org/zellij/releases/latest" | grep -Po '"tag_name": "v\K[^"]*')
@@ -11,12 +18,12 @@
     curl -sLo /tmp/zellij.tar.gz "https://github.com/zellij-org/zellij/releases/download/v${ZELLIJ_VERSION}/zellij-x86_64-unknown-linux-musl.tar.gz"
     cd /tmp
     tar xf zellij.tar.gz
-    install zellij /usr/local/bin
+    install zellij "{{ ansible_env.HOME }}/.local/bin/zellij"
     rm -f zellij zellij.tar.gz
   args:
     executable: /bin/bash
-    creates: /usr/local/bin/zellij
-  become: true
+    creates: "{{ ansible_env.HOME }}/.local/bin/zellij"
+  become: false
   ignore_errors: "{{ ansible_check_mode }}"
 
 - name: Ensure Zellij configuration directory exists
