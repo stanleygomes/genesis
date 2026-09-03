@@ -103,7 +103,7 @@
   lineinfile:
     path: "{{ ansible_env.HOME }}/.config/ghostty/config"
     regexp: "^command\\s*="
-    line: "command = zellij attach --create default"
+    line: "command = {{ ansible_env.HOME }}/.local/bin/zellij attach --create default"
     create: yes
     mode: '0644'
   become: false
