@@ -87,3 +87,13 @@
     create: yes
     mode: '0644'
   become: false
+
+# Save and restore window state (tabs, splits, dimensions) on exit/launch
+- name: Configure Ghostty window save state
+  lineinfile:
+    path: "{{ ansible_env.HOME }}/.config/ghostty/config"
+    regexp: "^window-save-state\\s*="
+    line: "window-save-state = {{ ghostty_window_save_state }}"
+    create: yes
+    mode: '0644'
+  become: false
