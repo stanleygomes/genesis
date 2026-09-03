@@ -77,3 +77,13 @@
     create: yes
     mode: '0644'
   become: false
+
+# Ensure new tabs and windows inherit the working directory of the active terminal
+- name: Configure Ghostty window inherit working directory
+  lineinfile:
+    path: "{{ ansible_env.HOME }}/.config/ghostty/config"
+    regexp: "^window-inherit-working-directory\\s*="
+    line: "window-inherit-working-directory = {{ ghostty_window_inherit_working_directory | lower }}"
+    create: yes
+    mode: '0644'
+  become: false
