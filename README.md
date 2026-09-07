@@ -131,7 +131,6 @@ Here is a list of all roles available in this repository:
 | `terraform`       | Installs Terraform CLI tool from HashiCorp releases.                                                                                                          |
 | `tuicr`           | Installs tuicr (Terminal UI for Code Reviews).                                                                                                               |
 | `vscode`          | Installs VS Code, syncs user settings/keybindings, and installs extensions.                                                                                   |
-| `zellij`          | Installs Zellij terminal multiplexer binary.                                                                                                                  |
 | `zsh`             | Installs Zsh and Oh My Zsh, sets Zsh as default shell, and configures core aliases/functions.                                                                 |
 
 ---
@@ -142,7 +141,7 @@ This project organises roles into the following playbooks:
 
 ### 1. Minimal Configuration (`minimal.yml`)
 
-> Target: Lean workstation baseline — Git, Docker, Zsh/Oh My Zsh, CLI tools, Neovim, Zellij, Herdr, Arkflix CLI, and the `evangelist` biblical verse display.
+> Target: Lean workstation baseline — Git, Docker, Zsh/Oh My Zsh, CLI tools, Neovim, Herdr, Arkflix CLI, and the `evangelist` biblical verse display.
 
 ### 2. Desktop Configuration (`desktop.yml`)
 
