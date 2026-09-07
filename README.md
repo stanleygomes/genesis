@@ -114,6 +114,7 @@ Here is a list of all roles available in this repository:
 | `github-copilot`  | Installs GitHub Copilot CLI globally via NPM.                                                                                                                 |
 | `go`              | Installs Go language runtime and `golangci-lint` to `~/.local/go`.                                                                                            |
 | `google-chrome`   | Installs Google Chrome web browser.                                                                                                                           |
+| `herdr`           | Installs Herdr terminal multiplexer for AI coding agents and configures default settings.                                                                      |
 | `java`            | Installs SDKMAN and configures Java development dependencies.                                                                                                 |
 | `mongodb-compass` | Installs MongoDB Compass GUI client.                                                                                                                          |
 | `mongosh`         | Installs MongoDB Shell (`mongosh`) and configures `mongo-connect` credential management script.                                                               |
@@ -141,7 +142,7 @@ This project organises roles into the following playbooks:
 
 ### 1. Minimal Configuration (`minimal.yml`)
 
-> Target: Lean workstation baseline — Git, Docker, Zsh/Oh My Zsh, CLI tools, Neovim, Zellij, Arkflix CLI, and the `evangelist` biblical verse display.
+> Target: Lean workstation baseline — Git, Docker, Zsh/Oh My Zsh, CLI tools, Neovim, Zellij, Herdr, Arkflix CLI, and the `evangelist` biblical verse display.
 
 ### 2. Desktop Configuration (`desktop.yml`)
 

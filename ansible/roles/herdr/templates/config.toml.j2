@@ -1,0 +1,28 @@
+# herdr configuration
+# Managed by Genesis Ansible
+
+onboarding = {{ herdr_onboarding | lower }}
+
+[theme]
+name = "{{ herdr_theme }}"
+
+[keys]
+# Prefix key to enter navigate mode (default: "ctrl+b")
+prefix = "ctrl+b"
+
+[ui]
+sidebar_width = 26
+confirm_close = true
+accent = "cyan"
+
+[ui.toast]
+enabled = false
+
+[ui.sound]
+enabled = true
+
+[ui.sound.agents]
+droid = "off"
+
+[advanced]
+allow_nested = false

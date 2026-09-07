@@ -1,0 +1,8 @@
+---
+# Defaults for herdr role
+herdr_fallback_version: "0.2.2"
+herdr_install_dir: "{{ ansible_env.HOME }}/.local/bin"
+herdr_config_dir: "{{ ansible_env.HOME }}/.config/herdr"
+herdr_config_file: "{{ herdr_config_dir }}/config.toml"
+herdr_theme: "catppuccin"
+herdr_onboarding: false

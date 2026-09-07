@@ -1,0 +1,66 @@
+---
+# Herdr is a terminal multiplexer designed for AI coding agents.
+# We download and install the binary release from GitHub/herdr.dev.
+
+- name: Ensure ~/.local/bin directory exists
+  file:
+    path: "{{ herdr_install_dir }}"
+    state: directory
+    mode: "0755"
+  become: false
+
+- name: Install Herdr binary
+  shell: |
+    set -eu
+    MANIFEST_URL="https://herdr.dev/latest.json"
+    ARCH="$(uname -m)"
+    case "$ARCH" in
+      x86_64|amd64)   arch="x86_64" ;;
+      aarch64|arm64)  arch="aarch64" ;;
+      *)              echo "unsupported architecture: $ARCH" >&2; exit 1 ;;
+    esac
+
+    TARGET="linux-${arch}"
+    DOWNLOAD_URL=""
+    MANIFEST=$(curl -fsSL --retry 3 --connect-timeout 10 --max-time 20 "$MANIFEST_URL" || true)
+    if [ -n "$MANIFEST" ]; then
+      DOWNLOAD_URL=$(printf '%s\n' "$MANIFEST" | awk -v target="\"${TARGET}\"" '
+        /^[[:space:]]*"assets"[[:space:]]*:/ { in_assets = 1; next }
+        in_assets && /^[[:space:]]*}/ { exit }
+        in_assets && index($0, target) {
+          sub(/^.*:[[:space:]]*"/, "")
+          sub(/".*$/, "")
+          print
+          exit
+        }
+      ')
+    fi
+
+    if [ -z "$DOWNLOAD_URL" ]; then
+      echo "Failed to query manifest. Using fallback version {{ herdr_fallback_version }}"
+      DOWNLOAD_URL="https://github.com/herdrdev/herdr/releases/download/v{{ herdr_fallback_version }}/herdr-${TARGET}"
+    fi
+
+    TMP_DIR=$(mktemp -d)
+    trap 'rm -rf "$TMP_DIR"' EXIT
+    curl -fsSL --retry 3 --connect-timeout 10 --max-time 120 "$DOWNLOAD_URL" -o "${TMP_DIR}/herdr"
+    install -m 0755 "${TMP_DIR}/herdr" "{{ herdr_install_dir }}/herdr"
+  args:
+    executable: /bin/bash
+    creates: "{{ herdr_install_dir }}/herdr"
+  become: false
+  ignore_errors: "{{ ansible_check_mode }}"
+
+- name: Ensure Herdr configuration directory exists
+  file:
+    path: "{{ herdr_config_dir }}"
+    state: directory
+    mode: "0755"
+  become: false
+
+- name: Deploy Herdr configuration
+  template:
+    src: config.toml.j2
+    dest: "{{ herdr_config_file }}"
+    mode: "0644"
+  become: false
