@@ -21,15 +21,29 @@
   become: true
   when: not nvim_bin.stat.exists
 
-- name: Install packages needed for plugins (ripgrep, build-essential, unzip, tree-sitter-cli)
+- name: Install packages needed for plugins (ripgrep, build-essential, unzip)
   apt:
     name:
       - ripgrep
       - build-essential
       - unzip
-      - tree-sitter-cli
     state: present
   become: true
+
+- name: Install tree-sitter CLI binary from GitHub releases (not available via apt)
+  # NOTE: tree-sitter-cli is NOT packaged in Ubuntu's apt repos (22.04-26.04).
+  # Binary releases >= 0.25.0 require glibc >= 2.39 (Ubuntu 24.04+ only), so pin
+  # to v0.24.7 (requires glibc >= 2.29) which runs on Ubuntu 22.04 through 26.04.
+  # Asset format for the 0.24.x series is a gzipped binary (no .zip).
+  shell: |
+    curl -sL -o /tmp/tree-sitter-cli.gz "https://github.com/tree-sitter/tree-sitter/releases/download/v0.24.7/tree-sitter-linux-x64.gz"
+    gunzip -f -k /tmp/tree-sitter-cli.gz
+    install /tmp/tree-sitter-cli /usr/local/bin
+  args:
+    executable: /bin/bash
+    creates: /usr/local/bin/tree-sitter
+  become: true
+  ignore_errors: "{{ ansible_check_mode }}"
 
 - name: Ensure Neovim configuration directories exist
   file:
