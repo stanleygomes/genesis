@@ -99,12 +99,19 @@
   become: false
 
 # Configure Ghostty to start Herdr session by default
-- name: Configure Ghostty to use Herdr session
+# - name: Configure Ghostty to use Herdr session
+#   lineinfile:
+#     path: "{{ ansible_env.HOME }}/.config/ghostty/config"
+#     regexp: "^command\\s*="
+#     line: "command = {{ ghostty_command }}"
+#     create: yes
+#     mode: '0644'
+#   become: false
+#   when: ghostty_use_herdr | default(true) | bool
+
+- name: Ensure Herdr session is not configured in Ghostty
   lineinfile:
     path: "{{ ansible_env.HOME }}/.config/ghostty/config"
-    regexp: "^command\\s*="
-    line: "command = {{ ghostty_command }}"
-    create: yes
-    mode: '0644'
+    regexp: "^command\\s*=\\s*.*herdr"
+    state: absent
   become: false
-  when: ghostty_use_herdr | default(true) | bool

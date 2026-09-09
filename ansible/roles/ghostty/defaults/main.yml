@@ -3,5 +3,5 @@
 ghostty_theme: "Monokai Soda"
 ghostty_window_inherit_working_directory: true
 ghostty_window_save_state: "always"
-ghostty_use_herdr: true
-ghostty_command: "{{ ansible_env.HOME }}/.local/bin/herdr"
+# ghostty_use_herdr: true
+# ghostty_command: "{{ ansible_env.HOME }}/.local/bin/herdr"
