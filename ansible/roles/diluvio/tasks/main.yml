@@ -1,0 +1,19 @@
+---
+- name: Install Diluvio script
+  copy:
+    src: diluvio.sh
+    dest: "{{ diluvio_install_path }}"
+    mode: "0755"
+    owner: root
+    group: root
+  become: true
+
+- name: Add diluvio alias to .zshrc
+  blockinfile:
+    path: "{{ ansible_env.HOME }}/.zshrc"
+    marker: "# {mark} DILUVIO ALIAS"
+    block: |
+      # Alias para limpeza de disco (dilúvio: varre o que sobra)
+      alias diluvio='sudo {{ diluvio_install_path }}'
+    state: present
+  become: false

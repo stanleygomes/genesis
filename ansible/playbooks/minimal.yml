@@ -19,6 +19,7 @@
     - autoremove
     - git
     - zsh
+    - diluvio
     - docker
     - oxker
     - eza
