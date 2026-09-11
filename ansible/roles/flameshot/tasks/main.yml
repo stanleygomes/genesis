@@ -1,0 +1,79 @@
+---
+# Probing first preserves idempotency and avoids unnecessary package manager calls
+- name: Check if Flameshot is installed
+  command: dpkg -s {{ flameshot_package }}
+  register: flameshot_check
+  ignore_errors: true
+  changed_when: false
+  become: false
+
+# Install Flameshot package via apt when not present on the system
+- name: Install Flameshot
+  apt:
+    name: "{{ flameshot_package }}"
+    state: present
+  become: true
+  when: flameshot_check.rc != 0
+
+# Check whether dconf is present so desktop shortcut configuration can run safely
+- name: Check if dconf binary is present
+  command: which dconf
+  register: dconf_check
+  ignore_errors: true
+  changed_when: false
+  become: false
+
+# GNOME binds the Print key to its native interactive screenshot UI by default.
+# Clearing this keybinding frees the Print shortcut so Flameshot can bind to it.
+- name: Disable GNOME default interactive screenshot UI shortcut
+  community.general.dconf:
+    key: "/org/gnome/shell/keybindings/show-screenshot-ui"
+    value: "@as []"
+    state: present
+  become: false
+  when: dconf_check.rc == 0
+
+# Register the Flameshot keybinding metadata under GNOME media-keys custom shortcuts
+- name: Configure Flameshot custom keybinding name
+  community.general.dconf:
+    key: "{{ flameshot_custom_keybinding_path }}name"
+    value: "'{{ flameshot_shortcut_name }}'"
+    state: present
+  become: false
+  when: dconf_check.rc == 0
+
+# Specify the command to execute when the custom keybinding is triggered
+- name: Configure Flameshot custom keybinding command
+  community.general.dconf:
+    key: "{{ flameshot_custom_keybinding_path }}command"
+    value: "'{{ flameshot_command }}'"
+    state: present
+  become: false
+  when: dconf_check.rc == 0
+
+# Bind the Print key to the custom Flameshot shortcut
+- name: Configure Flameshot custom keybinding binding
+  community.general.dconf:
+    key: "{{ flameshot_custom_keybinding_path }}binding"
+    value: "'{{ flameshot_shortcut_binding }}'"
+    state: present
+  become: false
+  when: dconf_check.rc == 0
+
+# Read existing custom keybindings from dconf to avoid overwriting any existing shortcuts
+- name: Read existing GNOME custom keybindings
+  community.general.dconf:
+    key: "/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings"
+    state: read
+  register: existing_custom_keybindings
+  become: false
+  when: dconf_check.rc == 0
+
+# Append Flameshot path to custom-keybindings list while preserving existing bindings and ensuring uniqueness
+- name: Ensure Flameshot is registered in custom-keybindings list
+  community.general.dconf:
+    key: "/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings"
+    value: "{{ '[' + ((((existing_custom_keybindings.value | from_yaml) if (existing_custom_keybindings.value is not none and not existing_custom_keybindings.value.startswith('@as')) else []) + [flameshot_custom_keybinding_path]) | unique | map('to_json') | join(', ') | replace('\"', \"'\")) + ']' }}"
+    state: present
+  become: false
+  when: dconf_check.rc == 0

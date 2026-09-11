@@ -1,0 +1,15 @@
+---
+# APT package name for Flameshot
+flameshot_package: "flameshot"
+
+# Command to execute when the screenshot shortcut is triggered
+flameshot_command: "flameshot gui"
+
+# Keybinding shortcut for capturing screenshots
+flameshot_shortcut_binding: "Print"
+
+# Display name of the custom keybinding in GNOME settings
+flameshot_shortcut_name: "Flameshot"
+
+# dconf path used to store the Flameshot custom keybinding definition
+flameshot_custom_keybinding_path: "/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom-flameshot/"

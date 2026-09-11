@@ -109,6 +109,7 @@ Here is a list of all roles available in this repository:
 | `dust`           | Installs dust (a modern, intuitive version of du written in Rust).                                                                                            |
 | `evangelist`      | Displays a random biblical verse on terminal session launch using local genesis files.                                       |
 | `eza`            | Installs and configures eza (a modern, feature-rich replacement for ls).                                                                                      |
+| `flameshot`       | Installs Flameshot screenshot tool and binds the Print Screen shortcut to it.                                                 |
 | `ghostty`         | Installs Ghostty terminal emulator.                                                                                                                           |
 | `git`             | Installs Git, configures user credentials, and generates/sets GitHub SSH keys.                                                                                |
 | `github-copilot`  | Installs GitHub Copilot CLI globally via NPM.                                                                                                                 |
