@@ -29,7 +29,7 @@
   community.general.flatpak:
     name: "{{ nocturne_flatpak_app }}"
     remote: "{{ nocturne_flatpak_remote_name }}"
-    state: present
+    state: latest
     method: system
   become: true
 

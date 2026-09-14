@@ -150,7 +150,7 @@ This project organises roles into the following playbooks:
 
 ### 3. Custom Setup 1 (`custom1.yml`)
 
-> Target: Custom bundle containing browsers, Bruno, and databases.
+> Target: Custom bundle containing browsers, Bruno, databases, and Nocturne.
 
 ### 4. Arkflix Media Server (`arkflix.yml`)
 
