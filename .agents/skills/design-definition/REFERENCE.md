@@ -180,3 +180,19 @@ All components reference exact tokens from [SKILL.md](file:///home/stanley/proje
 - **Text Group:** Display `flex`, Flex-direction `column`, Gap `4px`.
   - Title: Font Size `24px`, Font Weight `800`, Color `text-primary`.
   - Subtitle: Font Size `14px`, Font Weight `500`, Color `text-muted`, Line-height `20px`.
+
+---
+
+## 14. Motion & Animation Standards
+- **Micro-interactions (Buttons, Links, Tabs, Nav Items, Inputs):**
+  - Property: `all 150ms cubic-bezier(0.4, 0, 0.2, 1)`.
+- **Dropdown & Popover Entrance:**
+  - Initial State: `opacity: 0`, `transform: translateY(-4px)`.
+  - Open State: `opacity: 1`, `transform: translateY(0)`.
+  - Timing: `200ms cubic-bezier(0, 0, 0.2, 1)`.
+- **Modal Dialog Entrance:**
+  - Backdrop: `opacity: 0` ➔ `opacity: 1` in `200ms cubic-bezier(0, 0, 0.2, 1)`.
+  - Box Container: `opacity: 0` + `transform: scale(0.96)` ➔ `opacity: 1` + `transform: scale(1)` in `200ms cubic-bezier(0, 0, 0.2, 1)`.
+- **Motion Accessibility (`a11y`):**
+  - `@media (prefers-reduced-motion: reduce)`: `animation-duration: 0ms !important; transition-duration: 0ms !important;`.
+

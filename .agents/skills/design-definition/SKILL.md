@@ -55,7 +55,13 @@ description: Authoritative design system tokens, typography scales, spacing rule
 - **Form Controls Stack:** Margin-bottom `16px` between input groups. Label Margin-bottom `8px`.
 - **Alert Margin-Bottom:** `20px` above destination content.
 
-## 5. Component Catalog & References
+## 5. Animation & Motion Tokens
+- **Duration Tokens:** `duration-fast`: `150ms` (hover, colors, micro-interactions), `duration-normal`: `200ms` (dropdowns, tabs, fades), `duration-slow`: `300ms` (modals, overlays).
+- **Easing Tokens:** `ease-standard`: `cubic-bezier(0.4, 0, 0.2, 1)`, `ease-out`: `cubic-bezier(0, 0, 0.2, 1)`.
+- **Default Transition:** `all 150ms cubic-bezier(0.4, 0, 0.2, 1)` for interactive controls.
+- **Motion Accessibility:** Enforce `0ms` duration when `prefers-reduced-motion: reduce`.
+
+## 6. Component Catalog & References
 All interactive components and controls are strictly detailed in [REFERENCE.md](REFERENCE.md):
 - **Buttons:** Solid, Outline, Ghost, Circle/Icon (Height `48px`, Radius `12px`, Weight `700`).
 - **Input Fields & Forms:** Label (`14px` / `700`), idle, hover, focus, error, disabled, prefix icon.
@@ -70,7 +76,7 @@ All interactive components and controls are strictly detailed in [REFERENCE.md](
 - **Data Table:** Header row, striped/hover rows, table cells, pagination bar.
 - **Modal / Dialog:** Backdrop with blur, rounded card container, header with close, body, actions footer.
 
-## 6. Implementation Standard
-- All components and layouts must consume defined color tokens, typography rules, and spacing scales by name.
+## 7. Implementation Standard
+- All components and layouts must consume defined color tokens, typography rules, spacing scales, and animation timings by name.
 - Always apply idle, hover, and active states using the exact tokens mapped above.
 - Maintain fixed metric values strictly (no fluid ranges, no ad-hoc pixels).
