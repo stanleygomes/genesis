@@ -146,7 +146,7 @@ This project organises roles into the following playbooks:
 
 ### 2. Desktop Configuration (`desktop.yml`)
 
-> Target: User interfaces, web browsers, IDEs, desktop entries and database tools.
+> Target: User interfaces, web browsers, IDEs, desktop entries, agent configurations, and database tools.
 
 ### 3. Custom Setup 1 (`custom1.yml`)
 

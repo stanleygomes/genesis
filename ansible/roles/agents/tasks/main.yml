@@ -8,27 +8,36 @@
     mode: "0755"
   become: false
 
-- name: Check if repo .agents directory exists
+- name: Probe repository .agents directory candidates
   stat:
-    path: "{{ playbook_dir }}/../.agents"
-  register: repo_agents_stat
+    path: "{{ item }}"
+  loop:
+    - "{{ playbook_dir }}/../../.agents"
+    - "{{ playbook_dir }}/../.agents"
+    - "{{ playbook_dir }}/.agents"
+  register: repo_agents_candidates
+  become: false
+
+- name: Resolve repository .agents directory
+  set_fact:
+    resolved_repo_agents_dir: "{{ (repo_agents_candidates.results | selectattr('stat.exists') | map(attribute='item') | first) | default('') }}"
   become: false
 
 - name: Sync skills into ~/.agents/skills
   copy:
-    src: "{{ playbook_dir }}/../.agents/skills/"
+    src: "{{ resolved_repo_agents_dir }}/skills/"
     dest: "{{ agents_dir }}/skills/"
     mode: "0755"
   become: false
-  when: repo_agents_stat.stat.exists
+  when: resolved_repo_agents_dir != ''
 
 - name: Sync rules into ~/.agents/rules
   copy:
-    src: "{{ playbook_dir }}/../.agents/rules/"
+    src: "{{ resolved_repo_agents_dir }}/rules/"
     dest: "{{ agents_dir }}/rules/"
     mode: "0644"
   become: false
-  when: repo_agents_stat.stat.exists
+  when: resolved_repo_agents_dir != ''
 
 - name: Check for a skills folder in ~/.agents
   stat:
