@@ -1,0 +1,55 @@
+---
+# Zellij is a modern terminal multiplexer written in Rust.
+# We download the latest binary release from GitHub and install to ~/.local/bin.
+
+- name: Ensure ~/.local/bin directory exists
+  file:
+    path: "{{ zellij_install_dir }}"
+    state: directory
+    mode: "0755"
+  become: false
+
+- name: Install Zellij binary
+  shell: |
+    set -eu
+    ZELLIJ_VERSION=$(curl -s "https://api.github.com/repos/zellij-org/zellij/releases/latest" | grep -Po '"tag_name": "v?\K[^"]*' || true)
+    if [ -z "$ZELLIJ_VERSION" ]; then
+      echo "Failed to get zellij version. Retrying with fallback version {{ zellij_fallback_version }}"
+      ZELLIJ_VERSION="{{ zellij_fallback_version }}"
+    fi
+    TMP_DIR=$(mktemp -d)
+    trap 'rm -rf "$TMP_DIR"' EXIT
+    curl -sLo "$TMP_DIR/zellij.tar.gz" "https://github.com/zellij-org/zellij/releases/download/v${ZELLIJ_VERSION}/zellij-x86_64-unknown-linux-musl.tar.gz"
+    tar xf "$TMP_DIR/zellij.tar.gz" -C "$TMP_DIR" zellij
+    install -m 0755 "$TMP_DIR/zellij" "{{ zellij_install_dir }}/zellij"
+  args:
+    executable: /bin/bash
+    creates: "{{ zellij_install_dir }}/zellij"
+  become: false
+  ignore_errors: "{{ ansible_check_mode }}"
+
+- name: Ensure Zellij configuration directory exists
+  file:
+    path: "{{ zellij_config_dir }}"
+    state: directory
+    mode: "0755"
+  become: false
+
+- name: Add zellij helper function to .zshrc
+  blockinfile:
+    path: "{{ ansible_env.HOME }}/.zshrc"
+    marker: "# {mark} ZELLIJ CONFIGURATION"
+    block: |
+      # Zellij helper: 'zj' attaches/creates a session named after the current directory, or forwards arguments
+      zj() {
+        if [ $# -eq 0 ]; then
+          local session_name
+          session_name="$(basename "$PWD")"
+          zellij attach -c "$session_name"
+        else
+          zellij "$@"
+        fi
+      }
+    state: present
+  become: false
+  when: zellij_add_zsh_helper | default(true) | bool
