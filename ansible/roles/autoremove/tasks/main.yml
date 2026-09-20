@@ -33,6 +33,32 @@
   become: true
   when: autoremove_snap_packages | default([]) | length > 0
 
+# === NPM PACKAGES ===
+- name: Remove global NPM packages
+  shell: |
+    if [ -f "{{ ansible_env.HOME }}/.nvm/nvm.sh" ]; then
+      source "{{ ansible_env.HOME }}/.nvm/nvm.sh"
+    fi
+    removed=0
+    if command -v npm >/dev/null 2>&1 && npm list -g --depth=0 "{{ item }}" >/dev/null 2>&1; then
+      npm uninstall -g "{{ item }}"
+      removed=1
+    fi
+    if command -v pnpm >/dev/null 2>&1 && pnpm list -g --depth=0 "{{ item }}" >/dev/null 2>&1; then
+      pnpm remove -g "{{ item }}"
+      removed=1
+    fi
+    if [ "$removed" -eq 1 ]; then
+      echo "uninstalled"
+    fi
+  args:
+    executable: /bin/bash
+  register: npm_uninstall_result
+  changed_when: "'uninstalled' in npm_uninstall_result.stdout"
+  loop: "{{ autoremove_npm_packages | default([]) }}"
+  become: false
+  when: autoremove_npm_packages | default([]) | length > 0
+
 # === DESKTOP ENTRIES & SHORTCUTS ===
 - name: Remove desktop entries
   file:
