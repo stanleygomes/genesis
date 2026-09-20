@@ -5,6 +5,7 @@ autoremove_apt_packages:
   - filezilla
   - git-delta
   - claude-desktop
+  - ghostty
 
 
 # List of Flatpak packages to remove
@@ -25,6 +26,8 @@ autoremove_desktop_entries:
   - antigravity-url-handler.desktop
   - claude-code-url-handler.desktop
   - claude.desktop
+  - com.mitchellh.ghostty.desktop
+  - ghostty.desktop
 
 # List of custom paths (directories or files) to remove as superuser (become: true)
 autoremove_custom_paths:
@@ -38,6 +41,8 @@ autoremove_custom_paths:
   - /usr/share/pixmaps/antigravity-ide.png
   - /etc/apt/sources.list.d/claude-desktop.list
   - /usr/share/keyrings/claude-desktop-archive-keyring.asc
+  - /etc/apt/sources.list.d/debian-griffo-io.list
+  - /etc/apt/keyrings/debian-griffo-io.asc
 
 
 # List of user-space paths (directories or files) to remove (become: false)
@@ -55,4 +60,5 @@ autoremove_user_paths:
   - "{{ ansible_env.HOME }}/.local/state/claude"
   - "{{ ansible_env.HOME }}/.claude.json"
   - "{{ ansible_env.HOME }}/.config/gideon"
+  - "{{ ansible_env.HOME }}/.config/ghostty"
 
