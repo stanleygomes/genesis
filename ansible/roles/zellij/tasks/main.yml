@@ -35,7 +35,7 @@
     mode: "0755"
   become: false
 
-- name: Add zellij helper function to .zshrc
+- name: Add zellij helper function and auto-attach to .zshrc
   blockinfile:
     path: "{{ ansible_env.HOME }}/.zshrc"
     marker: "# {mark} ZELLIJ CONFIGURATION"
@@ -43,6 +43,10 @@
       # Zellij helper: 'zj' attaches/creates a session named after the current directory, or forwards arguments
       zj() {
         if [ $# -eq 0 ]; then
+          if [ -n "$ZELLIJ" ]; then
+            echo "Already inside Zellij session: $ZELLIJ_SESSION_NAME"
+            return 0
+          fi
           local session_name
           session_name="$(basename "$PWD")"
           zellij attach -c "$session_name"
@@ -50,6 +54,14 @@
           zellij "$@"
         fi
       }
+      {% if zellij_auto_attach | default(false) | bool %}
+
+      # Auto-start / auto-attach Zellij in interactive sessions when outside Zellij
+      if [[ -o interactive ]] && [ -t 1 ] && [ -z "$ZELLIJ" ] && [ -z "$NO_ZELLIJ" ]; then
+        zj
+      fi
+      {% endif %}
     state: present
   become: false
   when: zellij_add_zsh_helper | default(true) | bool
+
