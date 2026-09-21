@@ -4,4 +4,3 @@ zellij_install_dir: "{{ ansible_env.HOME }}/.local/bin"
 zellij_config_dir: "{{ ansible_env.HOME }}/.config/zellij"
 zellij_fallback_version: "0.45.1"
 zellij_add_zsh_helper: true
-zellij_auto_attach: true
