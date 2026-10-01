@@ -5,12 +5,6 @@
     state: present
   become: true
 
-- name: Check if Orca AppImage is installed
-  stat:
-    path: "{{ orca_bin_path }}"
-  register: orca_bin
-  become: false
-
 - name: Download Orca AppImage
   get_url:
     url: "{{ orca_appimage_url }}"
@@ -19,7 +13,6 @@
     owner: root
     group: root
   become: true
-  when: not orca_bin.stat.exists
 
 - name: Ensure user icons directory exists
   file:
