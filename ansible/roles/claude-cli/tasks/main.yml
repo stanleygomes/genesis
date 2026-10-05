@@ -17,3 +17,59 @@
     creates: "{{ claude_cli_bin_path }}"
   become: false
   ignore_errors: "{{ ansible_check_mode }}"
+
+- name: Ensure ~/.claude directory exists
+  file:
+    path: "{{ claude_cli_config_dir }}"
+    state: directory
+    mode: "0755"
+  become: false
+
+# The script depends on jq, which the zsh role installs.
+- name: Copy statusline script
+  copy:
+    src: "{{ playbook_dir }}/../configs/claude/statusline.sh"
+    dest: "{{ claude_cli_statusline_script_dest }}"
+    mode: "0755"
+  become: false
+
+- name: Check if Claude Code settings.json exists
+  stat:
+    path: "{{ claude_cli_settings_dest }}"
+  register: claude_cli_settings_stat
+  become: false
+
+- name: Create default settings.json if missing
+  copy:
+    dest: "{{ claude_cli_settings_dest }}"
+    mode: "0644"
+    content: "{}\n"
+  when: not claude_cli_settings_stat.stat.exists
+  become: false
+
+# settings.json is also written by Claude Code and other tools (hooks, theme),
+# so only the statusLine key is patched instead of templating the whole file.
+- name: Configure statusLine in settings.json
+  shell: |
+    python3 -c '
+    import json
+    path = "{{ claude_cli_settings_dest }}"
+    wanted = {
+        "type": "command",
+        "command": "bash {{ claude_cli_statusline_script_dest }}",
+    }
+    with open(path, "r") as f:
+        try:
+            data = json.load(f)
+        except Exception:
+            data = {}
+    if data.get("statusLine") != wanted:
+        data["statusLine"] = wanted
+        with open(path, "w") as f:
+            json.dump(data, f, indent=2)
+            f.write("\n")
+        print("changed")
+    '
+  register: claude_cli_statusline_result
+  changed_when: "'changed' in claude_cli_statusline_result.stdout"
+  become: false
