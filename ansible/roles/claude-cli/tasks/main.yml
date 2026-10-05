@@ -1,0 +1,19 @@
+---
+# Claude Code is Anthropic's official terminal CLI.
+# Ensure ~/.local/bin exists and install via the official standalone installer.
+
+- name: Ensure ~/.local/bin directory exists
+  file:
+    path: "{{ claude_cli_bin_dir }}"
+    state: directory
+    mode: "0755"
+  become: false
+
+- name: Install Claude Code CLI
+  shell: |
+    curl -fsSL {{ claude_cli_installer_url }} | bash
+  args:
+    executable: /bin/bash
+    creates: "{{ claude_cli_bin_path }}"
+  become: false
+  ignore_errors: "{{ ansible_check_mode }}"

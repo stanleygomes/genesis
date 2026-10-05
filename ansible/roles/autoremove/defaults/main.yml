@@ -24,7 +24,6 @@ autoremove_npm_packages:
 autoremove_desktop_entries:
   - antigravity-ide.desktop
   - antigravity-url-handler.desktop
-  - claude-code-url-handler.desktop
   - claude.desktop
   - com.mitchellh.ghostty.desktop
   - ghostty.desktop
@@ -33,8 +32,6 @@ autoremove_desktop_entries:
 autoremove_custom_paths:
   - /usr/local/bin/xh
   - /usr/local/bin/lazydocker
-  - /usr/local/bin/claude
-  - /usr/bin/claude
   - /usr/share/antigravity-ide
   - /usr/bin/antigravity-ide
   - /usr/bin/antigravity
@@ -54,11 +51,6 @@ autoremove_user_paths:
   - "{{ ansible_env.HOME }}/.config/Antigravity IDE"
   - "{{ ansible_env.HOME }}/.antigravity"
   - "{{ ansible_env.HOME }}/.config/Claude"
-  - "{{ ansible_env.HOME }}/.local/bin/claude"
-  - "{{ ansible_env.HOME }}/.local/share/claude"
-  - "{{ ansible_env.HOME }}/.cache/claude"
-  - "{{ ansible_env.HOME }}/.local/state/claude"
-  - "{{ ansible_env.HOME }}/.claude.json"
   - "{{ ansible_env.HOME }}/.config/gideon"
   - "{{ ansible_env.HOME }}/.config/ghostty"
 

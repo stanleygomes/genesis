@@ -103,6 +103,7 @@ Here is a list of all roles available in this repository:
 | `atuin`           | Installs and configures Atuin shell history search.                                                                                                           |
 | `autoremove`      | Aggregates uninstallation and removal actions (APT, Flatpak, Snap packages, desktop shortcuts, custom paths/files). |
 | `bruno`           | Installs Bruno API client (open-source, Git-friendly alternative to Postman/Insomnia).                                                                        |
+| `claude-cli`      | Installs Anthropic's Claude Code CLI (`claude`) via the official native installer.                                            |
 | `darktable`       | Installs Darktable photography workflow application and RAW developer.                                                                                        |
 | `dbeaver`         | Installs DBeaver Community Edition (SQL database explorer/client).                                                                                            |
 | `docker`          | Installs Docker Engine, Docker Compose, and sets permissions/user groups.                                                                                     |
@@ -143,7 +144,7 @@ This project organises roles into the following playbooks:
 
 ### 1. Minimal Configuration (`minimal.yml`)
 
-> Target: Lean workstation baseline — Git, Docker, Zsh/Oh My Zsh, CLI tools, Neovim, Herdr, Zellij, Arkflix CLI, and the `evangelist` biblical verse display.
+> Target: Lean workstation baseline — Git, Docker, Zsh/Oh My Zsh, CLI tools, Neovim, Herdr, Zellij, Arkflix CLI, Antigravity CLI, Claude CLI, and the `evangelist` biblical verse display.
 
 ### 2. Desktop Configuration (`desktop.yml`)
 

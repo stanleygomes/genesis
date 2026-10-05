@@ -1,0 +1,5 @@
+---
+# Defaults for claude-cli role
+claude_cli_installer_url: "https://claude.ai/install.sh"
+claude_cli_bin_dir: "{{ ansible_env.HOME | default(lookup('env', 'HOME')) }}/.local/bin"
+claude_cli_bin_path: "{{ claude_cli_bin_dir }}/claude"
