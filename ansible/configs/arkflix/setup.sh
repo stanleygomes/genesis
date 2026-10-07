@@ -82,7 +82,7 @@ MEDIA_DIRS=(
     "/var/media/musicas"
     "/var/lib/navidrome"
     "/var/lib/jellyfin/config"
-    "/var/lib/jellyfin/cache"
+    "/var/media/cache"
     "/opt/media-stack"
 )
 
@@ -104,7 +104,7 @@ services:
       - "127.0.0.1:8096:8096"
     volumes:
       - /var/lib/jellyfin/config:/config
-      - /var/lib/jellyfin/cache:/cache
+      - /var/media/cache:/cache
       - /var/media:/media:ro
     networks:
       - media-network
