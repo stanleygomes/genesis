@@ -86,9 +86,18 @@
   become: false
   when: autoremove_user_paths | default([]) | length > 0
 
+# === SHELL CONFIGURATION CLEANUP ===
+- name: Check if .zshrc exists
+  stat:
+    path: "{{ ansible_env.HOME }}/.zshrc"
+  register: autoremove_zshrc_stat
+  become: false
+
 - name: Clean up obsolete Gideon function from .zshrc
   blockinfile:
     path: "{{ ansible_env.HOME }}/.zshrc"
     marker: "# {mark} GIDEON CLI FUNCTION"
     state: absent
   become: false
+  when: autoremove_zshrc_stat.stat.exists
+
