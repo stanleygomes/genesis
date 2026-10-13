@@ -55,7 +55,7 @@
     content: |
       services:
         jellyfin:
-          image: jellyfin/jellyfin:latest
+          image: "jellyfin/jellyfin:{{ jellyfin_version }}"
           container_name: jellyfin
           restart: unless-stopped
           ports:
@@ -68,7 +68,7 @@
             - media-network
 
         navidrome:
-          image: deluan/navidrome:latest
+          image: "deluan/navidrome:{{ navidrome_version }}"
           container_name: navidrome
           restart: unless-stopped
           ports:
@@ -88,6 +88,11 @@
         media-network:
           external: true
   become: true
+
+- name: Pull latest Docker images for media stack
+  command: docker compose -f /opt/media-stack/docker-compose.yml pull
+  become: true
+  when: arkflix_pull_latest | default(true) | bool
 
 - name: Ensure Docker Compose media stack services are running
   command: docker compose -f /opt/media-stack/docker-compose.yml up -d

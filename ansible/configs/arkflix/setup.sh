@@ -132,6 +132,7 @@ networks:
 EOF
 
 info "Starting Docker Compose services (Jellyfin & Navidrome)..."
+docker compose -f /opt/media-stack/docker-compose.yml pull
 docker compose -f /opt/media-stack/docker-compose.yml up -d
 success "Media stack containers started."
 
