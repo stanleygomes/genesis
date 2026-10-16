@@ -1,0 +1,7 @@
+{
+  "id": "messi",
+  "displayName": "messi",
+  "description": "A tiny soccer star pet inspired by an Argentina number 10 footballer.",
+  "spritesheetPath": "spritesheet.webp",
+  "kind": "object"
+}

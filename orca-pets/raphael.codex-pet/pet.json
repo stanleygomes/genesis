@@ -1,0 +1,8 @@
+{
+  "id": "raphael",
+  "displayName": "Raphael",
+  "description": "A cute Raphael companion with twin sai, playful ninja moves, and a red mask.",
+  "spritesheetPath": "spritesheet.webp",
+  "spriteVersionNumber": 2,
+  "kind": "object"
+}

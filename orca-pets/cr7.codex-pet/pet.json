@@ -1,0 +1,7 @@
+{
+  "id": "cr7",
+  "displayName": "CR7",
+  "description": "A tiny red-kit football striker pet with a full SIUU celebration.",
+  "spritesheetPath": "spritesheet.webp",
+  "kind": "person"
+}

@@ -1,0 +1,7 @@
+{
+  "id": "salah",
+  "displayName": "Salah",
+  "description": "A Salah-inspired red football companion who plays with a ball.",
+  "spritesheetPath": "spritesheet.webp",
+  "kind": "person"
+}
