@@ -53,4 +53,5 @@ autoremove_user_paths:
   - "{{ ansible_env.HOME }}/.config/Claude"
   - "{{ ansible_env.HOME }}/.config/gideon"
   - "{{ ansible_env.HOME }}/.config/ghostty"
+  - "{{ ansible_env.HOME }}/.config/arkflix"
 

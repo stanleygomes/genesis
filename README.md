@@ -76,12 +76,11 @@ make check CONFIG="desktop"
 
 ```text
 ⚙️ ansible/            # Ansible configuration and deployment files
-  ├── configs/         # Specific tool configurations (VS Code, Arkflix CLI, etc.)
-  │     ├── arkflix/   # Arkflix Media Server configs
-  │     └── arkflix-cli/ # Arkflix Media Tools CLI (Makefile, arkflix.sh)
+  ├── configs/         # Specific tool configurations (VS Code, Arkflix, etc.)
+  │     └── arkflix/   # Arkflix Media Server configs
   ├── group_vars/      # Global configuration variables (all.yml)
   ├── playbooks/       # Setup playbooks (minimal.yml, desktop.yml, arkflix.yml, etc.)
-  ├── roles/           # Modular Ansible roles (arkflix, arkflix-cli, zsh, docker, etc.)
+  ├── roles/           # Modular Ansible roles (arkflix, zsh, docker, etc.)
   ├── ansible.cfg      # Ansible configuration settings
   └── inventory        # Ansible host definition (localhost)
 🛠️ Makefile            # Helper tasks to run, check, list playbooks
@@ -99,7 +98,6 @@ Here is a list of all roles available in this repository:
 | `agents`          | Syncs local Genesis `.agents` (Skills, rules) into `~/.agents` and `~/.claude`.                                                             |
 | `antigravity-cli` | Installs the Antigravity CLI client tool (`agy`) and configures custom statusLine settings. |
 | `arkflix`         | Provisions self-hosted media server stack (Jellyfin, Navidrome, Nginx reverse proxy, Let's Encrypt SSL, and UFW firewall).                                     |
-| `arkflix-cli`     | Deploys Arkflix Media Tools CLI (`~/.config/arkflix`), configures `arkflix` shell wrapper in `~/.zshrc`, and handles media downloads & Chromecast conversion. |
 | `atuin`           | Installs and configures Atuin shell history search.                                                                                                           |
 | `autoremove`      | Aggregates uninstallation and removal actions (APT, Flatpak, Snap packages, desktop shortcuts, custom paths/files). |
 | `bruno`           | Installs Bruno API client (open-source, Git-friendly alternative to Postman/Insomnia).                                                                        |
@@ -144,7 +142,7 @@ This project organises roles into the following playbooks:
 
 ### 1. Minimal Configuration (`minimal.yml`)
 
-> Target: Lean workstation baseline — Git, Docker, Zsh/Oh My Zsh, CLI tools, Neovim, Herdr, Zellij, Arkflix CLI, Antigravity CLI, Claude CLI, and the `evangelist` biblical verse display.
+> Target: Lean workstation baseline — Git, Docker, Zsh/Oh My Zsh, CLI tools, Neovim, Herdr, Zellij, Antigravity CLI, Claude CLI, and the `evangelist` biblical verse display.
 
 ### 2. Desktop Configuration (`desktop.yml`)
 

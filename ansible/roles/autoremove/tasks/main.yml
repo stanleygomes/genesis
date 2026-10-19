@@ -101,3 +101,11 @@
   become: false
   when: autoremove_zshrc_stat.stat.exists
 
+- name: Clean up obsolete Arkflix CLI function from .zshrc
+  blockinfile:
+    path: "{{ ansible_env.HOME }}/.zshrc"
+    marker: "# {mark} ARKFLIX CLI FUNCTION"
+    state: absent
+  become: false
+  when: autoremove_zshrc_stat.stat.exists
+
