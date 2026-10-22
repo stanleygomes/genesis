@@ -51,9 +51,9 @@
       # Alias para o bat/cat (no Ubuntu o comando é batcat)
       alias bat='batcat'
 
-      # Alias for installing/updating Genesis
+      # Function for installing/updating Genesis
       genesis() {
-          curl -sSL https://raw.githubusercontent.com/stanleygomes/genesis/refs/heads/master/bootstrap.sh | bash
+          curl -sSL https://raw.githubusercontent.com/stanleygomes/genesis/refs/heads/master/bootstrap.sh | bash -s -- "$@"
       }
     state: present
   become: false

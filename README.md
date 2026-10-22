@@ -20,7 +20,11 @@ Any other OS/distro (Fedora, Arch, macOS, WSL without a supported base, etc.) is
 To set up a fresh machine, just run:
 
 ```bash
+# Interactive mode (opens checklist menu)
 curl -sSL https://raw.githubusercontent.com/stanleygomes/genesis/refs/heads/master/bootstrap.sh | bash
+
+# Non-interactive mode (specify playbooks to run)
+curl -sSL https://raw.githubusercontent.com/stanleygomes/genesis/refs/heads/master/bootstrap.sh | bash -s -- minimal desktop
 ```
 
 This command will install `git`, `ansible`, clone this repository, and run the setup.
@@ -46,24 +50,35 @@ Before running the playbooks, you need to have **Ansible** installed on your mac
 
 ## Usage
 
-### 1. Interactive Bootstrap Script
+### 1. Bootstrap Script & Shell Command
 
-The easiest way to set up or update the environment is running `bootstrap.sh` (see the one-liner above). It installs the system requirements, clones/pulls this repository, and opens an interactive `whiptail` checklist to select which playbooks to run on top of `common.yml`.
+The easiest way to set up or update the environment is running `bootstrap.sh`. It installs the system requirements, clones/pulls this repository, and runs the selected playbooks.
 
-After the first run, the `zsh` role installs a `genesis` shell function in your `.zshrc` that re-runs the bootstrap one-liner, so you can just type:
+After the first run, the `zsh` role installs a `genesis` shell function in your `.zshrc`, allowing you to run it directly from any terminal.
+
+#### Interactive Mode (Whiptail Menu)
+
+Run without arguments to select playbooks interactively:
 
 ```bash
-genesis
+genesis update
 ```
 
-from any terminal to update or reconfigure your machine.
+#### Non-Interactive Mode (Direct Execution)
+
+Pass one or more playbooks as arguments (or `all` to run everything):
+
+```bash
+# Run specific playbooks
+genesis update minimal desktop
+```
 
 ### 2. Manual Execution (via Makefile)
 
 To run a specific configuration or multiple configurations:
 
 ```bash
-make run CONFIG="bash desktop"
+make run CONFIG="minimal desktop"
 ```
 
 ### 3. Run in dry-run mode:
