@@ -1,23 +1,20 @@
 ---
-description: Enforces Conventional Commits formatting and length limits when writing commit messages.
+description: Enforces Conventional Commits in Portuguese, super objective, hard 72-char limit.
 applyTo: '*'
 ---
 
 ## Instructions
-1. **Format:** `<type>(<scope>): <subject>` — scope optional, omit parens if unused.
-2. **Types:** `feat`, `fix`, `refactor`, `chore`, `docs`, `test`, `perf`, `style`, `build`, `ci`. Pick exactly one.
-3. **Subject:** imperative mood ("add", not "added"/"adds"), no capital first letter, no trailing period, max **50 chars**.
-4. **Body (optional):** blank line after subject, wrap at **72 chars/line**, explain *why*, not *what* (diff already shows what).
-5. **Breaking changes:** `!` after type/scope (`feat!:`) or a `BREAKING CHANGE:` footer — never both silently, always one of the two.
-6. **Footer (optional):** issue refs (`Refs #123`, `Closes #123`), one per line.
-7. **Never:** multiple unrelated changes in one commit, no vague subjects ("fix stuff", "update code"), no emoji.
+1. **Language:** commit messages MUST always be in Portuguese.
+2. **Format:** `<type>(<scope>): <subject>` — Conventional Commits mandatory. Scope is optional; omit the parentheses when unused.
+3. **Types:** `feat`, `fix`, `refactor`, `chore`, `docs`, `test`, `perf`, `style`, `build`, `ci`. Pick exactly one.
+4. **Hard 72-char limit per line** (subject, body, and footer). NEVER exceed: it breaks the pipeline. The limit includes `type` and `scope`.
+5. **Subject:** imperative mood ("adiciona", not "adicionado"), no trailing period, super objective — a single line.
+6. **Body (optional):** blank line after the subject, wrap at 72 chars/line, explain *why*, not *what* (the diff already shows what).
+7. **Breaking changes:** `!` after type/scope (`feat!:`) — never both silently.
+8. **Footer (optional):** issue references (`Refs #123`, `Closes #123`), one per line.
+9. **Never:** multiple unrelated changes in one commit, vague subjects ("corrige coisas", "ajusta código"), emoji.
 
 ## Example
 ```
-fix(auth): reject expired refresh tokens
-
-Expired tokens were silently re-issued instead of failing,
-letting revoked sessions stay alive indefinitely.
-
-Closes #482
+feat(auth): rejeita refresh token expirado
 ```
