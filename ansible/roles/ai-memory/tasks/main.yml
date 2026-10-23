@@ -1,0 +1,35 @@
+---
+# ai-memory is a local, Git-backed long-term memory engine for AI coding agents.
+# It wires lifecycle hooks and MCP tools across Antigravity CLI, Claude Code, and other agents.
+
+- name: Ensure ~/.local/bin directory exists
+  file:
+    path: "{{ ai_memory_bin_dir }}"
+    state: directory
+    mode: "0755"
+  become: false
+
+- name: Check if ai-memory is installed
+  stat:
+    path: "{{ ai_memory_bin_path }}"
+  register: ai_memory_bin_stat
+  become: false
+
+- name: Install ai-memory binary
+  shell: |
+    curl -fsSL {{ ai_memory_installer_url }} | sh
+  args:
+    executable: /bin/sh
+    creates: "{{ ai_memory_bin_path }}"
+  become: false
+  ignore_errors: "{{ ansible_check_mode }}"
+
+- name: Run ai-memory setup to initialize service and wire agent hooks
+  shell: |
+    {{ ai_memory_bin_path }} setup --yes
+  args:
+    executable: /bin/bash
+    creates: "{{ ansible_env.HOME }}/.local/share/ai-memory/config.toml"
+  become: false
+  when: ai_memory_run_setup | default(true) | bool
+  ignore_errors: "{{ ansible_check_mode }}"

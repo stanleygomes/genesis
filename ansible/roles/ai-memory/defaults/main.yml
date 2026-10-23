@@ -1,0 +1,7 @@
+---
+# Defaults for ai-memory role
+# ai-memory is a long-term cross-agent memory system (akitaonrails/ai-memory).
+ai_memory_bin_dir: "{{ ansible_env.HOME }}/.local/bin"
+ai_memory_bin_path: "{{ ai_memory_bin_dir }}/ai-memory"
+ai_memory_installer_url: "https://github.com/akitaonrails/ai-memory/releases/latest/download/install.sh"
+ai_memory_run_setup: true

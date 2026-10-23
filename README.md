@@ -111,6 +111,7 @@ Here is a list of all roles available in this repository:
 | Role              | Description                                                                                                                                                   |
 | :---------------- | :------------------------------------------------------------------------------------------------------------------------------------------------------------ |
 | `agents`          | Syncs local Genesis `.agents` (Skills, rules) into `~/.agents` and `~/.claude`.                                                             |
+| `ai-memory`       | Installs `ai-memory` (akitaonrails/ai-memory) persistent cross-agent memory engine, systemd user service, and wires agent hooks/MCP. |
 | `antigravity-cli` | Installs the Antigravity CLI client tool (`agy`) and configures custom statusLine settings. |
 | `arkflix`         | Provisions self-hosted media server stack (Jellyfin, Navidrome, Nginx reverse proxy, Let's Encrypt SSL, and UFW firewall).                                     |
 | `atuin`           | Installs and configures Atuin shell history search.                                                                                                           |
@@ -157,7 +158,7 @@ This project organises roles into the following playbooks:
 
 ### 1. Minimal Configuration (`minimal.yml`)
 
-> Target: Lean workstation baseline — Git, Docker, Zsh/Oh My Zsh, CLI tools, Neovim, Herdr, Zellij, Antigravity CLI, Claude CLI, and the `evangelist` biblical verse display.
+> Target: Lean workstation baseline — Git, Docker, Zsh/Oh My Zsh, CLI tools, Neovim, Herdr, Zellij, Antigravity CLI, Claude CLI, AI Memory, and the `evangelist` biblical verse display.
 
 ### 2. Desktop Configuration (`desktop.yml`)
 
