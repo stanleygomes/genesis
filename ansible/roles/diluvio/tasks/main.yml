@@ -6,14 +6,17 @@
     mode: "0755"
     owner: root
     group: root
-  become: true
 
-- name: Add diluvio alias to .zshrc
+- name: Check for existing Zsh configuration
+  stat:
+    path: "{{ ansible_env.HOME }}/.zshrc"
+  become: false
+  register: diluvio_zshrc
+
+- name: Remove obsolete Diluvio alias
   blockinfile:
     path: "{{ ansible_env.HOME }}/.zshrc"
     marker: "# {mark} DILUVIO ALIAS"
-    block: |
-      # Alias para limpeza de disco (dilúvio: varre o que sobra)
-      alias diluvio='sudo {{ diluvio_install_path }}'
-    state: present
+    state: absent
   become: false
+  when: diluvio_zshrc.stat.exists

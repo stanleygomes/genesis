@@ -73,6 +73,8 @@ Pass one or more playbooks as arguments (or `all` to run everything):
 genesis update minimal desktop
 ```
 
+Run `diluvio` in a terminal to clean disposable system files and empty your local trash after confirmation. System cleanup requires sudo.
+
 ### 2. Manual Execution (via Makefile)
 
 To run a specific configuration or multiple configurations:
@@ -120,6 +122,7 @@ Here is a list of all roles available in this repository:
 | `claude-cli`      | Installs Anthropic's Claude Code CLI (`claude`) via the official native installer and configures a custom statusLine. |
 | `darktable`       | Installs Darktable photography workflow application and RAW developer.                                                                                        |
 | `dbeaver`         | Installs DBeaver Community Edition (SQL database explorer/client).                                                                                            |
+| `diluvio`        | Installs a terminal command for confirmed cleanup of journal, APT cache, temporary files, and the local trash. |
 | `docker`          | Installs Docker Engine, Docker Compose, and sets permissions/user groups.                                                                                     |
 | `dust`           | Installs dust (a modern, intuitive version of du written in Rust).                                                                                            |
 | `evangelist`      | Displays a random biblical verse on terminal session launch using local genesis files.                                       |
@@ -158,7 +161,7 @@ This project organises roles into the following playbooks:
 
 ### 1. Minimal Configuration (`minimal.yml`)
 
-> Target: Lean workstation baseline — Git, Docker, Zsh/Oh My Zsh, CLI tools, Neovim, Herdr, Zellij, Antigravity CLI, Claude CLI, AI Memory, and the `evangelist` biblical verse display.
+> Target: Lean workstation baseline — Git, Docker, Zsh/Oh My Zsh, CLI tools, Neovim, Herdr, Zellij, Antigravity CLI, Claude CLI, AI Memory, the `diluvio` disk cleanup command, and the `evangelist` biblical verse display.
 
 ### 2. Desktop Configuration (`desktop.yml`)
 
