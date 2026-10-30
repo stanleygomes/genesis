@@ -1,0 +1,5 @@
+---
+openbot_version: "0.54.0"
+openbot_install_dir: "{{ ansible_env.HOME }}/.local/bin"
+openbot_appimage_path: "{{ openbot_install_dir }}/OpenBot.AppImage"
+openbot_release_url: "https://github.com/nightly-labs/openbot/releases/download/v{{ openbot_version }}"
