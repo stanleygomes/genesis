@@ -12,7 +12,8 @@ applyTo: '*'
 6. **Body (optional):** blank line after the subject, wrap at 72 chars/line, explain *why*, not *what* (the diff already shows what).
 7. **Breaking changes:** `!` after type/scope (`feat!:`) — never both silently.
 8. **Footer (optional):** issue references (`Refs #123`, `Closes #123`), one per line.
-9. **Never:** multiple unrelated changes in one commit, vague subjects ("corrige coisas", "ajusta código"), emoji.
+9. **Authorship:** never add a `Co-Authored-By` trailer.
+10. **Never:** multiple unrelated changes in one commit, vague subjects ("corrige coisas", "ajusta código"), emoji.
 
 ## Example
 ```
