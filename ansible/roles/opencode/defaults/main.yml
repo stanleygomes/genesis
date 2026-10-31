@@ -1,0 +1,6 @@
+---
+# Defaults for opencode role
+# OpenCode is an open-source AI coding agent (https://opencode.ai / anomalyco/opencode)
+opencode_installer_url: "https://opencode.ai/v2/install"
+opencode_bin_dir: "{{ ansible_env.HOME }}/.opencode/bin"
+opencode_bin_path: "{{ opencode_bin_dir }}/opencode"

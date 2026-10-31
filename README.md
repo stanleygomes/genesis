@@ -141,6 +141,7 @@ Here is a list of all roles available in this repository:
 | `nocturne`        | Installs Nocturne ambient sound and music player application via Flatpak.                                                                                     |
 | `node`            | Installs NVM, Node.js runtime, and the `pnpm` package manager.                                                                                                |
 | `openbot`         | Installs the OpenBot AI agent workspace via AppImage. |
+| `opencode`        | Installs OpenCode AI coding agent CLI (`opencode`) via official installer. |
 | `openspec`        | Installs OpenSpec CLI (`@fission-ai/openspec`) globally via NPM.                                                                                              |
 | `orca`            | Installs Orca AI agent desktop environment via AppImage and configures desktop entry and icon.                                                                |
 | `oxker`           | Installs oxker TUI binary for Docker container monitoring and aliases `docker ps`.                                                                            |
@@ -170,7 +171,7 @@ This project organises roles into the following playbooks:
 
 ### 3. Custom Setup 1 (`custom1.yml`)
 
-> Target: Custom bundle containing browsers, Bruno, databases, Nocturne, and OpenBot.
+> Target: Custom bundle containing browsers, Bruno, databases, Nocturne, OpenCode, and OpenBot.
 
 ### 4. Arkflix Media Server (`arkflix.yml`)
 

@@ -1,0 +1,19 @@
+---
+# OpenCode CLI (https://opencode.ai)
+# Installs the OpenCode AI coding agent via official install script into ~/.opencode/bin/opencode
+
+- name: Ensure OpenCode bin directory exists
+  file:
+    path: "{{ opencode_bin_dir }}"
+    state: directory
+    mode: "0755"
+  become: false
+
+- name: Install OpenCode CLI
+  shell: |
+    curl -fsSL {{ opencode_installer_url }} | bash
+  args:
+    executable: /bin/bash
+    creates: "{{ opencode_bin_path }}"
+  become: false
+  ignore_errors: "{{ ansible_check_mode }}"

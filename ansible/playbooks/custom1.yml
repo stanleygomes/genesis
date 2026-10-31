@@ -27,6 +27,7 @@
     - python
     - node
     - openspec
+    - opencode
     - openbot
     - agents
     - flameshot
