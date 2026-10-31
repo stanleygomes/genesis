@@ -20,6 +20,7 @@
     - google-chrome
     - dbeaver
     - vscode
+    - node
     - antigravity-cli
     - github-copilot
     - openspec
@@ -34,4 +35,3 @@
     - python
     - php
     - go
-    - node

@@ -17,6 +17,7 @@
   roles:
     - system
     - google-chrome
+    - node
     - mongodb-compass
     - mongosh
     - dbeaver
@@ -25,7 +26,6 @@
     - nocturne
     - java
     - python
-    - node
     - openspec
     - opencode
     - openbot
