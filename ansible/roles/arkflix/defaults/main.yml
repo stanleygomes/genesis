@@ -1,8 +1,0 @@
----
-# Arkflix role default variables
-domain_jellyfin: ""
-domain_navidrome: ""
-email: ""
-jellyfin_version: "latest"
-navidrome_version: "latest"
-arkflix_pull_latest: true

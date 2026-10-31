@@ -93,11 +93,10 @@ make check CONFIG="desktop"
 
 ```text
 ⚙️ ansible/            # Ansible configuration and deployment files
-  ├── configs/         # Specific tool configurations (VS Code, Arkflix, etc.)
-  │     └── arkflix/   # Arkflix Media Server configs
+  ├── configs/         # Specific tool configurations (VS Code, agy, etc.)
   ├── group_vars/      # Global configuration variables (all.yml)
-  ├── playbooks/       # Setup playbooks (minimal.yml, desktop.yml, arkflix.yml, etc.)
-  ├── roles/           # Modular Ansible roles (arkflix, zsh, docker, etc.)
+  ├── playbooks/       # Setup playbooks (minimal.yml, desktop.yml, custom1.yml)
+  ├── roles/           # Modular Ansible roles (zsh, docker, etc.)
   ├── ansible.cfg      # Ansible configuration settings
   └── inventory        # Ansible host definition (localhost)
 🛠️ Makefile            # Helper tasks to run, check, list playbooks
@@ -115,7 +114,6 @@ Here is a list of all roles available in this repository:
 | `agents`          | Syncs local Genesis `.agents` (Skills, rules) into `~/.agents` and `~/.claude`.                                                             |
 | `ai-memory`       | Installs `ai-memory` (akitaonrails/ai-memory) persistent cross-agent memory engine, systemd user service, and wires agent hooks/MCP. |
 | `antigravity-cli` | Installs the Antigravity CLI client tool (`agy`) and configures custom statusLine settings. |
-| `arkflix`         | Provisions self-hosted media server stack (Jellyfin, Navidrome, Nginx reverse proxy, Let's Encrypt SSL, and UFW firewall).                                     |
 | `atuin`           | Installs and configures Atuin shell history search.                                                                                                           |
 | `autoremove`      | Aggregates uninstallation and removal actions (APT, Flatpak, Snap packages, desktop shortcuts, custom paths/files). |
 | `bruno`           | Installs Bruno API client (open-source, Git-friendly alternative to Postman/Insomnia).                                                                        |
@@ -172,8 +170,4 @@ This project organises roles into the following playbooks:
 ### 3. Custom Setup 1 (`custom1.yml`)
 
 > Target: Custom bundle containing browsers, Bruno, databases, Nocturne, OpenCode, and OpenBot.
-
-### 4. Arkflix Media Server (`arkflix.yml`)
-
-> Target: Provisioning of self-hosted media server stack (Jellyfin, Navidrome, Nginx SSL reverse proxy, Let's Encrypt renewal, UFW).
 
