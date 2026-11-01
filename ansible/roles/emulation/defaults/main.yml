@@ -20,3 +20,28 @@ emulation_apt_packages:
 emulation_esde_release_api: "https://gitlab.com/api/v4/projects/es-de%2Femulationstation-de/releases/permalink/latest"
 emulation_esde_asset_name: "ES-DE_x64.AppImage"
 emulation_esde_bin_path: "/usr/local/bin/es-de"
+
+# RetroArch ships without cores. These are the ones ES-DE uses by default for the
+# consoles in the Arkflix library (nes, snes, gbc, genesis, n64, nds, psx, arcade),
+# downloaded from the official libretro buildbot into the Flatpak's cores folder.
+emulation_retroarch_cores_dir: "{{ ansible_env.HOME }}/.var/app/org.libretro.RetroArch/config/retroarch/cores"
+emulation_retroarch_buildbot: "https://buildbot.libretro.com/nightly/linux/x86_64/latest"
+emulation_retroarch_cores:
+  - mesen
+  - snes9x
+  - gambatte
+  - genesis_plus_gx
+  - mupen64plus_next
+  - melondsds
+  - mednafen_psx
+  - fbneo
+
+# ES-DE reads games from the Arkflix library mounted read-only by solomon's
+# `make arkflix-mount`. Written only when absent, so later ES-DE changes stick.
+emulation_esde_rom_dir: "{{ ansible_env.HOME }}/Games/arkflix/roms"
+# Per-console emulator override: standalone PPSSPP and PCSX2 run better than the
+# RetroArch defaults, and FinalBurn Neo is far smaller than the default MAME core.
+emulation_esde_alternative_emulators:
+  psp: "PPSSPP (Standalone)"
+  ps2: "PCSX2 (Standalone)"
+  arcade: "FinalBurn Neo"

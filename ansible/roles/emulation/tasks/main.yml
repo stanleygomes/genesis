@@ -63,6 +63,63 @@
   become: true
   when: not emulation_esde_bin.stat.exists
 
+- name: Ensure RetroArch cores directory exists
+  file:
+    path: "{{ emulation_retroarch_cores_dir }}"
+    state: directory
+    mode: "0755"
+  become: false
+
+# `creates` skips cores already present, so reruns do not download again
+- name: Download RetroArch cores
+  unarchive:
+    src: "{{ emulation_retroarch_buildbot }}/{{ item }}_libretro.so.zip"
+    dest: "{{ emulation_retroarch_cores_dir }}"
+    remote_src: true
+    creates: "{{ emulation_retroarch_cores_dir }}/{{ item }}_libretro.so"
+  loop: "{{ emulation_retroarch_cores }}"
+  become: false
+
+- name: Ensure ES-DE settings directory exists
+  file:
+    path: "{{ ansible_env.HOME }}/ES-DE/settings"
+    state: directory
+    mode: "0755"
+  become: false
+
+# force: false keeps whatever the user changed later inside ES-DE
+- name: Point ES-DE to the Arkflix game library
+  copy:
+    dest: "{{ ansible_env.HOME }}/ES-DE/settings/es_settings.xml"
+    force: false
+    mode: "0644"
+    content: |
+      <?xml version="1.0"?>
+      <string name="ROMDirectory" value="{{ emulation_esde_rom_dir }}" />
+  become: false
+
+- name: Ensure ES-DE gamelist directories exist
+  file:
+    path: "{{ ansible_env.HOME }}/ES-DE/gamelists/{{ item.key }}"
+    state: directory
+    mode: "0755"
+  loop: "{{ emulation_esde_alternative_emulators | dict2items }}"
+  become: false
+
+- name: Set the emulator ES-DE uses per console
+  copy:
+    dest: "{{ ansible_env.HOME }}/ES-DE/gamelists/{{ item.key }}/gamelist.xml"
+    force: false
+    mode: "0644"
+    content: |
+      <?xml version="1.0"?>
+      <alternativeEmulator>
+      	<label>{{ item.value }}</label>
+      </alternativeEmulator>
+      <gameList />
+  loop: "{{ emulation_esde_alternative_emulators | dict2items }}"
+  become: false
+
 - name: Ensure user applications directory exists
   file:
     path: "{{ ansible_env.HOME }}/.local/share/applications"
