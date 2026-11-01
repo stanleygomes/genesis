@@ -1,0 +1,20 @@
+---
+# Emulators from Flathub: RetroArch covers every console in the RomM library;
+# standalone PPSSPP runs PSP faster than RetroArch's PPSSPP core.
+emulation_flatpak_apps:
+  - org.libretro.RetroArch
+  - org.ppsspp.PPSSPP
+emulation_flatpak_remote_name: "flathub"
+emulation_flatpak_remote_url: "https://dl.flathub.org/repo/flathub.flatpakrepo"
+
+# sshfs mounts the Arkflix game library read-only (solomon: make arkflix-mount);
+# libfuse2 runs the ES-DE AppImage.
+emulation_apt_packages:
+  - sshfs
+  - libfuse2
+
+# ES-DE (EmulationStation Desktop Edition): console-like library over RetroArch.
+# The Flathub entry has no metadata, so the official AppImage from GitLab is used.
+emulation_esde_release_api: "https://gitlab.com/api/v4/projects/es-de%2Femulationstation-de/releases/permalink/latest"
+emulation_esde_asset_name: "ES-DE_x64.AppImage"
+emulation_esde_bin_path: "/usr/local/bin/es-de"

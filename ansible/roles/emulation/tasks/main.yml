@@ -1,0 +1,92 @@
+---
+# Check if flatpak is installed before attempting to manage Flatpak applications
+- name: Check if Flatpak is installed
+  command: which flatpak
+  register: emulation_flatpak_check
+  ignore_errors: true
+  changed_when: false
+  become: false
+
+- name: Install Flatpak package manager
+  apt:
+    name: flatpak
+    state: present
+  become: true
+  when: emulation_flatpak_check.rc != 0
+
+# Flathub remote is required to resolve the emulator packages
+- name: Ensure Flathub repository is configured
+  community.general.flatpak_remote:
+    name: "{{ emulation_flatpak_remote_name }}"
+    flatpakrepo_url: "{{ emulation_flatpak_remote_url }}"
+    state: present
+    method: system
+  become: true
+
+- name: Install emulator Flatpak applications
+  community.general.flatpak:
+    name: "{{ emulation_flatpak_apps }}"
+    remote: "{{ emulation_flatpak_remote_name }}"
+    state: present
+    method: system
+  become: true
+
+- name: Install sshfs and AppImage support
+  apt:
+    name: "{{ emulation_apt_packages }}"
+    state: present
+  become: true
+
+# Probe first so the GitLab API is only queried when ES-DE is missing
+- name: Check if ES-DE is installed
+  stat:
+    path: "{{ emulation_esde_bin_path }}"
+  register: emulation_esde_bin
+  become: false
+
+# The latest release lists its downloads; pick the x64 AppImage by name
+- name: Look up the latest ES-DE release
+  uri:
+    url: "{{ emulation_esde_release_api }}"
+    return_content: true
+  register: emulation_esde_release
+  become: false
+  when: not emulation_esde_bin.stat.exists
+
+- name: Download ES-DE AppImage
+  get_url:
+    url: "{{ (emulation_esde_release.json.assets.links | selectattr('name', 'equalto', emulation_esde_asset_name) | first).url }}"
+    dest: "{{ emulation_esde_bin_path }}"
+    mode: "0755"
+    owner: root
+    group: root
+  become: true
+  when: not emulation_esde_bin.stat.exists
+
+- name: Ensure user applications directory exists
+  file:
+    path: "{{ ansible_env.HOME }}/.local/share/applications"
+    state: directory
+    mode: "0755"
+  become: false
+
+- name: Create ES-DE desktop entry
+  copy:
+    dest: "{{ ansible_env.HOME }}/.local/share/applications/es-de.desktop"
+    mode: "0644"
+    content: |
+      [Desktop Entry]
+      Name=ES-DE
+      Comment=Game library frontend (RetroArch, PPSSPP)
+      Exec={{ emulation_esde_bin_path }}
+      Icon=applications-games
+      Terminal=false
+      Type=Application
+      Categories=Game;Emulator;
+      StartupNotify=true
+  become: false
+
+- name: Update user desktop database
+  command: update-desktop-database "{{ ansible_env.HOME }}/.local/share/applications"
+  changed_when: false
+  become: false
