@@ -123,7 +123,7 @@ Here is a list of all roles available in this repository:
 | `diluvio`        | Installs a terminal command for confirmed cleanup of journal, APT cache, temporary files, and the local trash. |
 | `docker`          | Installs Docker Engine, Docker Compose, and sets permissions/user groups.                                                                                     |
 | `dust`           | Installs dust (a modern, intuitive version of du written in Rust).                                                                                            |
-| `emulation`       | Installs RetroArch and PPSSPP (Flatpak), the ES-DE game library frontend (AppImage) and sshfs to mount the Arkflix games. |
+| `emulation`       | Installs RetroArch, PPSSPP and PCSX2 (Flatpak), the ES-DE game library frontend (AppImage) and sshfs to mount the Arkflix games. |
 | `evangelist`      | Displays a random biblical verse on terminal session launch using local genesis files.                                       |
 | `eza`            | Installs and configures eza (a modern, feature-rich replacement for ls).                                                                                      |
 | `flameshot`       | Installs Flameshot screenshot tool and binds the Print Screen shortcut to it.                                                 |
@@ -167,7 +167,7 @@ This project organises roles into the following playbooks:
 
 ### 2. Desktop Configuration (`desktop.yml`)
 
-> Target: User interfaces, web browsers, IDEs, the VLC media player, game emulators (RetroArch, PPSSPP, ES-DE), desktop entries, agent configurations, OpenBot, and database tools.
+> Target: User interfaces, web browsers, IDEs, the VLC media player, game emulators (RetroArch, PPSSPP, PCSX2, ES-DE), desktop entries, agent configurations, OpenBot, and database tools.
 
 ### 3. Custom Setup 1 (`custom1.yml`)
 

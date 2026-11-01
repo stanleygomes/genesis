@@ -1,9 +1,11 @@
 ---
 # Emulators from Flathub: RetroArch covers every console in the RomM library;
-# standalone PPSSPP runs PSP faster than RetroArch's PPSSPP core.
+# standalone PPSSPP runs PSP faster than RetroArch's PPSSPP core, and PCSX2 runs
+# PS2, which the RomM browser player does not support at all.
 emulation_flatpak_apps:
   - org.libretro.RetroArch
   - org.ppsspp.PPSSPP
+  - net.pcsx2.PCSX2
 emulation_flatpak_remote_name: "flathub"
 emulation_flatpak_remote_url: "https://dl.flathub.org/repo/flathub.flatpakrepo"
 
