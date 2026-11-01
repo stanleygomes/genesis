@@ -149,6 +149,7 @@ Here is a list of all roles available in this repository:
 | `starship`        | Installs and configures Starship prompt for Bash and Zsh.                                                                                                     |
 | `terraform`       | Installs Terraform CLI tool from HashiCorp releases.                                                                                                          |
 | `tuicr`           | Installs tuicr (Terminal UI for Code Reviews).                                                                                                               |
+| `vlc`             | Installs VLC media player (local media and network streams such as RTSP cameras).                                                                             |
 | `vscode`          | Installs VS Code, syncs user settings/keybindings, and installs extensions.                                                                                   |
 | `zellij`          | Installs Zellij terminal multiplexer binary and configures shell integration.                                                                                 |
 | `zsh`             | Installs Zsh and Oh My Zsh, sets Zsh as default shell, and configures core aliases/functions.                                                                 |
@@ -165,7 +166,7 @@ This project organises roles into the following playbooks:
 
 ### 2. Desktop Configuration (`desktop.yml`)
 
-> Target: User interfaces, web browsers, IDEs, desktop entries, agent configurations, OpenBot, and database tools.
+> Target: User interfaces, web browsers, IDEs, the VLC media player, desktop entries, agent configurations, OpenBot, and database tools.
 
 ### 3. Custom Setup 1 (`custom1.yml`)
 
