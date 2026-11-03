@@ -62,3 +62,19 @@
   command: update-desktop-database "{{ ansible_env.HOME }}/.local/share/applications"
   changed_when: false
   become: false
+
+- name: Ensure user configuration directory exists
+  file:
+    path: "{{ ansible_env.HOME }}/.config"
+    state: directory
+    mode: '0755'
+  become: false
+
+- name: Clone or update Orca plugins
+  git:
+    repo: "{{ orca_plugins_repo }}"
+    dest: "{{ orca_plugins_path }}"
+    version: master
+    update: true
+    force: true
+  become: false

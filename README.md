@@ -142,7 +142,7 @@ Here is a list of all roles available in this repository:
 | `openbot`         | Installs the OpenBot AI agent workspace via AppImage. |
 | `opencode`        | Installs OpenCode AI coding agent CLI (`opencode`) via official installer. |
 | `openspec`        | Installs OpenSpec CLI (`@fission-ai/openspec`) globally via NPM.                                                                                              |
-| `orca`            | Installs Orca AI agent desktop environment via AppImage and configures desktop entry and icon.                                                                |
+| `orca`            | Installs Orca via AppImage and clones or updates plugins in `~/.config/orca-plugins`, discarding tracked local changes.                                                                |
 | `oxker`           | Installs oxker TUI binary for Docker container monitoring and aliases `docker ps`.                                                                            |
 | `php`             | Installs PHP runtime, extensions, and Composer package manager.                                                                                               |
 | `python`          | Installs Python runtime dependencies, Astral `uv` tool, and Python 3.14.                                                                                      |

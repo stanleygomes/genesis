@@ -2,3 +2,5 @@
 orca_appimage_url: "https://github.com/stablyai/orca/releases/latest/download/orca-linux.AppImage"
 orca_icon_url: "https://raw.githubusercontent.com/stablyai/orca/main/resources/icon.png"
 orca_bin_path: "/usr/local/bin/orca"
+orca_plugins_repo: "https://github.com/stanleygomes/orca-plugins.git"
+orca_plugins_path: "{{ ansible_env.HOME }}/.config/orca-plugins"
