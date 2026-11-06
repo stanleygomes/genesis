@@ -7,6 +7,10 @@ description: Retro design system (by Noemi) — vintage print base with 8-bit an
 
 **8-bit in the details, 16-bit in the structure, vintage print everywhere else.** Text meant to be read is never in a pixel font or under an effect.
 
+## 0. Before anything
+- **Check the project first.** Look for existing design rules or colors: AGENTS.md/CLAUDE.md/README, theme or token files (`:root` vars, `tailwind.config`, `theme.*`), a design doc, an existing stylesheet. What the project defines **wins**; this skill only fills the gaps. Conflict? Ask before overriding.
+- **Say you are using it.** Tell the user, in one short block, that `retro-design` is in use and what was decided: what came from the project, which layers apply (print/8-bit/16-bit), which optional modules were chosen or left out, and what is still pending their answer.
+
 ## 1. Ask first (decision points)
 Sections 2–6 always apply. **Before using anything in [OPTIONS.md](OPTIONS.md), ask the user**, in one message: list only the options that fit the screen, one line each, with your recommendation first. Never add them by default; never ask again for what was already decided in this project (check its AGENTS.md/README).
 - **CRT tube** (where: intro, STAGE CLEAR, LED signs) · **Analog glitch** (which events) · **Stage floor** (grid / Mode 7 / synthwave)
