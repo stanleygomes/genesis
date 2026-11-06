@@ -1,9 +1,11 @@
 ---
-name: design-definition
-description: Authoritative design system tokens, typography scales, spacing rules, and structural guidelines for UI interfaces. Use when creating, styling, or reviewing UI layouts, components, and tokens.
+name: bento-design
+description: Bento design system — clean, modern bento-grid UI (green primary, slate, Inter, rounded 24px cards, flat borders) with exact tokens, typography, spacing and components. Default for creating, styling or reviewing UI layouts, components and tokens. Not for retro, arcade, 8-bit, pixel or vintage interfaces: use noemi-retro-design.
 ---
 
-# Skill: Design System Definition
+# Skill: Bento Design
+
+Default UI style: clean, modern, bento-grid cards. For retro/arcade/vintage, use `noemi-retro-design` instead.
 
 ## 1. Color System (Exact Tokens & High Contrast)
 - `color-primary`: `#009739`
