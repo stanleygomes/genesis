@@ -11,6 +11,7 @@ Arcade cabinet meets vintage print: flat colors, thick ink borders, hard offset 
 - **Display / titles:** `"Bungee Shade"` (hero only), `"Bungee"` (buttons, labels, h2).
 - **Body:** `"Overpass"` `400`/`700` — highway-sign sans, very legible.
 - **Code / data:** `"Overpass Mono"` `400`.
+- **Typewriter (nav, menus, tags, status lines):** `"Courier Prime"` `700`, uppercase, `+0.15em`, `13–14px`.
 - **Game bits:** `"Press Start 2P"` — scores, HUD, toasts, verdicts. Never for paragraphs.
 
 ## 2. Color Tokens (`light-dark()`; light = paper, dark = cabinet)
@@ -45,7 +46,7 @@ Arcade cabinet meets vintage print: flat colors, thick ink borders, hard offset 
 - **Floor:** pixel ground strip (`5px` grass + `10px` checkered dirt) for mascots to walk on.
 
 ## 6. Components
-Specs in [REFERENCE.md](REFERENCE.md): button, tabs, input/textarea, select, LED board, status, HUD, life bar, toast, stage map, verdict, pixel sprite, notice panel.
+Specs in [REFERENCE.md](REFERENCE.md): nav bar, button, tabs, input/textarea, select, LED board, status, HUD, life bar, toast, stage map, verdict, pixel sprite, notice panel.
 
 ## 7. Old References (borrow, never copy)
 - **Arcade 80s:** Pac-Man, Galaga, Space Invaders (attract mode, INSERT COIN, 1UP/HI).

@@ -2,6 +2,11 @@
 
 Tokens from [SKILL.md](SKILL.md). Fixed values only.
 
+## Nav Bar (typewriter)
+- bg `board`, items Courier Prime `700` `13px` uppercase `+0.15em`, cream text, gap `32px`, height `48px`.
+- Hover: underline `2px` `coin`, offset `6px`. Current page: `coin` text.
+- Status at the right (e.g. `● NOW BOOKING · FALL 2026`): same type in `red`, `●` blinking `1.2s steps(1)`.
+
 ## Button (arcade)
 - Pill `999px`, padding `10px 20px`, border `3px solid edge`, bg `coin`, text `#1B1B1F`, Bungee `14px` `+0.05em`, gap `8px`, shadow `0 5px 0 shadow`.
 - Hover `filter: brightness(1.06)` · Active `translateY(5px)` + shadow `0 0 0` (pressed) · `transition: transform 80ms`.
