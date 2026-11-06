@@ -1,4 +1,4 @@
-# Components: Noemi — Retro Design
+# Components: Retro Design
 
 Tokens and layers from [SKILL.md](SKILL.md). Fixed values only.
 
