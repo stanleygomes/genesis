@@ -5,7 +5,7 @@ description: Noemi's retro design system — 80s arcade and vintage game UI with
 
 # Skill: Noemi — Retro Design
 
-Arcade cabinet meets vintage print: flat colors, thick ink borders, hard offset shadows, pixel type for game bits only. Fun in the details, calm in the layout.
+Arcade cabinet meets vintage print: flat colors, thick ink borders, hard offset shadows, pixel type for game bits only. Fun in the details, calm in the layout. For clean modern UI, use `bento-design` instead.
 
 ## 1. Fonts (self-hosted via `@fontsource/*`, never a CDN link)
 - **Display / titles:** `"Bungee Shade"` (hero only), `"Bungee"` (buttons, labels, h2).

@@ -1,6 +1,6 @@
-# Component Reference: Design System
+# Component Reference: Bento Design
 
-All components reference exact tokens from [SKILL.md](file:///home/stanley/projects/genesis/.agents/skills/design-definition/SKILL.md). All dimensions, margins, and borders use fixed values.
+All components reference exact tokens from [SKILL.md](SKILL.md). All dimensions, margins, and borders use fixed values.
 
 ---
 
