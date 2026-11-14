@@ -19,7 +19,6 @@
 ## Stage floor (perspective)
 - **Grid (default pick):** 160×100 canvas, pixelated; 1px lines in `blue` ramp, amber horizon, dithered sky, pixel sun with cut bands, 12 fps.
 - **Mode 7:** checkered floor running to the horizon in 16-bit ramps (F-Zero/Mario Kart). More color and motion; busier behind text.
-- **Synthwave:** magenta neon grid with glow, purple→orange sky, striped sun. Clashes with print/pixel and leans cyberpunk: only if explicitly wanted.
 - All: dark game screens only, never behind forms. Redraw pixel floors only when the 12 fps step changes.
 
 ## Ink & paper (neobrutalism × 1930s cartoon)

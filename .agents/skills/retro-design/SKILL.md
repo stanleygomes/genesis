@@ -1,6 +1,6 @@
 ---
 name: retro-design
-description: Retro design system (by Noemi) — vintage print base with 8-bit and 16-bit game layers, exact fonts, colors, sizes and components, plus optional modules (CRT tube, analog glitch, stage floor, synthwave, ink & paper neobrutalism × 1930s cartoon) that require asking the user first. Use when creating, styling or reviewing a retro, arcade, 8-bit, 16-bit, pixel or vintage interface. For clean modern UI, use bento-design.
+description: Retro design system (by Noemi) — vintage print base with 8-bit and 16-bit game layers, exact fonts, colors, sizes and components, plus optional modules (CRT tube, analog glitch, stage floor, ink & paper neobrutalism × 1930s cartoon) that require asking the user first. Use when creating, styling or reviewing a retro, arcade, 8-bit, 16-bit, pixel or vintage interface. For clean modern UI, use bento-design.
 ---
 
 # Skill: Retro Design
@@ -13,7 +13,7 @@ description: Retro design system (by Noemi) — vintage print base with 8-bit an
 
 ## 1. Ask first (decision points)
 Sections 2–6 always apply. **Before using anything in [OPTIONS.md](OPTIONS.md), ask the user**, in one message: list only the options that fit the screen, one line each, with your recommendation first. Never add them by default; never ask again for what was already decided in this project (check its AGENTS.md/README).
-- **CRT tube** (where: intro, STAGE CLEAR, LED signs) · **Analog glitch** (which events) · **Stage floor** (grid / Mode 7 / synthwave)
+- **CRT tube** (where: intro, STAGE CLEAR, LED signs) · **Analog glitch** (which events) · **Stage floor** (grid / Mode 7)
 - **Ink & paper** (neobrutalism × 1930s cartoon: crisp grid and color blocks, hand-drawn ink objects, stamps, balloons, telegram, mascot): replaces the print look, keep effects faint
 - Also ask: dark-only game screens? sound? mascot sprite?
 
@@ -48,7 +48,7 @@ Sections 2–6 always apply. **Before using anything in [OPTIONS.md](OPTIONS.md)
 - Motion stepped (`steps(n)`), `≤ 1.8s`, off under `prefers-reduced-motion`. Intro `≤ 1s`, once a day.
 - Errors never take the full screen; celebrations may. Header clean: no strips under it. One loud element per screen.
 - CSS/canvas only: no image requests, no `innerHTML`. Backgrounds: light 2px dot every 16px; dark pixel starfield.
-- Never: digital glitch (datamosh, pixel sorting), clashing neon palettes, everything tilted, "ugly on purpose", system fonts.
+- Never: digital glitch (datamosh, pixel sorting), clashing neon palettes, synthwave/cyberpunk, everything tilted, "ugly on purpose", system fonts.
 
 ## 7. References (borrow, never copy)
 Pac-Man, Galaga, Space Invaders · NES title screens, Konami code · Street Fighter II · Super Mario World map · F-Zero/Mario Kart (Mode 7) · Final Fantasy/Chrono Trigger windows · PICO-8 · 90s BIOS boot screens · Solari boards, LED signs · 70s enamel signs, hazard stripes · 1930s rubber hose shorts (era only).
