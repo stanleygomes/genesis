@@ -29,3 +29,15 @@
 - **Giant number:** one per screen, Bungee `clamp(44px, 8vw, 92px)`, accent on part of it.
 - **Bare structure:** visible grid with `3px` dividers, black caption tags (`01`, `02`), mono metadata.
 - **Never:** random garish palette, more than one sticker, everything rotated or overlapping.
+
+## 1930s cartoon (rubber hose)
+- **What it is:** the look of 1930s hand-drawn cartoons (Fleischer, early studio shorts): film print, boiling ink lines, sepia paper. Borrow the **era**, never a specific game or show (no characters, art or screens from Cuphead or any other title).
+- **Where:** a whole product identity (not a game-screen module); works on long-use apps only with the effects kept faint. Replaces the print layer's look: no 8-bit/16-bit mixed in, no dot background.
+- **Tokens (`light-dark()`: aged paper / projection room):** `paper` `#EFE2C4`/`#17110C` · `card` `#F8EFD9`/`#241A13` · `ink` `#24170F`/`#F1E4C6` · `ink-soft` `#6A5442`/`#B9A588` · `line` `#24170F`/`#E9DABA` · `red` `#B5322A`/`#E0574A` · `mustard` `#D49A2E`/`#E8B34A` · `teal` `#2F6F6B`/`#5FA8A1` · `balloon` `#FFF8E8`/`#2E2219`. Background: paper + two faint watercolor washes (mustard top-left, teal bottom-right, `radial-gradient` ≤18% alpha).
+- **Fonts:** title `Limelight` (stroke `2px` ink + `4px 4px 0` ink shadow, fill mustard) · labels/buttons `Bevan` · body `Alegreya` (italic for taglines) · logs, meta, telegrams `Special Elite`.
+- **Boiling line:** outlines on a `::before` with `filter: url(#boil)` (`feTurbulence` fractalNoise `0.035`, seed cycling 3 values `calcMode=discrete` over `0.9s`, `feDisplacementMap scale≈1.6`). Never on text. Uneven radii (`16px 20px 14px 18px / 18px 14px 20px 16px`), `3px` line, `6px 7px 0` hard shadow.
+- **Film layer (keep it light):** fixed overlay, `pointer-events: none` · grain canvas ~240×150, ~30% of pixels at alpha 22, redrawn every ~180ms, opacity `.2` (`multiply`) / `.14` dark (`screen`) · vignette `transparent 68% → rgb(70 40 15/.3)` (`.5` black on dark) · one 1px scratch, opacity ≤ `.08`, visible a few frames every ~9s. **No brightness flicker**: too tiring.
+- **Components:** speech balloons with tail (agent/chat) · rubber stamps for status (double border, `rotate(-3deg)`) · film-reel progress bar (sprocket holes, fill `steps(5)`) · confirmations as a **telegram** (`Special Elite`, ends in "STOP.") · ticket buttons (notched sides via `mask` radial-gradients, `3px 4px 0` drop shadow) · nav as a theater program (dotted leaders) · ribbon banner for the tagline.
+- **Mascot:** original rubber-hose character tied to the product (pie-cut eyes, white 4-finger gloves, hose limbs, bob `steps(3)`, wave `steps(2)`), drawn in SVG with the boil filter. Never a lookalike of an existing character.
+- **Motion:** stepped only. View change = iris close/open (`box-shadow: 0 0 0 300vmax` hole, `steps(6)`/`steps(7)`, ~0.65s total). Cards at `±0.5deg` alternating, straighten on hover. All of it off under `prefers-reduced-motion` (also remove the SVG `<animate>`).
+- **Never:** heavy grain, flicker, scratches or boil at full strength (it reads as broken), boil on paragraphs, neon colors, pixel fonts.

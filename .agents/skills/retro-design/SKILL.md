@@ -15,6 +15,7 @@ description: Retro design system (by Noemi) — vintage print base with 8-bit an
 Sections 2–6 always apply. **Before using anything in [OPTIONS.md](OPTIONS.md), ask the user**, in one message: list only the options that fit the screen, one line each, with your recommendation first. Never add them by default; never ask again for what was already decided in this project (check its AGENTS.md/README).
 - **CRT tube** (where: intro, STAGE CLEAR, LED signs) · **Analog glitch** (which events) · **Stage floor** (grid / Mode 7 / synthwave)
 - **Neobrutalism extras** (lift hover, tilted sticker, color blocks, giant number, bare structure)
+- **1930s cartoon** (rubber hose identity: film grain, boiling lines, balloons, telegram, mascot): replaces the print look, keep effects faint
 - Also ask: dark-only game screens? sound? mascot sprite?
 
 ## 2. Layers
@@ -51,6 +52,6 @@ Sections 2–6 always apply. **Before using anything in [OPTIONS.md](OPTIONS.md)
 - Never: digital glitch (datamosh, pixel sorting), clashing neon palettes, everything tilted, "ugly on purpose", system fonts.
 
 ## 7. References (borrow, never copy)
-Pac-Man, Galaga, Space Invaders · NES title screens, Konami code · Street Fighter II · Super Mario World map · F-Zero/Mario Kart (Mode 7) · Final Fantasy/Chrono Trigger windows · PICO-8 · 90s BIOS boot screens · Solari boards, LED signs · 70s enamel signs, hazard stripes.
+Pac-Man, Galaga, Space Invaders · NES title screens, Konami code · Street Fighter II · Super Mario World map · F-Zero/Mario Kart (Mode 7) · Final Fantasy/Chrono Trigger windows · PICO-8 · 90s BIOS boot screens · Solari boards, LED signs · 70s enamel signs, hazard stripes · 1930s rubber hose shorts (era only).
 
 Components: [REFERENCE.md](REFERENCE.md) · Optional modules: [OPTIONS.md](OPTIONS.md).
