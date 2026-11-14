@@ -1,6 +1,6 @@
 ---
 name: retro-design
-description: Retro design system (by Noemi) — vintage print base with 8-bit and 16-bit game layers, exact fonts, colors, sizes and components, plus optional modules (CRT tube, analog glitch, stage floor, synthwave, neobrutalism) that require asking the user first. Use when creating, styling or reviewing a retro, arcade, 8-bit, 16-bit, pixel or vintage interface. For clean modern UI, use bento-design.
+description: Retro design system (by Noemi) — vintage print base with 8-bit and 16-bit game layers, exact fonts, colors, sizes and components, plus optional modules (CRT tube, analog glitch, stage floor, synthwave, ink & paper neobrutalism × 1930s cartoon) that require asking the user first. Use when creating, styling or reviewing a retro, arcade, 8-bit, 16-bit, pixel or vintage interface. For clean modern UI, use bento-design.
 ---
 
 # Skill: Retro Design
@@ -14,8 +14,7 @@ description: Retro design system (by Noemi) — vintage print base with 8-bit an
 ## 1. Ask first (decision points)
 Sections 2–6 always apply. **Before using anything in [OPTIONS.md](OPTIONS.md), ask the user**, in one message: list only the options that fit the screen, one line each, with your recommendation first. Never add them by default; never ask again for what was already decided in this project (check its AGENTS.md/README).
 - **CRT tube** (where: intro, STAGE CLEAR, LED signs) · **Analog glitch** (which events) · **Stage floor** (grid / Mode 7 / synthwave)
-- **Neobrutalism extras** (lift hover, tilted sticker, color blocks, giant number, bare structure)
-- **1930s cartoon** (rubber hose identity: film grain, boiling lines, balloons, telegram, mascot): replaces the print look, keep effects faint
+- **Ink & paper** (neobrutalism × 1930s cartoon: crisp grid and color blocks, hand-drawn ink objects, stamps, balloons, telegram, mascot): replaces the print look, keep effects faint
 - Also ask: dark-only game screens? sound? mascot sprite?
 
 ## 2. Layers
