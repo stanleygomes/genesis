@@ -1,56 +1,62 @@
 ---
 name: retro-design
-description: Retro design system (by Noemi) — vintage print base with 8-bit and 16-bit game layers, exact fonts, colors, sizes and components, plus optional modules (CRT tube, analog glitch, stage floor, ink & paper neobrutalism × 1930s cartoon) that require asking the user first. Use when creating, styling or reviewing a retro, arcade, 8-bit, 16-bit, pixel or vintage interface. For clean modern UI, use bento-design.
+description: Retro design system (by Noemi) — website style merging neobrutalism with 1930s rubber-hose cartoons (straight-line grid and color blocks, hand-drawn components, stamps, balloons, telegrams, film grain), with exact fonts, colors, sizes and components, plus optional CRT tube and analog glitch modules that require asking the user first. Use when creating, styling or reviewing a retro, vintage, neobrutalist, cartoon or rubber-hose interface. For clean modern UI, use bento-design.
 ---
 
-# Skill: Retro Design
+# Skill: Retro Design (neobrutalism × 1930s cartoon)
 
-**8-bit in the details, 16-bit in the structure, vintage print everywhere else.** Text meant to be read is never in a pixel font or under an effect.
+**Neobrutalist layout, 1930s cartoon components.** For websites and apps. Layout lines are straight; every component (card, button, input, balloon) has a hand-drawn outline. Text meant to be read is never under an effect.
 
 ## 0. Before anything
 - **Check the project first.** Look for existing design rules or colors: AGENTS.md/CLAUDE.md/README, theme or token files (`:root` vars, `tailwind.config`, `theme.*`), a design doc, an existing stylesheet. What the project defines **wins**; this skill only fills the gaps. Conflict? Ask before overriding.
-- **Say you are using it.** Tell the user, in one short block, that `retro-design` is in use and what was decided: what came from the project, which layers apply (print/8-bit/16-bit), which optional modules were chosen or left out, and what is still pending their answer.
+- **Say you are using it.** Tell the user, in one short block, that `retro-design` is in use and what was decided: what came from the project, which optional modules were chosen or left out, and what is still pending their answer.
 
 ## 1. Ask first (decision points)
-Sections 2–6 always apply. **Before using anything in [OPTIONS.md](OPTIONS.md), ask the user**, in one message: list only the options that fit the screen, one line each, with your recommendation first. Never add them by default; never ask again for what was already decided in this project (check its AGENTS.md/README).
-- **CRT tube** (where: intro, STAGE CLEAR, LED signs) · **Analog glitch** (which events) · **Stage floor** (grid / Mode 7)
-- **Ink & paper** (neobrutalism × 1930s cartoon: crisp grid and color blocks, hand-drawn ink objects, stamps, balloons, telegram, mascot): replaces the print look, keep effects faint
-- Also ask: dark-only game screens? sound? mascot sprite?
+Sections 2–7 always apply. **Before using anything in [OPTIONS.md](OPTIONS.md), ask the user**, in one message: list only the options that fit the screen, one line each, with your recommendation first. Never add them by default; never ask again for what was already decided in this project (check its AGENTS.md/README).
+- **CRT tube** (where: intro, celebration, sign boards) · **Analog glitch** (which events)
+- Also ask: mascot? sound? showcase page (animated film allowed) or app used all day (everything still)?
 
-## 2. Layers
-| Layer | Use for | Rules |
+## 2. Merge rule
+| Part | Source | Line |
 | --- | --- | --- |
-| **Print** (base) | layout, body text, forms, buttons | flat fills, `3px` ink borders, hard shadow, no blur |
-| **8-bit** | scores, HUD, hearts, coins, sprites, INSERT COIN, verdicts | PICO-8 palette, 1–2 colors per sprite, no gradients |
-| **16-bit** | cards/modals (RPG window), lists (inventory menu), life bars, stage maps | 5-tone ramps, outline + shade + highlight, dithering between bands |
+| **Layout**: grid, dividers, color blocks, giant number, caption tags | neobrutalism | **straight**: `3px` `outline`, square corners |
+| **Components**: cards, buttons, inputs, balloons, stamps, mascot | 1930s cartoon | **hand-drawn**: still `#sketch` filter + uneven radii |
+
+Never wobble the layout, never square off a component. Borrow the **era** (Fleischer, early studio shorts), never a specific game or show (no characters, art or screens from Cuphead or any other title).
 
 ## 3. Fonts (self-hosted `@fontsource/*`, never a CDN)
-- Hero `Bungee Shade` · buttons/labels `Bungee` · body `Overpass` 400/700 · data `Overpass Mono`.
-- Typewriter (nav, tags, status lines): `Courier Prime` 700, uppercase, `+0.15em`, `13–14px`.
-- 8-bit: `Press Start 2P` **only at 8, 16 or 24px** (8px grid; other sizes blur). 16-bit: `Pixelify Sans`, short phrases. CRT screens: `VT323`.
+- Title `Limelight` (stroke `2px` `outline` + `4px 4px 0` `outline` shadow, fill `mustard`).
+- Labels, buttons, giant number `Bevan` · body `Alegreya` 400/700 (italic for taglines).
+- Logs, meta, caption tags, code, telegrams `Special Elite`.
 
-## 4. Tokens (`light-dark()`: paper / cabinet)
-- `bg` `#F2E8D5`/`#14121A` · `panel` `#FFFBF2`/`#1E1B26` · `ink` `#1B1B1F`/`#F2E8D5` · `muted` `#6B6355`/`#A39BB0`
-- `edge` `#1B1B1F`/`#4A4458` · `shadow` `#1B1B1F`/`#050407` · `board` `#0E0D12` · `led` `#FFB000`
-- `red` `#E4352B`/`#FF5A4E` · `blue` `#1F5FAF`/`#4D8DFF` · `green` `#1E9E5A`/`#2FD483` · `coin` `#F7B500`/`#FFC93C`
-- `ok-bg` `#147A44`/`#2FD483` · `bad` `#C42A20`/`#FF5A4E`. One meaning per accent, max 3 per screen. Amber/yellow text only on dark.
-- 8-bit: `#000 #1D2B53 #7E2553 #008751 #AB5236 #5F574F #C2C3C7 #FFF1E8 #FF004D #FFA300 #FFEC27 #00E436 #29ADFF #83769C #FF77A8 #FFCCAA`.
-- 16-bit ramps: red `#3B0F14 #7A1E25 #C4322F #F06A4F #FFC2A8` · blue `#0B1640 #1C3A8C #2E66D1 #63A4FF #C9E4FF` · green `#0E2B1B #1E5E32 #2F9A4A #6FD36B #D3F5B5` · gold `#3A2306 #7A4B0C #C98A16 #F5C842 #FFF1B0`.
+## 4. Tokens (`light-dark()`: light cream / dark old-cinema)
+- `bg` `#EFE2C4`/`#17110C` · `card` `#F8EFD9`/`#241A13` · `balloon` `#FFF8E8`/`#2E2219`
+- `text` `#24170F`/`#F1E4C6` · `text-soft` `#6A5442`/`#B9A588` · `outline` `#24170F`/`#E9DABA` (borders and hard shadows)
+- `red` `#B5322A`/`#E0574A` · `mustard` `#D49A2E`/`#E8B34A` · `teal` `#2F6F6B`/`#5FA8A1`
+- One meaning per accent (`red` danger/error, `mustard` action/highlight, `teal` ok/info), max 3 per screen. Mustard text only on dark, or as a fill behind dark text.
+- Background: `bg` + two faint watercolor washes (mustard top-left, teal bottom-right, `radial-gradient` ≤18% alpha). No dots, no patterns.
 
 ## 5. Sizes
-- Body `17px/1.55` · code `14px` · labels `13px` Bungee uppercase `+0.08em` · hero `clamp(46px, 11vw, 100px)`.
-- Border `3px` · radius `10px` panels, `6px` tabs, `999px` buttons · shadow `5px 5px 0` panels, `0 5px 0` buttons.
+- Body `17px/1.55` · code `14px` · labels Bevan `13px` uppercase `+0.06em` · title `clamp(44px, 10vw, 96px)` · giant number `clamp(44px, 8vw, 92px)`.
+- Outline `3px` · component radii `16px 20px 14px 18px / 18px 14px 20px 16px` (small: halve them) · structure radius `0`.
+- Shadow `6px 7px 0` objects, `3px 4px 0` buttons, none on layout.
 - Spacing `8/12/16/20/28/32px` · `max-width: 1160px` · gutter `16px`.
 
-## 6. Rules (learned the hard way)
-- States: hover `brightness(1.06)`, active presses down, `focus-visible` `3px` blue outline. Contrast AA.
-- Pixel art: integer scale only, `image-rendering: pixelated`, never `scale(0.5)`.
-- Motion stepped (`steps(n)`), `≤ 1.8s`, off under `prefers-reduced-motion`. Intro `≤ 1s`, once a day.
-- Errors never take the full screen; celebrations may. Header clean: no strips under it. One loud element per screen.
-- CSS/canvas only: no image requests, no `innerHTML`. Backgrounds: light 2px dot every 16px; dark pixel starfield.
-- Never: digital glitch (datamosh, pixel sorting), clashing neon palettes, synthwave/cyberpunk, everything tilted, "ugly on purpose", system fonts.
+## 6. Hand-drawn outline
+- Component borders drawn on a `::before` with a **still** SVG `filter: url(#sketch)` (`feTurbulence` fractalNoise `0.035`, fixed seed, `feDisplacementMap scale≈1.2`, filter region `-10%/120%`). Never on text.
+- "Boiling" outline (seed cycling with `<animate calcMode=discrete>`) only on small elements and only while something happens (hover, agent working). Never looping, never on panels or paragraphs.
 
-## 7. References (borrow, never copy)
-Pac-Man, Galaga, Space Invaders · NES title screens, Konami code · Street Fighter II · Super Mario World map · F-Zero/Mario Kart (Mode 7) · Final Fantasy/Chrono Trigger windows · PICO-8 · 90s BIOS boot screens · Solari boards, LED signs · 70s enamel signs, hazard stripes · 1930s rubber hose shorts (era only).
+## 7. Rules (learned the hard way)
+- States: lift hover `translate(-2px,-2px)` + shadow `6px 7px → 8px 9px`; active sinks onto its shadow with no shadow; `focus-visible` `3px` `teal` outline. Contrast AA.
+- Cards at `±0.5deg` alternating, straighten on hover. Nothing else tilted except stamps.
+- Motion stepped (`steps(n)`), `≤ 1.8s`. View change = iris close/open (`box-shadow: 0 0 0 300vmax` hole, `steps(6)`/`steps(7)`, ~0.65s total). All off under `prefers-reduced-motion` (also remove SVG `<animate>`).
+- **Performance:** no `infinite` animation anywhere in an app. In WebKit (Wails/Tauri on Linux) any looping animation repaints the window and re-runs the SVG filters on every large `.sketched` panel: measured ~90% CPU vs 0–5% with everything still.
+- Errors never take the full screen; celebrations may. Header clean. One loud element per screen (one loud stamp, one giant number, one color block in view).
+- CSS/SVG/canvas only: no image requests, no `innerHTML`.
+- Grain/vignette overlay: fixed, `pointer-events: none`, painted once (see REFERENCE.md).
+- Never: heavy grain, flicker, scratches or boil at full strength (reads as broken), digital glitch (datamosh, pixel sorting), neon or garish palettes, synthwave/cyberpunk, pixel fonts, everything tilted or overlapping, "ugly on purpose", system fonts.
+
+## 8. References (borrow, never copy)
+1930s rubber-hose shorts (era only) · neobrutalist websites (bare grids, color blocks, hard shadows) · old cinema posters and programs, telegrams, rubber stamps, tickets, film reels (as UI metaphors).
 
 Components: [REFERENCE.md](REFERENCE.md) · Optional modules: [OPTIONS.md](OPTIONS.md).
