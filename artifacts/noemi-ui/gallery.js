@@ -1,4 +1,4 @@
-// Galeria bruca-ui: tema, playground de cores, demos e animações sob demanda.
+// Galeria noemi-ui: tema, playground de cores, demos e animações sob demanda.
 const root = document.documentElement;
 const $ = (sel, el = document) => el.querySelector(sel);
 const $$ = (sel, el = document) => [...el.querySelectorAll(sel)];

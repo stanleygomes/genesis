@@ -1,4 +1,4 @@
-/* bruca-ui: tokens + componentes da galeria. Spec: .agents/skills/bruca-ui */
+/* noemi-ui: tokens + componentes da galeria. Spec: .agents/skills/bruca-ui */
 
 @font-face { font-family: "Limelight"; src: url("fonts/limelight-latin-400-normal.woff2") format("woff2"); font-display: swap; }
 @font-face { font-family: "Bevan"; src: url("fonts/bevan-latin-400-normal.woff2") format("woff2"); font-display: swap; }
@@ -843,7 +843,7 @@ code.inline { padding: 0 4px; background: var(--card); border: 1px solid color-m
 
 /* ===================== field ===================== */
 /* ---------- Field + form (rótulo, controle, ajuda, erro, resumo) ---------- */
-/* .field, .field__label e .field__help já existem no bruca.css; aqui só o que falta. */
+/* .field, .field__label e .field__help já existem no noemi-ui.css; aqui só o que falta. */
 .field__opt { margin-left: 6px; font: italic 400 14px/1 "Alegreya", serif; letter-spacing: 0; text-transform: none; color: var(--text-soft); }
 .field__error { display: flex; align-items: flex-start; gap: 8px; font-size: 15px; line-height: 1.35; color: var(--red); }
 .field__error::before {
