@@ -1,4 +1,4 @@
-# Optional Modules: Retro Design
+# Optional Modules: bruca-ui
 
 **Ask the user before using any of these** (see SKILL.md §1). Each lists where it fits and what ruins it.
 

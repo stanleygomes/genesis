@@ -1,6 +1,6 @@
-# Components: Retro Design
+# Components: bruca-ui
 
-Tokens, fonts and the merge rule from [SKILL.md](SKILL.md). Fixed values only. "Sketched" = still `#sketch` filter on `::before`, uneven radii, `3px` `outline`.
+Tokens, fonts and the merge rule from [SKILL.md](SKILL.md). Fixed values only. Being split into `components/` (one file each); moved ones are gone from here. "Sketched" = still `#sketch` filter on `::before`, uneven radii, `3px` `outline`.
 
 ## Layout (straight lines)
 - **Grid:** visible `3px` `outline` dividers, no gaps between cells; each cell opens with a caption tag (`01`, `02`: `text` bg, `bg` text, Special Elite `12px`, `2px 8px`).
@@ -11,7 +11,6 @@ Tokens, fonts and the merge rule from [SKILL.md](SKILL.md). Fixed values only. "
 
 ## Components (hand-drawn)
 - **Card:** sketched, bg `card`, padding `20px`, shadow `6px 7px 0` `outline`, `±0.5deg`.
-- **Ticket button:** notched sides via `mask` radial-gradients (`8px` notches), Bevan `14px` uppercase, padding `10px 22px`, bg `mustard` (primary) or `card` (ghost), shadow `3px 4px 0`; lift on hover, sinks on active. Danger: bg `red`, `bg` text. Small: `6px 14px`, `12px`.
 - **Input/textarea/select:** sketched, bg `balloon`, padding `12px 14px`, Alegreya `16px`, shadow `3px 4px 0`. Focus: outline + shadow `teal`. Label Bevan `13px`. Placeholder italic `text-soft`.
 - **Tabs:** sketched small radii, bg `card`; selected bg `text`, `bg` text, `▶` in `mustard` (still).
 - **Speech balloon (chat/agent):** sketched, bg `balloon`, tail as a sketched triangle toward the speaker (left = agent, right = user), max-width `68ch`, Alegreya body.

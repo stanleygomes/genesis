@@ -1,15 +1,15 @@
 ---
-name: retro-design
-description: Retro design system (by Noemi) — website style merging neobrutalism with 1930s rubber-hose cartoons (straight-line grid and color blocks, hand-drawn components, stamps, balloons, telegrams, film grain), with exact fonts, colors, sizes and components, plus optional CRT tube and analog glitch modules that require asking the user first. Use when creating, styling or reviewing a retro, vintage, neobrutalist, cartoon or rubber-hose interface. For clean modern UI, use bento-design.
+name: bruca-ui
+description: bruca-ui design system (by Noemi; BRUtalism + CArtoon) — website style merging neobrutalism with 1930s rubber-hose cartoons (straight-line grid and color blocks, hand-drawn components, stamps, balloons, telegrams, film grain), with exact fonts, colors, sizes and components, plus optional CRT tube and analog glitch modules that require asking the user first. Use when creating, styling or reviewing a retro, vintage, neobrutalist, cartoon or rubber-hose interface. For clean modern UI, use bento-design.
 ---
 
-# Skill: Retro Design (neobrutalism × 1930s cartoon)
+# Skill: bruca-ui (neobrutalism × 1930s cartoon)
 
 **Neobrutalist layout, 1930s cartoon components.** For websites and apps. Layout lines are straight; every component (card, button, input, balloon) has a hand-drawn outline. Text meant to be read is never under an effect.
 
 ## 0. Before anything
 - **Check the project first.** Look for existing design rules or colors: AGENTS.md/CLAUDE.md/README, theme or token files (`:root` vars, `tailwind.config`, `theme.*`), a design doc, an existing stylesheet. What the project defines **wins**; this skill only fills the gaps. Conflict? Ask before overriding.
-- **Say you are using it.** Tell the user, in one short block, that `retro-design` is in use and what was decided: what came from the project, which optional modules were chosen or left out, and what is still pending their answer.
+- **Say you are using it.** Tell the user, in one short block, that `bruca-ui` is in use and what was decided: what came from the project, which optional modules were chosen or left out, and what is still pending their answer.
 
 ## 1. Ask first (decision points)
 Sections 2–7 always apply. **Before using anything in [OPTIONS.md](OPTIONS.md), ask the user**, in one message: list only the options that fit the screen, one line each, with your recommendation first. Never add them by default; never ask again for what was already decided in this project (check its AGENTS.md/README).
@@ -33,7 +33,7 @@ Never wobble the layout, never square off a component. Borrow the **era** (Fleis
 - `bg` `#EFE2C4`/`#17110C` · `card` `#F8EFD9`/`#241A13` · `balloon` `#FFF8E8`/`#2E2219`
 - `text` `#24170F`/`#F1E4C6` · `text-soft` `#6A5442`/`#B9A588` · `outline` `#24170F`/`#E9DABA` (borders and hard shadows)
 - `red` `#B5322A`/`#E0574A` · `mustard` `#D49A2E`/`#E8B34A` · `teal` `#2F6F6B`/`#5FA8A1`
-- One meaning per accent (`red` danger/error, `mustard` action/highlight, `teal` ok/info), max 3 per screen. Mustard text only on dark, or as a fill behind dark text.
+- One meaning per accent (`red` danger/error, `mustard` action/highlight, `teal` ok/info), max 3 per screen. Mustard text only on dark, or as a fill behind dark text: text on `mustard` is always `on-mustard` `#24170F`, in both themes.
 - Background: `bg` + two faint watercolor washes (mustard top-left, teal bottom-right, `radial-gradient` ≤18% alpha). No dots, no patterns.
 
 ## 5. Sizes
@@ -59,4 +59,12 @@ Never wobble the layout, never square off a component. Borrow the **era** (Fleis
 ## 8. References (borrow, never copy)
 1930s rubber-hose shorts (era only) · neobrutalist websites (bare grids, color blocks, hard shadows) · old cinema posters and programs, telegrams, rubber stamps, tickets, film reels (as UI metaphors).
 
-Components: [REFERENCE.md](REFERENCE.md) · Optional modules: [OPTIONS.md](OPTIONS.md).
+## 9. Components
+One file per component in `components/`: open only the ones the screen needs. Each gives visual (property → value/token), variants, states and behavior. **Rebuild the look and the states; never paste code** (there is none to paste).
+
+| Component | File |
+| --- | --- |
+| Button (ticket) | [components/button.md](components/button.md) |
+| Not migrated yet (grid, color block, giant number, nav, card, input, tabs, balloon, stamp, telegram, progress, notice, toast, code, film texture, mascot) | [REFERENCE.md](REFERENCE.md) |
+
+Optional modules: [OPTIONS.md](OPTIONS.md).
