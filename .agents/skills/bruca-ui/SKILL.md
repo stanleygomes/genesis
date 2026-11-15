@@ -14,13 +14,13 @@ description: bruca-ui design system (by Noemi; BRUtalism + CArtoon) — website 
 ## 1. Ask first (decision points)
 Sections 2–7 always apply. **Before using anything in [OPTIONS.md](OPTIONS.md), ask the user**, in one message: list only the options that fit the screen, one line each, with your recommendation first. Never add them by default; never ask again for what was already decided in this project (check its AGENTS.md/README).
 - **CRT tube** (where: intro, celebration, sign boards) · **Analog glitch** (which events)
-- Also ask: mascot? sound? showcase page (animated film allowed) or app used all day (everything still)?
+- Also ask: sound? showcase page (animated film allowed) or app used all day (everything still)?
 
 ## 2. Two kinds of component
 | Kind | Look | Examples | Budget |
 | --- | --- | --- | --- |
 | **Sober** (default) | neobrutalist: straight `3px` `outline`, small uneven radii (`radii-sm`), hard shadow, **no** sketch filter, no tilt | button, input, choice, card, tabs, table, badge, alert, toast, dialog, progress, nav, code, layout | unlimited |
-| **Cartoon** (seasoning) | 1930s cartoon: hand-drawn outline (`#sketch`), big uneven radii, period props, may tilt | ticket button, stamp, balloon, telegram, ribbon alert, film-reel progress, program nav, tilted card, mascot | **max 2 cartoon component types per screen** (a chat full of balloons counts as one) |
+| **Cartoon** (seasoning) | 1930s cartoon: hand-drawn outline (`#sketch`), big uneven radii, period props, may tilt | ticket button, stamp, balloon, telegram, ribbon alert, film-reel progress, program nav, tilted card | **max 2 cartoon component types per screen** (a chat full of balloons counts as one) |
 
 Layout (grid, dividers, color blocks, giant number) is always straight. When in doubt, pick the sober one. Borrow the **era** (Fleischer, early studio shorts), never a specific game or show (no characters, art or screens from Cuphead or any other title).
 
@@ -70,6 +70,6 @@ One file per component in `components/`: open only the ones the screen needs. Ea
 | Forms | [input](components/input.md) · [choice](components/choice.md) (checkbox, radio, switch) |
 | Feedback | [badge](components/badge.md) · 🎬 [stamp](components/stamp.md) · [alert](components/alert.md) (🎬 ribbon variant) · 🎬 [telegram](components/telegram.md) · [toast](components/toast.md) · [progress](components/progress.md) (🎬 film-reel variant) · [dialog](components/dialog.md) |
 | Content | [card](components/card.md) (🎬 tilted variant) · [tabs](components/tabs.md) · [table](components/table.md) · [code](components/code.md) · 🎬 [balloon](components/balloon.md) · [scrollbar](components/scrollbar.md) |
-| Effects | [transitions](components/transitions.md) (🎬 iris) · 🎬 [film texture](components/film-texture.md) · 🎬 [mascot](components/mascot.md) |
+| Effects | [transitions](components/transitions.md) (🎬 iris) · 🎬 [film texture](components/film-texture.md) |
 
 Optional modules: [OPTIONS.md](OPTIONS.md).

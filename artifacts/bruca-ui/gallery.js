@@ -305,8 +305,6 @@ const REPLAY = {
   chat,
   swap: swapView,
   iris,
-  wave: () => replayClass($("#mascot"), "is-wave"),
-  jump: () => replayClass($("#mascot"), "is-jump"),
 };
 $$("[data-replay]").forEach((btn) => {
   btn.addEventListener("click", () => REPLAY[btn.dataset.replay]?.());
