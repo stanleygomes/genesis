@@ -151,3 +151,4 @@ main { padding-top: 28px; min-width: 0; }
 /* marca: rosto da noemi + nome */
 .brand { display: flex; align-items: center; gap: 16px; }
 .brand__face { width: clamp(64px, 9vw, 96px); height: auto; filter: drop-shadow(4px 4px 0 var(--outline)); }
+.states { align-items: start; }
