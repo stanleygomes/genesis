@@ -48,10 +48,16 @@ A **special** button. The everyday one is [button.md](button.md); states and beh
 | loading | `aria-busy="true"`, not clickable, width locked to the label's width, label keeps its text + dots appearing `steps(3)`, outline boils; all of it stops the moment the work ends |
 | toggled | `aria-pressed="true"`: stays sunk (active look) with bg `teal`, label `bg` |
 
+## Motion
+| Event | Animation |
+| --- | --- |
+| hover / leave | lift + outline boils (seed cycling) while hovered, `120ms steps(2)` |
+| press | sink, `120ms steps(2)` |
+| loading | dots `0.9s steps(3)` + boil, **only while busy** |
+| `prefers-reduced-motion` | everything instant, no boil, no dots animation |
+
 ## Behavior
 - Enter and Space activate (native button). Never a `div` with a click handler.
-- State changes are stepped: `steps(2)`, `≤ 120ms`. No easing curves, no bounce.
-- `prefers-reduced-motion`: states switch instantly (no translate transition), no boil.
 - Double submit: loading starts on the first click and blocks the next ones.
 - Dark theme: same rules; the `outline` token turns light, so the shadow does too.
 
