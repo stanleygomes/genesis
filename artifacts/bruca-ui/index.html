@@ -28,11 +28,18 @@
     <button class="btn btn--neutral btn--sm" type="button" id="theme" aria-label="Alternar tema">Tema</button>
   </header>
 
+  <div class="layout">
+    <aside class="side">
+      <nav class="toc" aria-label="Componentes">
+        <p class="toc__group">Ações</p>
+        <ul>
+          <li><a href="#button">Button</a></li>
+          <li><a href="#ticket">Ticket button</a></li>
+        </ul>
+      </nav>
+    </aside>
+
   <main>
-    <nav class="toc" aria-label="Componentes">
-      <a href="#button">Button</a>
-      <a href="#ticket">Ticket button</a>
-    </nav>
 
     <section id="button" class="comp">
       <header class="comp__head">
@@ -40,45 +47,68 @@
         <p>O botão de sempre: formulário, diálogo, toolbar, tabela. Um <code>primary</code> por grupo, por último.
           Spec: <code>.agents/skills/bruca-ui/components/button.md</code></p>
       </header>
-      <div class="grid">
-        <div class="cell">
-          <span class="tag">variantes</span>
-          <div class="row">
-            <button class="btn" type="button">Salvar</button>
-            <button class="btn btn--neutral" type="button">Cancelar</button>
-            <button class="btn btn--danger" type="button">Apagar</button>
-            <button class="btn btn--neutral btn--flat" type="button">Editar</button>
-            <button class="btn btn--neutral btn--icon" type="button" aria-label="Adicionar"><svg viewBox="0 0 20 20" aria-hidden="true"><path d="M10 3v14M3 10h14" stroke="currentColor" stroke-width="3" stroke-linecap="square"/></svg></button>
+      <div class="comp__body">
+        <div class="grid">
+          <div class="cell">
+            <span class="tag">variantes</span>
+            <div class="row">
+              <button class="btn" type="button">Salvar</button>
+              <button class="btn btn--neutral" type="button">Cancelar</button>
+              <button class="btn btn--danger" type="button">Apagar</button>
+              <button class="btn btn--neutral btn--flat" type="button">Editar</button>
+              <button class="btn btn--neutral btn--icon" type="button" aria-label="Adicionar"><svg viewBox="0 0 20 20" aria-hidden="true"><path d="M10 3v14M3 10h14" stroke="currentColor" stroke-width="3" stroke-linecap="square"/></svg></button>
+            </div>
+          </div>
+          <div class="cell">
+            <span class="tag">tamanhos</span>
+            <div class="row">
+              <button class="btn btn--sm" type="button">Pequeno</button>
+              <button class="btn" type="button">Médio</button>
+              <button class="btn btn--lg" type="button"><svg viewBox="0 0 20 20" aria-hidden="true"><path d="M10 3v14M3 10h14" stroke="currentColor" stroke-width="3" stroke-linecap="square"/></svg>Grande</button>
+            </div>
+          </div>
+          <div class="cell">
+            <span class="tag">estados</span>
+            <div class="states">
+              <figure><button class="btn " type="button" tabindex="-1">Salvar</button><figcaption>default</figcaption></figure>
+              <figure><button class="btn is-hover" type="button" tabindex="-1">Salvar</button><figcaption>hover</figcaption></figure>
+              <figure><button class="btn is-active" type="button" tabindex="-1">Salvar</button><figcaption>active</figcaption></figure>
+              <figure><button class="btn is-focus" type="button" tabindex="-1">Salvar</button><figcaption>focus-visible</figcaption></figure>
+              <figure><button class="btn" type="button" disabled>Salvar</button><figcaption>disabled</figcaption></figure>
+              <figure><button class="btn " type="button" aria-busy="true" tabindex="-1">Salvar</button><figcaption>loading</figcaption></figure>
+              <figure><button class="btn " type="button" aria-pressed="true" tabindex="-1">Fixar</button><figcaption>toggled</figcaption></figure>
+            </div>
+          </div>
+          <div class="cell">
+            <span class="tag">ao vivo</span>
+            <p class="hint">Passe o mouse, clique, use Tab. "Enviar" carrega 2s; "Fixar" alterna.</p>
+            <div class="row">
+              <button class="btn btn--neutral" type="button" data-demo="toggle" aria-pressed="false">Fixar</button>
+              <button class="btn" type="button" data-demo="load">Enviar</button>
+            </div>
           </div>
         </div>
-        <div class="cell">
-          <span class="tag">tamanhos</span>
-          <div class="row">
-            <button class="btn btn--sm" type="button">Pequeno</button>
-            <button class="btn" type="button">Médio</button>
-            <button class="btn btn--lg" type="button"><svg viewBox="0 0 20 20" aria-hidden="true"><path d="M10 3v14M3 10h14" stroke="currentColor" stroke-width="3" stroke-linecap="square"/></svg>Grande</button>
-          </div>
-        </div>
-        <div class="cell">
-          <span class="tag">estados</span>
-          <div class="states">
-            <figure><button class="btn " type="button" tabindex="-1">Salvar</button><figcaption>default</figcaption></figure>
-            <figure><button class="btn is-hover" type="button" tabindex="-1">Salvar</button><figcaption>hover</figcaption></figure>
-            <figure><button class="btn is-active" type="button" tabindex="-1">Salvar</button><figcaption>active</figcaption></figure>
-            <figure><button class="btn is-focus" type="button" tabindex="-1">Salvar</button><figcaption>focus-visible</figcaption></figure>
-            <figure><button class="btn" type="button" disabled>Salvar</button><figcaption>disabled</figcaption></figure>
-            <figure><button class="btn " type="button" aria-busy="true" tabindex="-1">Salvar</button><figcaption>loading</figcaption></figure>
-            <figure><button class="btn " type="button" aria-pressed="true" tabindex="-1">Fixar</button><figcaption>toggled</figcaption></figure>
-          </div>
-        </div>
-        <div class="cell">
-          <span class="tag">ao vivo</span>
-          <p class="hint">Passe o mouse, clique, use Tab. "Enviar" carrega 2s; "Fixar" alterna.</p>
-          <div class="row">
-            <button class="btn btn--neutral" type="button" data-demo="toggle" aria-pressed="false">Fixar</button>
-            <button class="btn" type="button" data-demo="load">Enviar</button>
-          </div>
-        </div>
+        <aside class="base" aria-label="CSS base">
+          <span class="tag">css base</span>
+          <pre><code class="css">.btn {
+  display: inline-flex;
+  gap: 8px;
+  min-height: 44px;
+  padding: 10px 18px;
+  font: 14px/1 "Bevan";
+  letter-spacing: .06em;
+  text-transform: uppercase;
+  background: var(--mustard);
+  color: var(--on-mustard);
+  border-radius: 8px 10px 7px 9px / 9px 7px 10px 8px;
+  box-shadow: 4px 4px 0 var(--outline);
+}
+/* contorno à mão */
+.btn::before {
+  border: 3px solid var(--outline);
+  filter: url(#sketch);
+}</code></pre>
+        </aside>
       </div>
     </section>
 
@@ -88,38 +118,65 @@
         <p>Só a ação principal da tela: entrar, comprar, começar. No máximo um por tela; o resto usa o Button.
           Spec: <code>.agents/skills/bruca-ui/components/ticket-button.md</code></p>
       </header>
-      <div class="grid">
-        <div class="cell">
-          <span class="tag">variantes</span>
-          <div class="row">
-            <span class="tk"><button class="tk__btn" type="button">Entrar</button></span>
-            <span class="tk tk--ghost"><button class="tk__btn" type="button">Ver mais</button></span>
-            <span class="tk tk--danger"><button class="tk__btn" type="button">Encerrar</button></span>
-            <span class="tk tk--sm"><button class="tk__btn" type="button">Pequeno</button></span>
+      <div class="comp__body">
+        <div class="grid">
+          <div class="cell">
+            <span class="tag">variantes</span>
+            <div class="row">
+              <span class="tk"><button class="tk__btn" type="button">Entrar</button></span>
+              <span class="tk tk--ghost"><button class="tk__btn" type="button">Ver mais</button></span>
+              <span class="tk tk--danger"><button class="tk__btn" type="button">Encerrar</button></span>
+              <span class="tk tk--sm"><button class="tk__btn" type="button">Pequeno</button></span>
+            </div>
+          </div>
+          <div class="cell">
+            <span class="tag">estados</span>
+            <div class="states">
+              <figure><span class="tk "><button class="tk__btn" type="button" tabindex="-1">Entrar</button></span><figcaption>default</figcaption></figure>
+              <figure><span class="tk is-hover"><button class="tk__btn" type="button" tabindex="-1">Entrar</button></span><figcaption>hover</figcaption></figure>
+              <figure><span class="tk is-active"><button class="tk__btn" type="button" tabindex="-1">Entrar</button></span><figcaption>active</figcaption></figure>
+              <figure><span class="tk is-focus"><button class="tk__btn" type="button" tabindex="-1">Entrar</button></span><figcaption>focus-visible</figcaption></figure>
+              <figure><span class="tk"><button class="tk__btn" type="button" disabled>Entrar</button></span><figcaption>disabled</figcaption></figure>
+              <figure><span class="tk "><button class="tk__btn" type="button" aria-busy="true" tabindex="-1">Entrar</button></span><figcaption>loading</figcaption></figure>
+              <figure><span class="tk "><button class="tk__btn" type="button" aria-pressed="true" tabindex="-1">Fixar</button></span><figcaption>toggled</figcaption></figure>
+            </div>
+          </div>
+          <div class="cell">
+            <span class="tag">ao vivo</span>
+            <p class="hint">Mesmos estados do Button. "Comprar" carrega 2s.</p>
+            <div class="row">
+              <span class="tk"><button class="tk__btn" type="button" data-demo="load">Comprar</button></span>
+            </div>
           </div>
         </div>
-        <div class="cell">
-          <span class="tag">estados</span>
-          <div class="states">
-            <figure><span class="tk "><button class="tk__btn" type="button" tabindex="-1">Entrar</button></span><figcaption>default</figcaption></figure>
-            <figure><span class="tk is-hover"><button class="tk__btn" type="button" tabindex="-1">Entrar</button></span><figcaption>hover</figcaption></figure>
-            <figure><span class="tk is-active"><button class="tk__btn" type="button" tabindex="-1">Entrar</button></span><figcaption>active</figcaption></figure>
-            <figure><span class="tk is-focus"><button class="tk__btn" type="button" tabindex="-1">Entrar</button></span><figcaption>focus-visible</figcaption></figure>
-            <figure><span class="tk"><button class="tk__btn" type="button" disabled>Entrar</button></span><figcaption>disabled</figcaption></figure>
-            <figure><span class="tk "><button class="tk__btn" type="button" aria-busy="true" tabindex="-1">Entrar</button></span><figcaption>loading</figcaption></figure>
-            <figure><span class="tk "><button class="tk__btn" type="button" aria-pressed="true" tabindex="-1">Fixar</button></span><figcaption>toggled</figcaption></figure>
-          </div>
-        </div>
-        <div class="cell">
-          <span class="tag">ao vivo</span>
-          <p class="hint">Mesmos estados do Button. "Comprar" carrega 2s.</p>
-          <div class="row">
-            <span class="tk"><button class="tk__btn" type="button" data-demo="load">Comprar</button></span>
-          </div>
-        </div>
+        <aside class="base" aria-label="CSS base">
+          <span class="tag">css base</span>
+          <pre><code class="css">/* wrapper: sombra e foco (o mask cortaria) */
+.tk {
+  filter: drop-shadow(3px 4px 0 var(--outline));
+}
+.tk__btn {
+  min-height: 44px;
+  padding: 10px 22px;
+  font: 14px/1 "Bevan";
+  letter-spacing: .06em;
+  text-transform: uppercase;
+  background: var(--mustard);
+  color: var(--on-mustard);
+  border-radius: 8px 10px 7px 9px / 9px 7px 10px 8px;
+  /* entalhe de 8px em cada lado */
+  mask: radial-gradient(circle at 0 50%, #0000 8px, #000 0) left,
+        radial-gradient(circle at 100% 50%, #0000 8px, #000 0) right;
+}
+.tk__btn::before {
+  border: 3px solid var(--outline);
+  filter: url(#sketch);
+}</code></pre>
+        </aside>
       </div>
     </section>
   </main>
+  </div>
 
   <script src="gallery.js"></script>
 </body>

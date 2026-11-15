@@ -44,3 +44,48 @@ document.querySelectorAll('[data-demo="toggle"]').forEach((btn) => {
     btn.setAttribute("aria-pressed", String(btn.getAttribute("aria-pressed") !== "true"));
   });
 });
+
+// Realce do CSS base, montando nós (sem innerHTML).
+function span(cls, text) {
+  const el = document.createElement("span");
+  el.className = cls;
+  el.textContent = text;
+  return el;
+}
+const TOKEN = /(\/\*.*?\*\/)|("[^"]*")|(-?\d*\.?\d+(?:px|ms|deg|%|em|s)?)|([^"\/\d-]+|.)/g;
+function paintValue(out, text) {
+  for (const [, c, q, n, rest] of text.matchAll(TOKEN)) {
+    if (c) out.append(span("c", c));
+    else if (q) out.append(span("q", q));
+    else if (n) out.append(span("n", n));
+    else out.append(rest);
+  }
+}
+document.querySelectorAll("code.css").forEach((code) => {
+  const lines = code.textContent.split("\n");
+  code.textContent = "";
+  lines.forEach((line, i) => {
+    const prop = line.match(/^(\s+)([a-z-]+)(:)(.*)$/);
+    if (/^\s*\/\*.*\*\/\s*$/.test(line)) code.append(span("c", line));
+    else if (prop) {
+      code.append(prop[1], span("k", prop[2]), prop[3]);
+      paintValue(code, prop[4]);
+    } else if (/\{\s*$/.test(line)) {
+      code.append(span("s", line.replace(/\s*\{\s*$/, "")), " {");
+    } else paintValue(code, line);
+    if (i < lines.length - 1) code.append("\n");
+  });
+});
+
+// Sidebar marca a seção visível.
+const links = new Map(
+  [...document.querySelectorAll(".toc a")].map((a) => [a.hash.slice(1), a]),
+);
+const seen = new IntersectionObserver((entries) => {
+  entries.forEach((e) => {
+    if (!e.isIntersecting) return;
+    links.forEach((a) => a.removeAttribute("aria-current"));
+    links.get(e.target.id)?.setAttribute("aria-current", "true");
+  });
+}, { rootMargin: "-20% 0px -70% 0px" });
+document.querySelectorAll(".comp").forEach((s) => seen.observe(s));
