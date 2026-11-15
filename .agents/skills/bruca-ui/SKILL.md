@@ -69,7 +69,7 @@ One file per component in `components/`: open only the ones the screen needs. Ea
 | Actions | [button](components/button.md) · 🎬 [ticket button](components/ticket-button.md) |
 | Forms | [input](components/input.md) · [choice](components/choice.md) (checkbox, radio, switch) |
 | Feedback | [badge](components/badge.md) · 🎬 [stamp](components/stamp.md) · [alert](components/alert.md) (🎬 ribbon variant) · 🎬 [telegram](components/telegram.md) · [toast](components/toast.md) · [progress](components/progress.md) (🎬 film-reel variant) · [dialog](components/dialog.md) |
-| Content | [card](components/card.md) (🎬 tilted variant) · [tabs](components/tabs.md) · [table](components/table.md) · [code](components/code.md) · 🎬 [balloon](components/balloon.md) |
+| Content | [card](components/card.md) (🎬 tilted variant) · [tabs](components/tabs.md) · [table](components/table.md) · [code](components/code.md) · 🎬 [balloon](components/balloon.md) · [scrollbar](components/scrollbar.md) |
 | Effects | [transitions](components/transitions.md) (🎬 iris) · 🎬 [film texture](components/film-texture.md) · 🎬 [mascot](components/mascot.md) |
 
 Optional modules: [OPTIONS.md](OPTIONS.md).
