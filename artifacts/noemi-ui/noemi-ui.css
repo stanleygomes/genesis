@@ -405,10 +405,13 @@ a.card:focus-visible { outline: 3px solid var(--teal); outline-offset: 3px; }
 .card--tilted:nth-child(even) { transform: rotate(.5deg); }
 .card--tilted:hover { transform: rotate(0); }
 
-.tabs [role="tablist"] { display: flex; gap: 4px; overflow-x: auto; }
-.tabs [role="tab"] { padding: 10px 16px; border: 3px solid var(--outline); border-bottom: 0; border-radius: 6px 6px 0 0; background: var(--card); color: var(--text); font: 400 13px "Bevan", serif; letter-spacing: .06em; text-transform: uppercase; cursor: pointer; transition: background var(--step), color var(--step); }
-.tabs [role="tab"][aria-selected="true"] { background: var(--text); color: var(--bg); }
-.tabs [role="tab"]:focus-visible { outline: 3px solid var(--teal); outline-offset: 2px; }
+/* pasta de arquivo: a aba ativa tem a cor do painel e se funde com ele; a inativa fica
+   rebaixada (bg, texto apagado) com a linha do painel passando por baixo */
+.tabs [role="tablist"] { position: relative; z-index: 1; display: flex; align-items: flex-end; gap: 8px; overflow-x: auto; margin-bottom: -3px; }
+.tabs [role="tab"] { padding: 8px 16px; border: 3px solid var(--outline); border-radius: 6px 6px 0 0; background: var(--bg); color: var(--text-soft); font: 400 13px "Bevan", serif; letter-spacing: .06em; text-transform: uppercase; cursor: pointer; transition: background var(--step), color var(--step); }
+.tabs [role="tab"]:hover { background: color-mix(in srgb, var(--outline) 8%, var(--bg)); color: var(--text); }
+.tabs [role="tab"][aria-selected="true"] { padding-block: 12px; border-bottom-color: var(--card); background: var(--card); color: var(--text); box-shadow: inset 0 5px 0 var(--mustard); }
+.tabs [role="tab"]:focus-visible { outline: 3px solid var(--teal); outline-offset: -6px; }
 .tabs [role="tabpanel"] { padding: 20px; border: 3px solid var(--outline); background: var(--card); }
 
 .tbl-wrap { overflow-x: auto; }
