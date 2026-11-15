@@ -1,0 +1,123 @@
+/* bruca-ui: tokens + componentes da galeria. Spec: .agents/skills/bruca-ui */
+
+@font-face { font-family: "Limelight"; src: url("fonts/limelight-latin-400-normal.woff2") format("woff2"); font-display: swap; }
+@font-face { font-family: "Bevan"; src: url("fonts/bevan-latin-400-normal.woff2") format("woff2"); font-display: swap; }
+@font-face { font-family: "Alegreya"; src: url("fonts/alegreya-latin-400-normal.woff2") format("woff2"); font-weight: 400; font-display: swap; }
+@font-face { font-family: "Alegreya"; src: url("fonts/alegreya-latin-700-normal.woff2") format("woff2"); font-weight: 700; font-display: swap; }
+@font-face { font-family: "Alegreya"; src: url("fonts/alegreya-latin-400-italic.woff2") format("woff2"); font-style: italic; font-display: swap; }
+@font-face { font-family: "Special Elite"; src: url("fonts/special-elite-latin-400-normal.woff2") format("woff2"); font-display: swap; }
+
+:root {
+  color-scheme: light dark;
+  --bg: light-dark(#EFE2C4, #17110C);
+  --card: light-dark(#F8EFD9, #241A13);
+  --balloon: light-dark(#FFF8E8, #2E2219);
+  --text: light-dark(#24170F, #F1E4C6);
+  --text-soft: light-dark(#6A5442, #B9A588);
+  --outline: light-dark(#24170F, #E9DABA);
+  --red: light-dark(#B5322A, #E0574A);
+  --mustard: light-dark(#D49A2E, #E8B34A);
+  --teal: light-dark(#2F6F6B, #5FA8A1);
+  --on-mustard: #24170F; /* texto sobre mostarda: escuro nos dois temas */
+  --radii: 16px 20px 14px 18px / 18px 14px 20px 16px;
+  --radii-sm: 8px 10px 7px 9px / 9px 7px 10px 8px;
+  --step: 120ms steps(2);
+}
+:root[data-theme="light"] { color-scheme: light; }
+:root[data-theme="dark"] { color-scheme: dark; }
+
+/* ---------- Button (ticket) ---------- */
+.tk {
+  --tk-bg: var(--mustard);
+  --tk-fg: var(--on-mustard);
+  --tk-line: var(--outline);
+  --tk-shadow: 3px 4px 0;
+  display: inline-block;
+  border-radius: var(--radii-sm);
+  filter: drop-shadow(var(--tk-shadow) var(--outline));
+  transition: transform var(--step), filter var(--step);
+}
+.tk--ghost { --tk-bg: var(--card); --tk-fg: var(--text); }
+.tk--danger { --tk-bg: var(--red); --tk-fg: var(--bg); }
+.tk--sm { --tk-shadow: 2px 3px 0; }
+
+.tk__btn {
+  --notch: 8px;
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  min-height: 44px;
+  padding: 10px 22px;
+  border: 0;
+  border-radius: var(--radii-sm);
+  color: var(--tk-fg);
+  font: 400 14px/1 "Bevan", serif;
+  letter-spacing: .06em;
+  text-transform: uppercase;
+  cursor: pointer;
+  /* aro escuro em volta de cada entalhe + preenchimento */
+  background:
+    radial-gradient(circle at 0 50%, #0000 var(--notch), var(--tk-line) var(--notch) calc(var(--notch) + 3px), #0000 calc(var(--notch) + 3px)),
+    radial-gradient(circle at 100% 50%, #0000 var(--notch), var(--tk-line) var(--notch) calc(var(--notch) + 3px), #0000 calc(var(--notch) + 3px)),
+    var(--tk-bg);
+  /* entalhes: corta meio círculo de cada lado */
+  mask:
+    radial-gradient(circle at 0 50%, #0000 var(--notch), #000 calc(var(--notch) + .5px)) left / 51% 100% no-repeat,
+    radial-gradient(circle at 100% 50%, #0000 var(--notch), #000 calc(var(--notch) + .5px)) right / 51% 100% no-repeat;
+}
+.tk__btn::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border: 3px solid var(--tk-line);
+  border-radius: inherit;
+  filter: url(#sketch);
+  pointer-events: none;
+}
+.tk__btn svg { width: 16px; height: 16px; flex: none; }
+.tk--sm .tk__btn { min-height: 32px; padding: 6px 14px; font-size: 12px; }
+.tk--icon .tk__btn { width: 44px; padding: 0; }
+.tk--icon .tk__btn svg { width: 20px; height: 20px; }
+
+/* hover: levanta */
+.tk:has(.tk__btn:hover:enabled:not([aria-busy="true"])), .tk.is-hover {
+  transform: translate(-2px, -2px);
+  filter: drop-shadow(5px 6px 0 var(--outline));
+}
+.tk:has(.tk__btn:hover:enabled) .tk__btn::before, .tk.is-hover .tk__btn::before { filter: url(#sketch-boil); }
+/* active: afunda na sombra */
+.tk:has(.tk__btn:active:enabled:not([aria-busy="true"])), .tk.is-active,
+.tk:has(.tk__btn[aria-pressed="true"]) {
+  transform: translate(3px, 4px);
+  filter: none;
+}
+.tk:has(.tk__btn[aria-pressed="true"]) { --tk-bg: var(--teal); --tk-fg: var(--bg); }
+/* foco: anel no wrapper (mask cortaria o outline do botão) */
+.tk:has(.tk__btn:focus-visible), .tk.is-focus { outline: 3px solid var(--teal); outline-offset: 3px; }
+/* disabled */
+.tk:has(.tk__btn:disabled), .tk:has(.tk__btn[aria-disabled="true"]) {
+  --tk-bg: var(--card); --tk-fg: var(--text-soft); --tk-line: var(--text-soft);
+  filter: none; transform: none;
+}
+.tk__btn:disabled, .tk__btn[aria-disabled="true"] { cursor: not-allowed; }
+/* loading: largura travada pelo JS, pontinhos em steps enquanto durar */
+.tk__btn[aria-busy="true"] { cursor: progress; }
+.tk__btn[aria-busy="true"]::before { filter: url(#sketch-boil); }
+.tk__btn[aria-busy="true"]::after {
+  content: "...";
+  display: inline-block;
+  width: 3ch;
+  overflow: hidden;
+  vertical-align: bottom;
+  clip-path: inset(0 100% 0 0);
+  animation: tk-dots .9s steps(3) infinite; /* só enquanto aria-busy */
+}
+@keyframes tk-dots { to { clip-path: inset(0 0 0 0); } }
+
+@media (prefers-reduced-motion: reduce) {
+  .tk { transition: none; }
+  .tk__btn::before, .tk__btn[aria-busy="true"]::before { filter: url(#sketch) !important; }
+  .tk__btn[aria-busy="true"]::after { animation: none; clip-path: none; }
+}

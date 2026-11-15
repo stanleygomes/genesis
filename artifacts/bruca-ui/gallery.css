@@ -1,0 +1,73 @@
+/* Layout da galeria (não é componente). */
+* { box-sizing: border-box; }
+body {
+  margin: 0;
+  color: var(--text);
+  font: 400 17px/1.55 "Alegreya", serif;
+  background:
+    radial-gradient(60vmax 40vmax at 0 0, color-mix(in srgb, var(--mustard) 18%, transparent), transparent 70%),
+    radial-gradient(60vmax 40vmax at 100% 100%, color-mix(in srgb, var(--teal) 16%, transparent), transparent 70%),
+    var(--bg);
+  min-height: 100vh;
+}
+code { font: 14px "Special Elite", monospace; }
+
+.top {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px 20px;
+  max-width: 1160px;
+  margin: 0 auto;
+  padding: 28px 16px 20px;
+}
+.logo {
+  margin: 0;
+  font: 400 clamp(44px, 10vw, 96px)/1 "Limelight", serif;
+  color: var(--mustard);
+  -webkit-text-stroke: 2px var(--outline);
+  paint-order: stroke fill;
+  text-shadow: 4px 4px 0 var(--outline);
+}
+.tagline { flex: 1 1 260px; margin: 0; font-style: italic; color: var(--text-soft); }
+
+main { max-width: 1160px; margin: 0 auto; padding: 0 16px 48px; }
+.toc {
+  display: flex;
+  gap: 20px;
+  padding: 12px 0;
+  border-block: 3px solid var(--outline);
+  margin-bottom: 32px;
+}
+.toc a {
+  color: var(--text);
+  font: 400 14px "Bevan", serif;
+  text-transform: uppercase;
+  text-decoration: none;
+}
+.toc a[aria-current] { box-shadow: inset 0 -3px var(--mustard); }
+
+.comp__head h2 { margin: 0; font: 400 32px/1.1 "Bevan", serif; }
+.comp__head small { font: 400 14px "Special Elite", monospace; color: var(--text-soft); }
+.comp__head p { max-width: 68ch; }
+
+.grid { border: 3px solid var(--outline); }
+.cell { padding: 20px 16px 28px; }
+.cell + .cell { border-top: 3px solid var(--outline); }
+.tag {
+  display: inline-block;
+  margin-bottom: 20px;
+  padding: 2px 8px;
+  background: var(--text);
+  color: var(--bg);
+  font: 12px "Special Elite", monospace;
+}
+.row { display: flex; flex-wrap: wrap; align-items: center; gap: 20px; }
+.states { display: grid; grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)); gap: 28px 20px; }
+.states figure { margin: 0; display: grid; justify-items: start; gap: 12px; }
+.states figcaption { font: 13px "Special Elite", monospace; color: var(--text-soft); }
+.hint { margin: 0 0 20px; color: var(--text-soft); font-style: italic; }
+
+/* vitrine de estados é parada: o loading de exemplo não anima */
+.states .tk__btn[aria-busy="true"]::after { animation: none; clip-path: none; }
+.states .tk__btn[aria-busy="true"]::before { filter: url(#sketch); }

@@ -1,0 +1,86 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>bruca-ui</title>
+  <link rel="stylesheet" href="bruca.css">
+  <link rel="stylesheet" href="gallery.css">
+</head>
+<body>
+  <!-- contorno desenhado à mão: parado (#sketch) e fervendo (#sketch-boil, só em hover/loading) -->
+  <svg width="0" height="0" aria-hidden="true" style="position:absolute">
+    <filter id="sketch" x="-10%" y="-10%" width="120%" height="120%">
+      <feTurbulence type="fractalNoise" baseFrequency="0.035" numOctaves="2" seed="3"/>
+      <feDisplacementMap in="SourceGraphic" scale="1.2"/>
+    </filter>
+    <filter id="sketch-boil" x="-10%" y="-10%" width="120%" height="120%">
+      <feTurbulence type="fractalNoise" baseFrequency="0.035" numOctaves="2" seed="3">
+        <animate id="boil" attributeName="seed" values="3;7;11" dur=".36s" calcMode="discrete" begin="indefinite" repeatCount="indefinite"/>
+      </feTurbulence>
+      <feDisplacementMap in="SourceGraphic" scale="1.6"/>
+    </filter>
+  </svg>
+
+  <header class="top">
+    <h1 class="logo">bruca-ui</h1>
+    <p class="tagline">brutalismo + cartoon: layout reto, componente desenhado à mão.</p>
+    <span class="tk tk--ghost tk--sm">
+      <button class="tk__btn" type="button" id="theme" aria-label="Alternar tema">Tema</button>
+    </span>
+  </header>
+
+  <main>
+    <nav class="toc" aria-label="Componentes">
+      <a href="#button" aria-current="true">Button</a>
+    </nav>
+
+    <section id="button" class="comp">
+      <header class="comp__head">
+        <h2>Button <small>ticket</small></h2>
+        <p>Ação na página. Um <code>primary</code> por grupo. Navegação é link, não botão.
+          Spec: <code>.agents/skills/bruca-ui/components/button.md</code></p>
+      </header>
+
+      <div class="grid">
+        <div class="cell">
+          <span class="tag">01 · variantes</span>
+          <div class="row">
+            <span class="tk"><button class="tk__btn" type="button">Salvar</button></span>
+            <span class="tk tk--ghost"><button class="tk__btn" type="button">Cancelar</button></span>
+            <span class="tk tk--danger"><button class="tk__btn" type="button">Apagar</button></span>
+            <span class="tk tk--sm"><button class="tk__btn" type="button">Pequeno</button></span>
+            <span class="tk tk--icon"><button class="tk__btn" type="button" aria-label="Adicionar">
+              <svg viewBox="0 0 20 20" aria-hidden="true"><path d="M10 3v14M3 10h14" stroke="currentColor" stroke-width="3" stroke-linecap="square"/></svg>
+            </button></span>
+          </div>
+        </div>
+
+        <div class="cell">
+          <span class="tag">02 · estados</span>
+          <div class="states">
+            <figure><span class="tk"><button class="tk__btn" type="button" tabindex="-1">Salvar</button></span><figcaption>default</figcaption></figure>
+            <figure><span class="tk is-hover"><button class="tk__btn" type="button" tabindex="-1">Salvar</button></span><figcaption>hover</figcaption></figure>
+            <figure><span class="tk is-active"><button class="tk__btn" type="button" tabindex="-1">Salvar</button></span><figcaption>active</figcaption></figure>
+            <figure><span class="tk is-focus"><button class="tk__btn" type="button" tabindex="-1">Salvar</button></span><figcaption>focus-visible</figcaption></figure>
+            <figure><span class="tk"><button class="tk__btn" type="button" disabled>Salvar</button></span><figcaption>disabled</figcaption></figure>
+            <figure><span class="tk"><button class="tk__btn" type="button" aria-busy="true" tabindex="-1">Salvar</button></span><figcaption>loading</figcaption></figure>
+            <figure><span class="tk"><button class="tk__btn" type="button" aria-pressed="true" tabindex="-1">Fixar</button></span><figcaption>toggled</figcaption></figure>
+          </div>
+        </div>
+
+        <div class="cell">
+          <span class="tag">03 · ao vivo</span>
+          <p class="hint">Passe o mouse, clique, use Tab. "Enviar" carrega 2s; "Fixar" alterna.</p>
+          <div class="row">
+            <span class="tk"><button class="tk__btn" type="button" data-demo="load">Enviar</button></span>
+            <span class="tk tk--ghost"><button class="tk__btn" type="button" data-demo="toggle" aria-pressed="false">Fixar</button></span>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <script src="gallery.js"></script>
+</body>
+</html>
