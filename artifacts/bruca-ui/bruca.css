@@ -321,7 +321,7 @@ select.input {
 .switch:focus-visible { outline: 3px solid var(--teal); outline-offset: 3px; }
 
 /* ===================== Feedback ===================== */
-.badge { display: inline-flex; align-items: center; justify-content: center; min-height: 22px; padding: 2px 8px; border: 2px solid var(--outline); border-radius: 4px; background: var(--card); color: var(--text); font: 12px/1 "Special Elite", monospace; letter-spacing: .08em; text-transform: uppercase; }
+.badge { display: inline-flex; align-items: center; justify-content: center; min-height: 22px; padding: 4px 8px 1px; border: 2px solid var(--outline); border-radius: 4px; background: var(--card); color: var(--text); font: 12px/1 "Special Elite", monospace; letter-spacing: .08em; text-transform: uppercase; }
 .badge--ok { background: var(--teal); color: var(--bg); }
 .badge--warn { background: var(--mustard); color: var(--on-mustard); }
 .badge--error { background: var(--red); color: var(--bg); }

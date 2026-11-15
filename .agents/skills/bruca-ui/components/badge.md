@@ -6,7 +6,7 @@ Tokens, fonts and the two kinds of component from [../SKILL.md](../SKILL.md). Va
 ## Visual
 | Property | Value |
 | --- | --- |
-| Box | `2px solid` `outline`, radius `4px`, padding `2px 8px`, no shadow |
+| Box | `2px solid` `outline`, radius `4px`, padding `4px 8px 1px` (Special Elite sits high: the extra top padding centers the caps), no shadow |
 | Text | Special Elite `12px` uppercase `+0.08em` |
 | Height | `22px` |
 
