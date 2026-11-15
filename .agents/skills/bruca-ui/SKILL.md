@@ -64,7 +64,8 @@ One file per component in `components/`: open only the ones the screen needs. Ea
 
 | Component | File |
 | --- | --- |
-| Button (ticket) | [components/button.md](components/button.md) |
+| Button (everyday: forms, toolbars, dialogs) | [components/button.md](components/button.md) |
+| Ticket button (special: the one hero action per screen) | [components/ticket-button.md](components/ticket-button.md) |
 | Not migrated yet (grid, color block, giant number, nav, card, input, tabs, balloon, stamp, telegram, progress, notice, toast, code, film texture, mascot) | [REFERENCE.md](REFERENCE.md) |
 
 Optional modules: [OPTIONS.md](OPTIONS.md).

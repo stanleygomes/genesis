@@ -26,7 +26,82 @@
 :root[data-theme="light"] { color-scheme: light; }
 :root[data-theme="dark"] { color-scheme: dark; }
 
-/* ---------- Button (ticket) ---------- */
+/* ---------- Button (o do dia a dia) ---------- */
+.btn {
+  --b-bg: var(--mustard);
+  --b-fg: var(--on-mustard);
+  --b-line: var(--outline);
+  --b-shadow: 4px 4px 0;
+  --b-lift: 6px 6px 0;
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  min-height: 44px;
+  padding: 10px 18px;
+  border: 0;
+  border-radius: var(--radii-sm);
+  background: var(--b-bg);
+  color: var(--b-fg);
+  box-shadow: var(--b-shadow) var(--outline);
+  font: 400 14px/1 "Bevan", serif;
+  letter-spacing: .06em;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: transform var(--step), box-shadow var(--step), background var(--step);
+}
+.btn::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border: 3px solid var(--b-line);
+  border-radius: inherit;
+  filter: url(#sketch);
+  pointer-events: none;
+}
+.btn svg { width: 16px; height: 16px; flex: none; }
+.btn--neutral { --b-bg: var(--card); --b-fg: var(--text); }
+.btn--danger { --b-bg: var(--red); --b-fg: var(--bg); }
+.btn--sm { min-height: 32px; padding: 6px 12px; font-size: 12px; --b-shadow: 3px 3px 0; --b-lift: 5px 5px 0; }
+.btn--lg { min-height: 52px; padding: 14px 24px; font-size: 16px; }
+.btn--lg svg { width: 20px; height: 20px; }
+.btn--icon { width: 44px; padding: 0; }
+.btn--icon.btn--sm { width: 32px; }
+.btn--flat { --b-shadow: 0 0 0; --b-lift: 0 0 0; }
+
+.btn:hover:enabled:not([aria-busy="true"]), .btn.is-hover {
+  transform: translate(-2px, -2px);
+  box-shadow: var(--b-lift) var(--outline);
+}
+.btn:hover:enabled::before, .btn.is-hover::before, .btn[aria-busy="true"]::before { filter: url(#sketch-boil); }
+.btn--flat:hover:enabled:not([aria-busy="true"]), .btn--flat.is-hover {
+  transform: none;
+  background: color-mix(in srgb, var(--b-bg) 92%, var(--outline));
+}
+.btn:active:enabled:not([aria-busy="true"]), .btn.is-active, .btn[aria-pressed="true"] {
+  transform: translate(4px, 4px);
+  box-shadow: 0 0 0 var(--outline);
+}
+.btn--flat:active:enabled, .btn--flat.is-active { transform: translate(1px, 1px); }
+.btn[aria-pressed="true"] { --b-bg: var(--teal); --b-fg: var(--bg); }
+.btn:focus-visible, .btn.is-focus { outline: 3px solid var(--teal); outline-offset: 3px; }
+.btn:disabled, .btn[aria-disabled="true"] {
+  --b-bg: var(--card); --b-fg: var(--text-soft); --b-line: var(--text-soft);
+  box-shadow: none; transform: none; cursor: not-allowed;
+}
+.btn[aria-busy="true"] { cursor: progress; }
+.btn[aria-busy="true"]::after, .tk__btn[aria-busy="true"]::after {
+  content: "...";
+  display: inline-block;
+  width: 3ch;
+  overflow: hidden;
+  vertical-align: bottom;
+  clip-path: inset(0 100% 0 0);
+  animation: tk-dots .9s steps(3) infinite; /* só enquanto aria-busy */
+}
+
+/* ---------- Ticket button (especial: a ação principal da tela) ---------- */
 .tk {
   --tk-bg: var(--mustard);
   --tk-fg: var(--on-mustard);
@@ -105,19 +180,10 @@
 /* loading: largura travada pelo JS, pontinhos em steps enquanto durar */
 .tk__btn[aria-busy="true"] { cursor: progress; }
 .tk__btn[aria-busy="true"]::before { filter: url(#sketch-boil); }
-.tk__btn[aria-busy="true"]::after {
-  content: "...";
-  display: inline-block;
-  width: 3ch;
-  overflow: hidden;
-  vertical-align: bottom;
-  clip-path: inset(0 100% 0 0);
-  animation: tk-dots .9s steps(3) infinite; /* só enquanto aria-busy */
-}
 @keyframes tk-dots { to { clip-path: inset(0 0 0 0); } }
 
 @media (prefers-reduced-motion: reduce) {
-  .tk { transition: none; }
-  .tk__btn::before, .tk__btn[aria-busy="true"]::before { filter: url(#sketch) !important; }
-  .tk__btn[aria-busy="true"]::after { animation: none; clip-path: none; }
+  .tk, .btn { transition: none; }
+  .tk__btn::before, .btn::before { filter: url(#sketch) !important; }
+  .tk__btn[aria-busy="true"]::after, .btn[aria-busy="true"]::after { animation: none; clip-path: none; }
 }

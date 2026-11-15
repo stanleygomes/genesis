@@ -12,7 +12,7 @@ function stopBoil() {
   if (boiling === 0) boil.endElement();
 }
 
-document.querySelectorAll(".tk__btn").forEach((btn) => {
+document.querySelectorAll(".tk__btn, .btn").forEach((btn) => {
   btn.addEventListener("pointerenter", () => { if (!btn.disabled) startBoil(); });
   btn.addEventListener("pointerleave", () => { if (!btn.disabled) stopBoil(); });
 });
@@ -25,20 +25,22 @@ document.getElementById("theme").addEventListener("click", () => {
   root.dataset.theme = dark ? "light" : "dark";
 });
 
-document.querySelector('[data-demo="load"]').addEventListener("click", (e) => {
-  const btn = e.currentTarget;
-  if (btn.getAttribute("aria-busy") === "true") return;
-  btn.style.width = `${btn.offsetWidth}px`;
-  btn.setAttribute("aria-busy", "true");
-  startBoil();
-  setTimeout(() => {
-    btn.removeAttribute("aria-busy");
-    btn.style.width = "";
-    stopBoil();
-  }, 2000);
+document.querySelectorAll('[data-demo="load"]').forEach((btn) => {
+  btn.addEventListener("click", () => {
+    if (btn.getAttribute("aria-busy") === "true") return;
+    btn.style.width = `${btn.offsetWidth}px`;
+    btn.setAttribute("aria-busy", "true");
+    startBoil();
+    setTimeout(() => {
+      btn.removeAttribute("aria-busy");
+      btn.style.width = "";
+      stopBoil();
+    }, 2000);
+  });
 });
 
-document.querySelector('[data-demo="toggle"]').addEventListener("click", (e) => {
-  const btn = e.currentTarget;
-  btn.setAttribute("aria-pressed", String(btn.getAttribute("aria-pressed") !== "true"));
+document.querySelectorAll('[data-demo="toggle"]').forEach((btn) => {
+  btn.addEventListener("click", () => {
+    btn.setAttribute("aria-pressed", String(btn.getAttribute("aria-pressed") !== "true"));
+  });
 });

@@ -19,7 +19,9 @@ code { font: 14px "Special Elite", monospace; }
   gap: 8px 20px;
   max-width: 1160px;
   margin: 0 auto;
-  padding: 28px 16px 20px;
+  padding-block: 28px 20px;
+  padding-left: max(16px, env(safe-area-inset-left, 0px));
+  padding-right: max(16px, env(safe-area-inset-right, 0px));
 }
 .logo {
   margin: 0;
@@ -31,7 +33,13 @@ code { font: 14px "Special Elite", monospace; }
 }
 .tagline { flex: 1 1 260px; margin: 0; font-style: italic; color: var(--text-soft); }
 
-main { max-width: 1160px; margin: 0 auto; padding: 0 16px 48px; }
+main {
+  max-width: 1160px;
+  margin: 0 auto;
+  padding-block: 0 48px;
+  padding-left: max(16px, env(safe-area-inset-left, 0px));
+  padding-right: max(16px, env(safe-area-inset-right, 0px));
+}
 .toc {
   display: flex;
   gap: 20px;
@@ -69,5 +77,6 @@ main { max-width: 1160px; margin: 0 auto; padding: 0 16px 48px; }
 .hint { margin: 0 0 20px; color: var(--text-soft); font-style: italic; }
 
 /* vitrine de estados é parada: o loading de exemplo não anima */
-.states .tk__btn[aria-busy="true"]::after { animation: none; clip-path: none; }
-.states .tk__btn[aria-busy="true"]::before { filter: url(#sketch); }
+.states [aria-busy="true"]::after { animation: none; clip-path: none; }
+.states [aria-busy="true"]::before { filter: url(#sketch); }
+.comp + .comp { margin-top: 48px; }

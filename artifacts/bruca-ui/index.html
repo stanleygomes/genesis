@@ -25,56 +25,96 @@
   <header class="top">
     <h1 class="logo">bruca-ui</h1>
     <p class="tagline">brutalismo + cartoon: layout reto, componente desenhado à mão.</p>
-    <span class="tk tk--ghost tk--sm">
-      <button class="tk__btn" type="button" id="theme" aria-label="Alternar tema">Tema</button>
-    </span>
+    <button class="btn btn--neutral btn--sm" type="button" id="theme" aria-label="Alternar tema">Tema</button>
   </header>
 
   <main>
     <nav class="toc" aria-label="Componentes">
-      <a href="#button" aria-current="true">Button</a>
+      <a href="#button">Button</a>
+      <a href="#ticket">Ticket button</a>
     </nav>
 
     <section id="button" class="comp">
       <header class="comp__head">
-        <h2>Button <small>ticket</small></h2>
-        <p>Ação na página. Um <code>primary</code> por grupo. Navegação é link, não botão.
+        <h2>Button <small>dia a dia</small></h2>
+        <p>O botão de sempre: formulário, diálogo, toolbar, tabela. Um <code>primary</code> por grupo, por último.
           Spec: <code>.agents/skills/bruca-ui/components/button.md</code></p>
       </header>
-
       <div class="grid">
         <div class="cell">
-          <span class="tag">01 · variantes</span>
+          <span class="tag">variantes</span>
           <div class="row">
-            <span class="tk"><button class="tk__btn" type="button">Salvar</button></span>
-            <span class="tk tk--ghost"><button class="tk__btn" type="button">Cancelar</button></span>
-            <span class="tk tk--danger"><button class="tk__btn" type="button">Apagar</button></span>
-            <span class="tk tk--sm"><button class="tk__btn" type="button">Pequeno</button></span>
-            <span class="tk tk--icon"><button class="tk__btn" type="button" aria-label="Adicionar">
-              <svg viewBox="0 0 20 20" aria-hidden="true"><path d="M10 3v14M3 10h14" stroke="currentColor" stroke-width="3" stroke-linecap="square"/></svg>
-            </button></span>
+            <button class="btn" type="button">Salvar</button>
+            <button class="btn btn--neutral" type="button">Cancelar</button>
+            <button class="btn btn--danger" type="button">Apagar</button>
+            <button class="btn btn--neutral btn--flat" type="button">Editar</button>
+            <button class="btn btn--neutral btn--icon" type="button" aria-label="Adicionar"><svg viewBox="0 0 20 20" aria-hidden="true"><path d="M10 3v14M3 10h14" stroke="currentColor" stroke-width="3" stroke-linecap="square"/></svg></button>
           </div>
         </div>
-
         <div class="cell">
-          <span class="tag">02 · estados</span>
+          <span class="tag">tamanhos</span>
+          <div class="row">
+            <button class="btn btn--sm" type="button">Pequeno</button>
+            <button class="btn" type="button">Médio</button>
+            <button class="btn btn--lg" type="button"><svg viewBox="0 0 20 20" aria-hidden="true"><path d="M10 3v14M3 10h14" stroke="currentColor" stroke-width="3" stroke-linecap="square"/></svg>Grande</button>
+          </div>
+        </div>
+        <div class="cell">
+          <span class="tag">estados</span>
           <div class="states">
-            <figure><span class="tk"><button class="tk__btn" type="button" tabindex="-1">Salvar</button></span><figcaption>default</figcaption></figure>
-            <figure><span class="tk is-hover"><button class="tk__btn" type="button" tabindex="-1">Salvar</button></span><figcaption>hover</figcaption></figure>
-            <figure><span class="tk is-active"><button class="tk__btn" type="button" tabindex="-1">Salvar</button></span><figcaption>active</figcaption></figure>
-            <figure><span class="tk is-focus"><button class="tk__btn" type="button" tabindex="-1">Salvar</button></span><figcaption>focus-visible</figcaption></figure>
-            <figure><span class="tk"><button class="tk__btn" type="button" disabled>Salvar</button></span><figcaption>disabled</figcaption></figure>
-            <figure><span class="tk"><button class="tk__btn" type="button" aria-busy="true" tabindex="-1">Salvar</button></span><figcaption>loading</figcaption></figure>
-            <figure><span class="tk"><button class="tk__btn" type="button" aria-pressed="true" tabindex="-1">Fixar</button></span><figcaption>toggled</figcaption></figure>
+            <figure><button class="btn " type="button" tabindex="-1">Salvar</button><figcaption>default</figcaption></figure>
+            <figure><button class="btn is-hover" type="button" tabindex="-1">Salvar</button><figcaption>hover</figcaption></figure>
+            <figure><button class="btn is-active" type="button" tabindex="-1">Salvar</button><figcaption>active</figcaption></figure>
+            <figure><button class="btn is-focus" type="button" tabindex="-1">Salvar</button><figcaption>focus-visible</figcaption></figure>
+            <figure><button class="btn" type="button" disabled>Salvar</button><figcaption>disabled</figcaption></figure>
+            <figure><button class="btn " type="button" aria-busy="true" tabindex="-1">Salvar</button><figcaption>loading</figcaption></figure>
+            <figure><button class="btn " type="button" aria-pressed="true" tabindex="-1">Fixar</button><figcaption>toggled</figcaption></figure>
           </div>
         </div>
-
         <div class="cell">
-          <span class="tag">03 · ao vivo</span>
+          <span class="tag">ao vivo</span>
           <p class="hint">Passe o mouse, clique, use Tab. "Enviar" carrega 2s; "Fixar" alterna.</p>
           <div class="row">
-            <span class="tk"><button class="tk__btn" type="button" data-demo="load">Enviar</button></span>
-            <span class="tk tk--ghost"><button class="tk__btn" type="button" data-demo="toggle" aria-pressed="false">Fixar</button></span>
+            <button class="btn btn--neutral" type="button" data-demo="toggle" aria-pressed="false">Fixar</button>
+            <button class="btn" type="button" data-demo="load">Enviar</button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="ticket" class="comp">
+      <header class="comp__head">
+        <h2>Ticket button <small>especial</small></h2>
+        <p>Só a ação principal da tela: entrar, comprar, começar. No máximo um por tela; o resto usa o Button.
+          Spec: <code>.agents/skills/bruca-ui/components/ticket-button.md</code></p>
+      </header>
+      <div class="grid">
+        <div class="cell">
+          <span class="tag">variantes</span>
+          <div class="row">
+            <span class="tk"><button class="tk__btn" type="button">Entrar</button></span>
+            <span class="tk tk--ghost"><button class="tk__btn" type="button">Ver mais</button></span>
+            <span class="tk tk--danger"><button class="tk__btn" type="button">Encerrar</button></span>
+            <span class="tk tk--sm"><button class="tk__btn" type="button">Pequeno</button></span>
+          </div>
+        </div>
+        <div class="cell">
+          <span class="tag">estados</span>
+          <div class="states">
+            <figure><span class="tk "><button class="tk__btn" type="button" tabindex="-1">Entrar</button></span><figcaption>default</figcaption></figure>
+            <figure><span class="tk is-hover"><button class="tk__btn" type="button" tabindex="-1">Entrar</button></span><figcaption>hover</figcaption></figure>
+            <figure><span class="tk is-active"><button class="tk__btn" type="button" tabindex="-1">Entrar</button></span><figcaption>active</figcaption></figure>
+            <figure><span class="tk is-focus"><button class="tk__btn" type="button" tabindex="-1">Entrar</button></span><figcaption>focus-visible</figcaption></figure>
+            <figure><span class="tk"><button class="tk__btn" type="button" disabled>Entrar</button></span><figcaption>disabled</figcaption></figure>
+            <figure><span class="tk "><button class="tk__btn" type="button" aria-busy="true" tabindex="-1">Entrar</button></span><figcaption>loading</figcaption></figure>
+            <figure><span class="tk "><button class="tk__btn" type="button" aria-pressed="true" tabindex="-1">Fixar</button></span><figcaption>toggled</figcaption></figure>
+          </div>
+        </div>
+        <div class="cell">
+          <span class="tag">ao vivo</span>
+          <p class="hint">Mesmos estados do Button. "Comprar" carrega 2s.</p>
+          <div class="row">
+            <span class="tk"><button class="tk__btn" type="button" data-demo="load">Comprar</button></span>
           </div>
         </div>
       </div>
