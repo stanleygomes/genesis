@@ -53,6 +53,7 @@ Layout (grid, dividers, color blocks, giant number) is always straight. When in 
 - **Motion is part of each component** (see its Motion section): stepped (`steps(n)`), `≤ 1.8s`, finite, tied to a real event (appear, change, finish). View change: [transitions.md](components/transitions.md). All off under `prefers-reduced-motion` (also remove SVG `<animate>`).
 - **Performance:** no `infinite` animation anywhere in an app. In WebKit (Wails/Tauri on Linux) any looping animation repaints the window and re-runs the SVG filters on every large `.sketched` panel: measured ~90% CPU vs 0–5% with everything still.
 - Errors never take the full screen; celebrations may. Header clean. One loud element per screen (one loud stamp, one giant number, one color block in view).
+- Direction: write logical properties (`margin-inline`, `padding-inline-start`, `inset-inline-end`, `border-inline-start`, `text-align: start`) so `dir="rtl"` flips layouts by itself. Hard shadows keep their down-right offset (it is the light, not the reading order); arrows and chevrons mirror.
 - CSS/SVG/canvas only: no image requests, no `innerHTML`.
 - Grain/vignette overlay: fixed, `pointer-events: none`, painted once (see [film-texture.md](components/film-texture.md)).
 - Never: heavy grain, flicker, scratches or boil at full strength (reads as broken), digital glitch (datamosh, pixel sorting), neon or garish palettes, synthwave/cyberpunk, pixel fonts, everything tilted or overlapping, "ugly on purpose", system fonts.
@@ -65,11 +66,13 @@ One file per component in `components/`: open only the ones the screen needs. Ea
 
 | Group | Components |
 | --- | --- |
-| Layout | [grid](components/grid.md) · [color block](components/color-block.md) · [giant number](components/giant-number.md) · [nav](components/nav.md) (🎬 program variant) |
-| Actions | [button](components/button.md) · 🎬 [ticket button](components/ticket-button.md) |
-| Forms | [input](components/input.md) · [choice](components/choice.md) (checkbox, radio, switch) |
-| Feedback | [badge](components/badge.md) · 🎬 [stamp](components/stamp.md) · [alert](components/alert.md) (🎬 ribbon variant) · 🎬 [telegram](components/telegram.md) · [toast](components/toast.md) · [progress](components/progress.md) (🎬 film-reel variant) · [dialog](components/dialog.md) |
-| Content | [card](components/card.md) (🎬 tilted variant) · [tabs](components/tabs.md) · [table](components/table.md) · [code](components/code.md) · 🎬 [balloon](components/balloon.md) · [scrollbar](components/scrollbar.md) |
-| Effects | [transitions](components/transitions.md) (🎬 iris) · 🎬 [film texture](components/film-texture.md) |
+| Layout | [grid](components/grid.md) · [color block](components/color-block.md) · [giant number](components/giant-number.md) · [resizable](components/resizable.md) · [scrollbar](components/scrollbar.md) |
+| Navigation | [nav](components/nav.md) (🎬 program) · [breadcrumb](components/breadcrumb.md) · [pagination](components/pagination.md) · [sidebar](components/sidebar.md) · [menubar](components/menubar.md) |
+| Actions | [button](components/button.md) · 🎬 [ticket button](components/ticket-button.md) · [button group](components/button-group.md) · [toggle](components/toggle.md) (+ group) |
+| Forms | [field](components/field.md) (label, form) · [input](components/input.md) (textarea, native select) · [input group](components/input-group.md) · [input otp](components/input-otp.md) · [choice](components/choice.md) (checkbox, radio, switch) · [select](components/select.md) (custom listbox) · [combobox](components/combobox.md) · [slider](components/slider.md) · [calendar](components/calendar.md) · [date picker](components/date-picker.md) · [questionnaire](components/questionnaire.md) (🎬 show) |
+| Overlays | [dialog](components/dialog.md) (alert dialog) · [drawer](components/drawer.md) (sheet) · [popover](components/popover.md) (🎬 balloon) · [tooltip](components/tooltip.md) · [hover card](components/hover-card.md) · [dropdown menu](components/dropdown-menu.md) · [context menu](components/context-menu.md) · [command](components/command.md) |
+| Feedback | [badge](components/badge.md) · 🎬 [stamp](components/stamp.md) · [alert](components/alert.md) (🎬 ribbon) · 🎬 [telegram](components/telegram.md) · [toast](components/toast.md) · [progress](components/progress.md) (🎬 film reel) · [spinner](components/spinner.md) (🎬 film reel) · [skeleton](components/skeleton.md) · [empty](components/empty.md) |
+| Content | [card](components/card.md) (🎬 tilted) · [image card](components/image-card.md) · [item](components/item.md) · [avatar](components/avatar.md) (🎬 cameo) · [accordion](components/accordion.md) (collapsible) · [tabs](components/tabs.md) · [table](components/table.md) · [data table](components/data-table.md) · [chart](components/chart.md) · [carousel](components/carousel.md) · [attachment](components/attachment.md) · [code](components/code.md) · [kbd](components/kbd.md) · [marker](components/marker.md) · 🎬 [balloon](components/balloon.md) · [message scroller](components/message-scroller.md) |
+| Effects | [transitions](components/transitions.md) (🎬 iris) · 🎬 [marquee](components/marquee.md) · 🎬 [film texture](components/film-texture.md) |
 
 Optional modules: [OPTIONS.md](OPTIONS.md).
