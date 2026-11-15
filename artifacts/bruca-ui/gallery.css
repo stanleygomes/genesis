@@ -10,7 +10,7 @@ body {
     var(--bg);
   min-height: 100vh;
 }
-code { font: 14px "Special Elite", monospace; }
+code { font: 14px "Courier Prime", monospace; }
 
 .top, .layout {
   max-width: 1400px;
@@ -99,9 +99,9 @@ main { padding-top: 28px; min-width: 0; }
 }
 .base .tag { margin-bottom: 12px; }
 .base pre { margin: 0; white-space: pre-wrap; overflow-wrap: anywhere; }
-.base code { font-size: 13px; line-height: 1.6; }
+.base code { font: 14px/1.55 "Courier Prime", monospace; }
 .css .s { color: var(--red); }
-.css .k { font-weight: 700; color: var(--text); text-shadow: .3px 0 currentColor; }
+.css .k { font-weight: 700; color: var(--text); }
 .css .q { color: var(--teal); }
 .css .n { color: light-dark(#6A5442, #E8B34A); }
 .css .c { color: var(--text-soft); font-style: italic; }
@@ -130,3 +130,20 @@ main { padding-top: 28px; min-width: 0; }
 .states [aria-busy="true"]::before { filter: url(#sketch); }
 .comp + .comp { margin-top: 48px; }
 .comp { scroll-margin-top: 16px; }
+
+/* selo do tipo de componente */
+.kind { display: inline-block; vertical-align: middle; padding: 2px 8px; border: 2px solid var(--outline); border-radius: 4px; font: 12px "Special Elite", monospace; color: var(--text-soft); }
+.kind--cartoon { background: var(--mustard); color: var(--on-mustard); }
+
+/* playground */
+.swatches { display: grid; grid-template-columns: repeat(auto-fill, minmax(190px, 1fr)); gap: 12px 20px; }
+.swatch { display: flex; align-items: center; gap: 12px; cursor: pointer; }
+.swatch input { width: 44px; height: 44px; padding: 0; border: 3px solid var(--outline); border-radius: var(--radii-sm); background: none; box-shadow: 3px 3px 0 var(--outline); cursor: pointer; }
+.swatch input::-webkit-color-swatch-wrapper { padding: 0; }
+.swatch input::-webkit-color-swatch { border: 0; border-radius: 5px; }
+.swatch input:focus-visible { outline: 3px solid var(--teal); outline-offset: 3px; }
+.swatch span { display: grid; font-size: 15px; line-height: 1.3; color: var(--text-soft); }
+.swatch b { font: 13px "Special Elite", monospace; color: var(--text); }
+#tok-out { flex-basis: 100%; margin-top: 16px; }
+
+.states .input, .states .field { width: 100%; min-width: 0; }

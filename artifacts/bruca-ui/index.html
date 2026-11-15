@@ -1,14 +1,13 @@
 <!doctype html>
-<html lang="pt-BR">
+<html lang="pt-BR" data-theme="light">
 <head>
   <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
   <title>bruca-ui</title>
   <link rel="stylesheet" href="bruca.css">
   <link rel="stylesheet" href="gallery.css">
 </head>
 <body>
-  <!-- contorno desenhado à mão: parado (#sketch) e fervendo (#sketch-boil, só em hover/loading) -->
   <svg width="0" height="0" aria-hidden="true" style="position:absolute">
     <filter id="sketch" x="-10%" y="-10%" width="120%" height="120%">
       <feTurbulence type="fractalNoise" baseFrequency="0.035" numOctaves="2" seed="3"/>
@@ -24,159 +23,529 @@
 
   <header class="top">
     <h1 class="logo">bruca-ui</h1>
-    <p class="tagline">brutalismo + cartoon: layout reto, componente desenhado à mão.</p>
-    <button class="btn btn--neutral btn--sm" type="button" id="theme" aria-label="Alternar tema">Tema</button>
+    <p class="tagline">brutalismo + cartoon: base sóbria, cartoon como tempero (🎬, no máximo 2 tipos por tela).</p>
+    <button class="btn btn--neutral btn--sm" type="button" id="theme">Tema escuro</button>
   </header>
 
   <div class="layout">
     <aside class="side">
       <nav class="toc" aria-label="Componentes">
-        <p class="toc__group">Ações</p>
-        <ul>
-          <li><a href="#button">Button</a></li>
-          <li><a href="#ticket">Ticket button</a></li>
-        </ul>
+        <p class="toc__group">Playground</p><ul><li><a href="#playground">Cores do tema</a></li></ul>
+        <p class="toc__group">Layout</p><ul><li><a href="#grid">Grid</a></li><li><a href="#color-block">Color block</a></li><li><a href="#giant-number">Giant number</a></li><li><a href="#nav">Nav</a></li></ul><p class="toc__group">Ações</p><ul><li><a href="#button">Button</a></li><li><a href="#ticket-button">Ticket button 🎬</a></li></ul><p class="toc__group">Formulários</p><ul><li><a href="#input">Input</a></li><li><a href="#choice">Choice</a></li></ul><p class="toc__group">Feedback</p><ul><li><a href="#badge">Badge</a></li><li><a href="#stamp">Stamp 🎬</a></li><li><a href="#alert">Alert</a></li><li><a href="#telegram">Telegram 🎬</a></li><li><a href="#toast">Toast</a></li><li><a href="#progress">Progress</a></li><li><a href="#dialog">Dialog</a></li></ul><p class="toc__group">Conteúdo</p><ul><li><a href="#card">Card</a></li><li><a href="#tabs">Tabs</a></li><li><a href="#table">Table</a></li><li><a href="#code">Code</a></li><li><a href="#balloon">Balloon 🎬</a></li></ul><p class="toc__group">Efeitos</p><ul><li><a href="#transitions">Transitions</a></li><li><a href="#film-texture">Film texture 🎬</a></li><li><a href="#mascot">Mascot 🎬</a></li></ul>
       </nav>
     </aside>
 
   <main>
-
-    <section id="button" class="comp">
+    <section id="playground" class="comp">
       <header class="comp__head">
-        <h2>Button <small>dia a dia</small></h2>
-        <p>O botão de sempre: formulário, diálogo, toolbar, tabela. Um <code>primary</code> por grupo, por último.
-          Spec: <code>.agents/skills/bruca-ui/components/button.md</code></p>
+        <h2>Cores do tema</h2>
+        <p>Mude uma cor e todos os componentes da página seguem. Cada tema (claro/escuro) guarda as suas. "Copiar tokens" gera o <code>:root</code> com <code>light-dark()</code>.</p>
       </header>
-      <div class="comp__body">
-        <div class="grid">
-          <div class="cell">
-            <span class="tag">variantes</span>
-            <div class="row">
-              <button class="btn" type="button">Salvar</button>
-              <button class="btn btn--neutral" type="button">Cancelar</button>
-              <button class="btn btn--danger" type="button">Apagar</button>
-              <button class="btn btn--neutral btn--flat" type="button">Editar</button>
-              <button class="btn btn--neutral btn--icon" type="button" aria-label="Adicionar"><svg viewBox="0 0 20 20" aria-hidden="true"><path d="M10 3v14M3 10h14" stroke="currentColor" stroke-width="3" stroke-linecap="square"/></svg></button>
-            </div>
-          </div>
-          <div class="cell">
-            <span class="tag">tamanhos</span>
-            <div class="row">
-              <button class="btn btn--sm" type="button">Pequeno</button>
-              <button class="btn" type="button">Médio</button>
-              <button class="btn btn--lg" type="button"><svg viewBox="0 0 20 20" aria-hidden="true"><path d="M10 3v14M3 10h14" stroke="currentColor" stroke-width="3" stroke-linecap="square"/></svg>Grande</button>
-            </div>
-          </div>
-          <div class="cell">
-            <span class="tag">estados</span>
-            <div class="states">
-              <figure><button class="btn " type="button" tabindex="-1">Salvar</button><figcaption>default</figcaption></figure>
-              <figure><button class="btn is-hover" type="button" tabindex="-1">Salvar</button><figcaption>hover</figcaption></figure>
-              <figure><button class="btn is-active" type="button" tabindex="-1">Salvar</button><figcaption>active</figcaption></figure>
-              <figure><button class="btn is-focus" type="button" tabindex="-1">Salvar</button><figcaption>focus-visible</figcaption></figure>
-              <figure><button class="btn" type="button" disabled>Salvar</button><figcaption>disabled</figcaption></figure>
-              <figure><button class="btn " type="button" aria-busy="true" tabindex="-1">Salvar</button><figcaption>loading</figcaption></figure>
-              <figure><button class="btn " type="button" aria-pressed="true" tabindex="-1">Fixar</button><figcaption>toggled</figcaption></figure>
-            </div>
-          </div>
-          <div class="cell">
-            <span class="tag">ao vivo</span>
-            <p class="hint">Passe o mouse, clique, use Tab. "Enviar" carrega 2s; "Fixar" alterna.</p>
-            <div class="row">
-              <button class="btn btn--neutral" type="button" data-demo="toggle" aria-pressed="false">Fixar</button>
-              <button class="btn" type="button" data-demo="load">Enviar</button>
-            </div>
-          </div>
-        </div>
-        <aside class="base" aria-label="CSS base">
-          <span class="tag">css base</span>
-          <pre><code class="css">.btn {
-  display: inline-flex;
-  gap: 8px;
-  min-height: 44px;
-  padding: 10px 18px;
-  font: 14px/1 "Bevan";
-  letter-spacing: .06em;
-  text-transform: uppercase;
-  background: var(--mustard);
-  color: var(--on-mustard);
-  border-radius: 8px 10px 7px 9px / 9px 7px 10px 8px;
-  box-shadow: 4px 4px 0 var(--outline);
-}
-/* contorno à mão */
-.btn::before {
-  border: 3px solid var(--outline);
-  filter: url(#sketch);
-}</code></pre>
-        </aside>
+      <div class="grid">
+        <div class="cell"><div class="swatches"><label class="swatch"><input type="color" id="tok-bg" data-token="--bg"><span><b>bg</b>fundo</span></label><label class="swatch"><input type="color" id="tok-card" data-token="--card"><span><b>card</b>cartão</span></label><label class="swatch"><input type="color" id="tok-balloon" data-token="--balloon"><span><b>balloon</b>balão/campo</span></label><label class="swatch"><input type="color" id="tok-text" data-token="--text"><span><b>text</b>texto</span></label><label class="swatch"><input type="color" id="tok-text-soft" data-token="--text-soft"><span><b>text-soft</b>texto suave</span></label><label class="swatch"><input type="color" id="tok-outline" data-token="--outline"><span><b>outline</b>contorno/sombra</span></label><label class="swatch"><input type="color" id="tok-mustard" data-token="--mustard"><span><b>mustard</b>mostarda</span></label><label class="swatch"><input type="color" id="tok-on-mustard" data-token="--on-mustard"><span><b>on-mustard</b>texto na mostarda</span></label><label class="swatch"><input type="color" id="tok-teal" data-token="--teal"><span><b>teal</b>teal</span></label><label class="swatch"><input type="color" id="tok-red" data-token="--red"><span><b>red</b>vermelho</span></label></div></div>
+        <div class="cell"><div class="row">
+          <button class="btn btn--neutral btn--sm" type="button" id="tok-reset">Restaurar este tema</button>
+          <button class="btn btn--sm" type="button" id="tok-copy">Copiar tokens</button>
+          <span class="b-meta" id="tok-status" role="status"></span>
+        </div><pre class="code" id="tok-out" hidden></pre></div>
       </div>
     </section>
 
-    <section id="ticket" class="comp">
+    <section id="grid" class="comp">
       <header class="comp__head">
-        <h2>Ticket button <small>especial</small></h2>
-        <p>Só a ação principal da tela: entrar, comprar, começar. No máximo um por tela; o resto usa o Button.
-          Spec: <code>.agents/skills/bruca-ui/components/ticket-button.md</code></p>
+        <h2>Grid <span class="kind">sóbrio</span></h2>
+        <p>Estrutura crua: moldura e divisórias de 3px, sem vão. Spec: <code>components/grid.md</code></p>
       </header>
       <div class="comp__body">
-        <div class="grid">
-          <div class="cell">
-            <span class="tag">variantes</span>
-            <div class="row">
-              <span class="tk"><button class="tk__btn" type="button">Entrar</button></span>
-              <span class="tk tk--ghost"><button class="tk__btn" type="button">Ver mais</button></span>
-              <span class="tk tk--danger"><button class="tk__btn" type="button">Encerrar</button></span>
-              <span class="tk tk--sm"><button class="tk__btn" type="button">Pequeno</button></span>
-            </div>
-          </div>
-          <div class="cell">
-            <span class="tag">estados</span>
-            <div class="states">
-              <figure><span class="tk "><button class="tk__btn" type="button" tabindex="-1">Entrar</button></span><figcaption>default</figcaption></figure>
-              <figure><span class="tk is-hover"><button class="tk__btn" type="button" tabindex="-1">Entrar</button></span><figcaption>hover</figcaption></figure>
-              <figure><span class="tk is-active"><button class="tk__btn" type="button" tabindex="-1">Entrar</button></span><figcaption>active</figcaption></figure>
-              <figure><span class="tk is-focus"><button class="tk__btn" type="button" tabindex="-1">Entrar</button></span><figcaption>focus-visible</figcaption></figure>
-              <figure><span class="tk"><button class="tk__btn" type="button" disabled>Entrar</button></span><figcaption>disabled</figcaption></figure>
-              <figure><span class="tk "><button class="tk__btn" type="button" aria-busy="true" tabindex="-1">Entrar</button></span><figcaption>loading</figcaption></figure>
-              <figure><span class="tk "><button class="tk__btn" type="button" aria-pressed="true" tabindex="-1">Fixar</button></span><figcaption>toggled</figcaption></figure>
-            </div>
-          </div>
-          <div class="cell">
-            <span class="tag">ao vivo</span>
-            <p class="hint">Mesmos estados do Button. "Comprar" carrega 2s.</p>
-            <div class="row">
-              <span class="tk"><button class="tk__btn" type="button" data-demo="load">Comprar</button></span>
-            </div>
-          </div>
-        </div>
-        <aside class="base" aria-label="CSS base">
-          <span class="tag">css base</span>
-          <pre><code class="css">/* wrapper: sombra e foco (o mask cortaria) */
-.tk {
-  filter: drop-shadow(3px 4px 0 var(--outline));
+        <div class="grid"><div class="cell"><span class="tag">exemplo</span><div class="row"><div class="b-grid" style="width:100%"><div><span class="b-tag">receita</span><p>R$ 12.400</p><span class="b-meta">nov · 2026</span></div><div><span class="b-tag">gastos</span><p>R$ 8.150</p><span class="b-meta">nov · 2026</span></div><div><span class="b-tag">sobra</span><p>R$ 4.250</p><span class="b-meta">nov · 2026</span></div></div></div></div></div>
+        <aside class="base" aria-label="CSS base"><span class="tag">css base</span><pre><code class="css">.b-grid {
+  display: grid;
+  border: 3px solid var(--outline);
 }
-.tk__btn {
+.b-grid &gt; * {
+  padding: 20px 16px 28px;
+  border-right: 3px solid var(--outline);
+  border-bottom: 3px solid var(--outline);
+}
+.b-tag {
+  background: var(--text);
+  color: var(--bg);
+  font: 12px &quot;Special Elite&quot;;
+}</code></pre></aside>
+      </div>
+    </section>
+    <section id="color-block" class="comp">
+      <header class="comp__head">
+        <h2>Color block <span class="kind">sóbrio</span></h2>
+        <p>Faixa sólida de largura total no lugar de card dentro de card. Uma por tela. Spec: <code>components/color-block.md</code></p>
+      </header>
+      <div class="comp__body">
+        <div class="grid"><div class="cell"><span class="tag">mostarda</span><div class="row"><div class="cblock" style="width:100%"><h3>Sobrou R$ 4.250</h3><p>Dá pra guardar metade na reserva este mês.</p></div></div></div><div class="cell"><span class="tag">teal</span><div class="row"><div class="cblock cblock--teal" style="width:100%"><h3>Tudo em dia</h3><p>Nenhuma conta vence nos próximos 7 dias.</p></div></div></div></div>
+        <aside class="base" aria-label="CSS base"><span class="tag">css base</span><pre><code class="css">.cblock {
+  padding-block: 32px;
+  background: var(--mustard);
+  color: var(--on-mustard);
+  border-block: 3px solid var(--outline);
+}</code></pre></aside>
+      </div>
+    </section>
+    <section id="giant-number" class="comp">
+      <header class="comp__head">
+        <h2>Giant number <span class="kind">sóbrio</span></h2>
+        <p>O número que a pessoa veio ver. Conta do zero uma vez ao aparecer. Spec: <code>components/giant-number.md</code></p>
+      </header>
+      <div class="comp__body">
+        <div class="grid"><div class="cell"><span class="tag">exemplo</span><div class="row"><div><span class="giant__label">sobra do mês</span><p class="giant" data-count="4250">R$ 4.2<span class="giant__accent">50</span></p></div><button class="btn btn--neutral btn--sm btn--flat" type="button" data-replay="count">Rever</button></div></div></div>
+        <aside class="base" aria-label="CSS base"><span class="tag">css base</span><pre><code class="css">.giant {
+  font: clamp(44px, 8vw, 92px)/1 &quot;Bevan&quot;;
+  font-variant-numeric: tabular-nums;
+  color: var(--text);
+}
+.giant__accent { color: var(--red); }
+/* aparece: conta em steps(12), ≤ 0.8s, uma vez */</code></pre></aside>
+      </div>
+    </section>
+    <section id="nav" class="comp">
+      <header class="comp__head">
+        <h2>Nav <span class="kind">sóbrio</span> <span class="kind kind--cartoon">🎬 variante cartoon</span></h2>
+        <p>Barra do dia a dia; o programa de teatro é a variante cartoon. Spec: <code>components/nav.md</code></p>
+      </header>
+      <div class="comp__body">
+        <div class="grid"><div class="cell"><span class="tag">barra</span><div class="row"><nav class="nav" style="width:100%" aria-label="Exemplo"><a href="#nav" aria-current="page">Início</a><a href="#nav">Gastos</a><a href="#nav">Metas</a><a href="#nav">Ajustes</a></nav></div></div><div class="cell"><span class="tag">🎬 programa</span><div class="row"><ul class="program"><li><a href="#nav">Abertura</a><span>p. 1</span></li><li><a href="#nav">O elenco</a><span>p. 4</span></li><li><a href="#nav">Bilheteria</a><span>p. 9</span></li></ul></div></div></div>
+        <aside class="base" aria-label="CSS base"><span class="tag">css base</span><pre><code class="css">.nav {
+  min-height: 56px;
+  gap: 20px;
+  border-bottom: 3px solid var(--outline);
+}
+.nav a {
+  font: 13px &quot;Bevan&quot;;
+  text-transform: uppercase;
+}
+.nav a[aria-current=&quot;page&quot;] {
+  box-shadow: inset 0 -3px var(--mustard);
+}</code></pre></aside>
+      </div>
+    </section>
+    <section id="button" class="comp">
+      <header class="comp__head">
+        <h2>Button <span class="kind">sóbrio</span></h2>
+        <p>O botão de sempre: formulário, diálogo, toolbar, tabela. Um primary por grupo, por último. Spec: <code>components/button.md</code></p>
+      </header>
+      <div class="comp__body">
+        <div class="grid"><div class="cell"><span class="tag">variantes</span><div class="row"><button class="btn " type="button" >Salvar</button><button class="btn btn--neutral" type="button" >Cancelar</button><button class="btn btn--danger" type="button" >Apagar</button><button class="btn btn--neutral btn--flat" type="button" >Editar</button><button class="btn btn--neutral btn--icon" type="button" aria-label="Adicionar"><svg viewBox="0 0 20 20" aria-hidden="true"><path d="M10 3v14M3 10h14" stroke="currentColor" stroke-width="3" stroke-linecap="square"/></svg></button></div></div><div class="cell"><span class="tag">tamanhos</span><div class="row"><button class="btn btn--sm" type="button" >Pequeno</button><button class="btn " type="button" >Médio</button><button class="btn btn--lg" type="button" ><svg viewBox="0 0 20 20" aria-hidden="true"><path d="M10 3v14M3 10h14" stroke="currentColor" stroke-width="3" stroke-linecap="square"/></svg>Grande</button></div></div><div class="cell"><span class="tag">estados</span><div class="states"><figure><button class="btn " type="button" tabindex="-1">Salvar</button><figcaption>default</figcaption></figure><figure><button class="btn is-hover" type="button" tabindex="-1">Salvar</button><figcaption>hover</figcaption></figure><figure><button class="btn is-active" type="button" tabindex="-1">Salvar</button><figcaption>active</figcaption></figure><figure><button class="btn is-focus" type="button" tabindex="-1">Salvar</button><figcaption>focus-visible</figcaption></figure><figure><button class="btn" type="button" disabled>Salvar</button><figcaption>disabled</figcaption></figure><figure><button class="btn " type="button" aria-busy="true" tabindex="-1">Salvar</button><figcaption>loading</figcaption></figure><figure><button class="btn " type="button" aria-pressed="true" tabindex="-1">Fixar</button><figcaption>toggled</figcaption></figure></div></div><div class="cell"><span class="tag">ao vivo</span><p class="hint">Passe o mouse, clique, use Tab. "Enviar" carrega 2s.</p><div class="row"><button class="btn btn--neutral" type="button" data-demo="toggle" aria-pressed="false">Fixar</button><button class="btn " type="button" data-demo="load">Enviar</button></div></div></div>
+        <aside class="base" aria-label="CSS base"><span class="tag">css base</span><pre><code class="css">.btn {
   min-height: 44px;
-  padding: 10px 22px;
-  font: 14px/1 "Bevan";
+  padding: 10px 18px;
+  font: 14px/1 &quot;Bevan&quot;;
   letter-spacing: .06em;
   text-transform: uppercase;
   background: var(--mustard);
   color: var(--on-mustard);
+  border: 3px solid var(--outline);
   border-radius: 8px 10px 7px 9px / 9px 7px 10px 8px;
-  /* entalhe de 8px em cada lado */
+  box-shadow: 4px 4px 0 var(--outline);
+  transition: transform 120ms steps(2);
+}
+.btn:hover { transform: translate(-2px, -2px); }
+.btn:active { transform: translate(4px, 4px); box-shadow: none; }</code></pre></aside>
+      </div>
+    </section>
+    <section id="ticket-button" class="comp">
+      <header class="comp__head">
+        <h2>Ticket button <span class="kind kind--cartoon">🎬 cartoon</span></h2>
+        <p>Só a ação principal da tela: entrar, comprar, começar. No máximo um por tela. Spec: <code>components/ticket-button.md</code></p>
+      </header>
+      <div class="comp__body">
+        <div class="grid"><div class="cell"><span class="tag">variantes</span><div class="row"><span class="tk "><button class="tk__btn" type="button" >Entrar</button></span><span class="tk tk--ghost"><button class="tk__btn" type="button">Ver mais</button></span><span class="tk tk--danger"><button class="tk__btn" type="button">Encerrar</button></span><span class="tk tk--sm"><button class="tk__btn" type="button">Pequeno</button></span></div></div><div class="cell"><span class="tag">estados</span><div class="states"><figure><span class="tk "><button class="tk__btn" type="button" tabindex="-1">Entrar</button></span><figcaption>default</figcaption></figure><figure><span class="tk is-hover"><button class="tk__btn" type="button" tabindex="-1">Entrar</button></span><figcaption>hover</figcaption></figure><figure><span class="tk is-active"><button class="tk__btn" type="button" tabindex="-1">Entrar</button></span><figcaption>active</figcaption></figure><figure><span class="tk is-focus"><button class="tk__btn" type="button" tabindex="-1">Entrar</button></span><figcaption>focus-visible</figcaption></figure><figure><span class="tk"><button class="tk__btn" type="button" disabled>Entrar</button></span><figcaption>disabled</figcaption></figure><figure><span class="tk "><button class="tk__btn" type="button" aria-busy="true" tabindex="-1">Entrar</button></span><figcaption>loading</figcaption></figure></div></div><div class="cell"><span class="tag">ao vivo</span><p class="hint">Passe o mouse: o contorno ferve só enquanto o mouse está em cima.</p><div class="row"><span class="tk "><button class="tk__btn" type="button" data-demo="load">Comprar</button></span></div></div></div>
+        <aside class="base" aria-label="CSS base"><span class="tag">css base</span><pre><code class="css">/* wrapper: sombra e foco (o mask cortaria) */
+.tk { filter: drop-shadow(3px 4px 0 var(--outline)); }
+.tk__btn {
+  min-height: 44px;
+  padding: 10px 22px;
+  font: 14px/1 &quot;Bevan&quot;;
+  background: var(--mustard);
+  color: var(--on-mustard);
+  border-radius: 8px 10px 7px 9px / 9px 7px 10px 8px;
   mask: radial-gradient(circle at 0 50%, #0000 8px, #000 0) left,
         radial-gradient(circle at 100% 50%, #0000 8px, #000 0) right;
 }
 .tk__btn::before {
   border: 3px solid var(--outline);
   filter: url(#sketch);
-}</code></pre>
-        </aside>
+}</code></pre></aside>
+      </div>
+    </section>
+    <section id="input" class="comp">
+      <header class="comp__head">
+        <h2>Input <span class="kind">sóbrio</span></h2>
+        <p>Texto, área de texto e select. Rótulo sempre visível em cima. Spec: <code>components/input.md</code></p>
+      </header>
+      <div class="comp__body">
+        <div class="grid"><div class="cell"><span class="tag">campos</span><div class="row"><div class="field"><label class="field__label" for="f-nome">Nome</label><input class="input" id="f-nome" placeholder="Como te chamam"><span class="field__help">Aparece no topo do app.</span></div><div class="field"><label class="field__label" for="f-cat">Categoria</label><select class="input" id="f-cat"><option>Mercado</option><option>Casa</option><option>Lazer</option></select></div><div class="field" style="flex-basis:100%"><label class="field__label" for="f-obs">Observação</label><textarea class="input" id="f-obs" placeholder="Opcional"></textarea></div></div></div><div class="cell"><span class="tag">estados</span><div class="states"><figure><input class="input is-focus" value="Focado" tabindex="-1" aria-label="focus"><figcaption>focus</figcaption></figure><figure><div class="field"><input class="input" value="1234" aria-invalid="true" tabindex="-1" aria-label="cep"><span class="field__help">Use 8 dígitos.</span></div><figcaption>invalid</figcaption></figure><figure><input class="input" value="Travado" disabled aria-label="disabled"><figcaption>disabled</figcaption></figure><figure><input class="input" value="Só leitura" readonly tabindex="-1" aria-label="readonly"><figcaption>read-only</figcaption></figure></div></div><div class="cell"><span class="tag">ao vivo</span><p class="hint">Valide com menos de 8 dígitos: treme uma vez e fica vermelho.</p><div class="row"><div class="field"><label class="field__label" for="f-cep">CEP</label><input class="input" id="f-cep" inputmode="numeric" placeholder="00000-000"><span class="field__help" id="f-cep-help">8 dígitos.</span></div><button class="btn " type="button" data-demo="validate">Validar</button></div></div></div>
+        <aside class="base" aria-label="CSS base"><span class="tag">css base</span><pre><code class="css">.input {
+  min-height: 44px;
+  padding: 10px 12px;
+  font: 17px &quot;Alegreya&quot;;
+  background: var(--balloon);
+  border: 3px solid var(--outline);
+  border-radius: 8px 10px 7px 9px / 9px 7px 10px 8px;
+  box-shadow: 3px 3px 0 var(--outline);
+}
+.input:focus {
+  border-color: var(--teal);
+  box-shadow: 4px 4px 0 var(--teal);
+}
+.input[aria-invalid=&quot;true&quot;] { border-color: var(--red); }</code></pre></aside>
+      </div>
+    </section>
+    <section id="choice" class="comp">
+      <header class="comp__head">
+        <h2>Choice <span class="kind">sóbrio</span></h2>
+        <p>Checkbox, radio e switch, sempre em cima do input nativo. Spec: <code>components/choice.md</code></p>
+      </header>
+      <div class="comp__body">
+        <div class="grid"><div class="cell"><span class="tag">checkbox</span><div class="row"><label class="choice"><input class="check" type="checkbox" checked><span>Lembrar de mim</span></label><label class="choice"><input class="check" type="checkbox"><span>Receber resumo</span></label><label class="choice"><input class="check" type="checkbox" id="ind"><span>Todos</span></label><label class="choice"><input class="check" type="checkbox" disabled><span>Indisponível</span></label></div></div><div class="cell"><span class="tag">radio</span><div class="row"><fieldset style="border:0;padding:0;margin:0;display:flex;gap:20px;flex-wrap:wrap"><legend class="field__label" style="margin-bottom:12px">Frequência</legend><label class="choice"><input class="check" type="radio" name="fr" checked><span>Diário</span></label><label class="choice"><input class="check" type="radio" name="fr"><span>Semanal</span></label><label class="choice"><input class="check" type="radio" name="fr"><span>Mensal</span></label></fieldset></div></div><div class="cell"><span class="tag">switch</span><div class="row"><label class="choice"><button class="switch" type="button" role="switch" aria-checked="true" data-demo="switch"></button><span>Tema automático</span></label><label class="choice"><button class="switch" type="button" role="switch" aria-checked="false" data-demo="switch"></button><span>Sons</span></label></div></div></div>
+        <aside class="base" aria-label="CSS base"><span class="tag">css base</span><pre><code class="css">.check {
+  appearance: none;
+  width: 22px;
+  height: 22px;
+  border: 3px solid var(--outline);
+  border-radius: 4px;
+  background: var(--balloon);
+  box-shadow: 2px 2px 0 var(--outline);
+}
+.check:checked { background: var(--mustard); }
+.switch {
+  width: 44px;
+  height: 24px;
+  border: 3px solid var(--outline);
+  border-radius: 999px;
+}
+.switch[aria-checked=&quot;true&quot;] { background: var(--teal); }</code></pre></aside>
+      </div>
+    </section>
+    <section id="badge" class="comp">
+      <header class="comp__head">
+        <h2>Badge <span class="kind">sóbrio</span></h2>
+        <p>Status do dia a dia. Uma palavra ou um número. Spec: <code>components/badge.md</code></p>
+      </header>
+      <div class="comp__body">
+        <div class="grid"><div class="cell"><span class="tag">variantes</span><div class="row"><span class="badge">rascunho</span><span class="badge badge--ok">pago</span><span class="badge badge--warn">vence hoje</span><span class="badge badge--error">atrasado</span><span class="badge badge--count">12</span></div></div></div>
+        <aside class="base" aria-label="CSS base"><span class="tag">css base</span><pre><code class="css">.badge {
+  min-height: 22px;
+  padding: 2px 8px;
+  border: 2px solid var(--outline);
+  border-radius: 4px;
+  font: 12px &quot;Special Elite&quot;;
+  text-transform: uppercase;
+}
+.badge--ok { background: var(--teal); color: var(--bg); }</code></pre></aside>
+      </div>
+    </section>
+    <section id="stamp" class="comp">
+      <header class="comp__head">
+        <h2>Stamp <span class="kind kind--cartoon">🎬 cartoon</span></h2>
+        <p>Carimbo pra um veredito que merece atenção. Um carimbo alto por tela. Spec: <code>components/stamp.md</code></p>
+      </header>
+      <div class="comp__body">
+        <div class="grid"><div class="cell"><span class="tag">variantes</span><div class="row"><span class="stamp sk">arquivado</span><span class="stamp sk stamp--red">vencido</span><span class="stamp sk stamp--mustard">novo</span><span class="stamp sk stamp--ok">pago</span></div></div><div class="cell"><span class="tag">ao vivo</span><p class="hint">Carimba só quando o status acabou de mudar.</p><div class="row"><span class="stamp sk stamp--red" id="stamp-demo">vencido</span><button class="btn btn--neutral btn--sm btn--flat" type="button" data-replay="stamp">Carimbar</button></div></div></div>
+        <aside class="base" aria-label="CSS base"><span class="tag">css base</span><pre><code class="css">.stamp {
+  padding: 6px 12px;
+  font: 12px &quot;Bevan&quot;;
+  letter-spacing: .1em;
+  text-transform: uppercase;
+  transform: rotate(-3deg);
+  outline: 1px solid currentColor;
+  outline-offset: -6px;
+}
+.stamp::before {
+  border: 3px solid currentColor;
+  filter: url(#sketch);
+}</code></pre></aside>
+      </div>
+    </section>
+    <section id="alert" class="comp">
+      <header class="comp__head">
+        <h2>Alert <span class="kind">sóbrio</span> <span class="kind kind--cartoon">🎬 variante cartoon</span></h2>
+        <p>Mensagem que fica até resolver. Informação curta é toast. Spec: <code>components/alert.md</code></p>
+      </header>
+      <div class="comp__body">
+        <div class="grid"><div class="cell"><span class="tag">variantes</span><div class="row"><div style="display:grid;gap:16px;width:100%"><div class="alert " role="status"><svg class="alert__icon" viewBox="0 0 20 20" aria-hidden="true"><circle cx="10" cy="10" r="8" fill="none" stroke="currentColor" stroke-width="2.5"/><path d="M10 9v5M10 6v.5" stroke="currentColor" stroke-width="2.5" stroke-linecap="square"/></svg><p class="alert__title">Sincronizado</p><p class="alert__body">As contas do Nubank foram atualizadas às 08:12.</p><button class="btn btn--neutral btn--flat btn--sm btn--icon alert__close" type="button" aria-label="Fechar"><svg viewBox="0 0 20 20" aria-hidden="true"><path d="M5 5l10 10M15 5L5 15" stroke="currentColor" stroke-width="3" stroke-linecap="square"/></svg></button></div><div class="alert alert--warn" role="status"><svg class="alert__icon" viewBox="0 0 20 20" aria-hidden="true"><circle cx="10" cy="10" r="8" fill="none" stroke="currentColor" stroke-width="2.5"/><path d="M10 9v5M10 6v.5" stroke="currentColor" stroke-width="2.5" stroke-linecap="square"/></svg><p class="alert__title">Orçamento perto do limite</p><p class="alert__body">Mercado já usou 85% do mês.</p><button class="btn btn--neutral btn--flat btn--sm btn--icon alert__close" type="button" aria-label="Fechar"><svg viewBox="0 0 20 20" aria-hidden="true"><path d="M5 5l10 10M15 5L5 15" stroke="currentColor" stroke-width="3" stroke-linecap="square"/></svg></button></div><div class="alert alert--error" role="alert"><svg class="alert__icon" viewBox="0 0 20 20" aria-hidden="true"><circle cx="10" cy="10" r="8" fill="none" stroke="currentColor" stroke-width="2.5"/><path d="M10 9v5M10 6v.5" stroke="currentColor" stroke-width="2.5" stroke-linecap="square"/></svg><p class="alert__title">Não deu pra salvar</p><p class="alert__body">O valor precisa ser maior que zero. Corrija e salve de novo.</p><button class="btn btn--neutral btn--flat btn--sm btn--icon alert__close" type="button" aria-label="Fechar"><svg viewBox="0 0 20 20" aria-hidden="true"><path d="M5 5l10 10M15 5L5 15" stroke="currentColor" stroke-width="3" stroke-linecap="square"/></svg></button></div></div></div></div><div class="cell"><span class="tag">🎬 ribbon</span><div class="row"><div class="alert alert--ribbon"><span class="ribbon">Estreia</span><ul><li>Galeria nova no ar</li><li><span class="chip">23</span> componentes</li></ul></div></div></div><div class="cell"><span class="tag">ao vivo</span><div class="row"><button class="btn btn--neutral btn--sm btn--flat" type="button" data-replay="alert">Mostrar alerta</button><div id="alert-slot" style="flex-basis:100%"></div></div></div></div>
+        <aside class="base" aria-label="CSS base"><span class="tag">css base</span><pre><code class="css">.alert {
+  padding: 14px 14px 14px 24px;
+  background: var(--card);
+  border: 3px solid var(--outline);
+  border-radius: 8px 10px 7px 9px / 9px 7px 10px 8px;
+  box-shadow: 4px 4px 0 var(--outline);
+}
+/* barra de 8px na cor do significado */
+.alert::before {
+  width: 8px;
+  background: var(--teal);
+}</code></pre></aside>
+      </div>
+    </section>
+    <section id="telegram" class="comp">
+      <header class="comp__head">
+        <h2>Telegram <span class="kind kind--cartoon">🎬 cartoon</span></h2>
+        <p>Confirmação escrita como telegrama. Datilografa uma vez ao aparecer. Spec: <code>components/telegram.md</code></p>
+      </header>
+      <div class="comp__body">
+        <div class="grid"><div class="cell"><span class="tag">exemplo</span><div class="row"><div class="telegram sk" id="tg-demo"><div class="telegram__band">TELEGRAMA</div><p class="telegram__body"><span>PAGAMENTO RECEBIDO STOP.</span><span>SALDO ATUALIZADO STOP.</span><span>ATÉ O PRÓXIMO MÊS STOP.</span></p><div class="telegram__foot">BRUCA · 08:12</div></div><button class="btn btn--neutral btn--sm btn--flat" type="button" data-replay="telegram">Rever</button></div></div></div>
+        <aside class="base" aria-label="CSS base"><span class="tag">css base</span><pre><code class="css">.telegram {
+  max-width: 46ch;
+  background: var(--card);
+  border-radius: 16px 20px 14px 18px / 18px 14px 20px 16px;
+  box-shadow: 6px 7px 0 var(--outline);
+}
+.telegram__body {
+  font: 15px/1.6 &quot;Special Elite&quot;;
+  text-transform: uppercase;
+}
+/* aparece: cada linha revela em steps(14) */</code></pre></aside>
+      </div>
+    </section>
+    <section id="toast" class="comp">
+      <header class="comp__head">
+        <h2>Toast <span class="kind">sóbrio</span></h2>
+        <p>Aviso curto sobre o que a pessoa acabou de fazer. Some em 4s. Spec: <code>components/toast.md</code></p>
+      </header>
+      <div class="comp__body">
+        <div class="grid"><div class="cell"><span class="tag">exemplo</span><div class="row"><div class="toast" style="position:static"><div><span class="toast__kicker">salvo</span><span class="toast__title">Gasto adicionado</span></div><button class="btn btn--sm btn--flat" type="button">Desfazer</button></div></div></div><div class="cell"><span class="tag">ao vivo</span><div class="row"><button class="btn btn--neutral btn--sm btn--flat" type="button" data-replay="toast">Disparar toast</button></div></div></div>
+        <aside class="base" aria-label="CSS base"><span class="tag">css base</span><pre><code class="css">.toast {
+  padding: 12px 14px;
+  background: var(--text);
+  color: var(--bg);
+  border: 3px solid var(--outline);
+  border-radius: 8px 10px 7px 9px / 9px 7px 10px 8px;
+  box-shadow: 4px 4px 0 var(--outline);
+  animation: up .2s steps(4);
+}</code></pre></aside>
+      </div>
+    </section>
+    <section id="progress" class="comp">
+      <header class="comp__head">
+        <h2>Progress <span class="kind">sóbrio</span> <span class="kind kind--cartoon">🎬 variante cartoon</span></h2>
+        <p>Barra reta no dia a dia; rolo de filme como variante cartoon. Spec: <code>components/progress.md</code></p>
+      </header>
+      <div class="comp__body">
+        <div class="grid"><div class="cell"><span class="tag">variantes</span><div class="row"><div style="display:grid;gap:20px;width:100%"><div class="progress " role="progressbar" aria-valuenow="62" aria-valuemin="0" aria-valuemax="100" style="--v:62%;width:100%"><div class="progress__track"><div class="progress__fill"></div></div><span class="progress__label">62%</span></div><div class="progress progress--seg" role="progressbar" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100" style="--v:60%;width:100%"><div class="progress__track"><div class="progress__fill"></div></div><span class="progress__label">3 de 5</span></div><div class="progress progress--reel" role="progressbar" aria-valuenow="45" aria-valuemin="0" aria-valuemax="100" style="--v:45%;width:100%"><div class="progress__track"><div class="progress__fill"></div></div><span class="progress__label">45%</span></div><div class="progress progress--indet" role="progressbar" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100" style="--v:100%;width:100%"><div class="progress__track"><div class="progress__fill"></div></div><span class="progress__label">…</span></div></div></div></div><div class="cell"><span class="tag">ao vivo</span><div class="row"><div style="display:grid;gap:20px;width:100%"><div class="progress" id="prog-demo" role="progressbar" aria-valuenow="10" aria-valuemin="0" aria-valuemax="100" style="--v:10%;width:100%"><div class="progress__track"><div class="progress__fill"></div></div><span class="progress__label">10%</span></div><div class="progress progress--indet" id="indet-demo" role="progressbar" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100" style="--v:100%;width:100%"><div class="progress__track"><div class="progress__fill"></div></div><span class="progress__label">…</span></div></div><button class="btn btn--neutral btn--sm btn--flat" type="button" data-replay="progress">Avançar</button><button class="btn btn--neutral btn--sm btn--flat" type="button" data-replay="indet">Trabalhar 2s</button></div></div></div>
+        <aside class="base" aria-label="CSS base"><span class="tag">css base</span><pre><code class="css">.progress__track {
+  height: 16px;
+  background: var(--card);
+  border: 3px solid var(--outline);
+  border-radius: 8px 10px 7px 9px / 9px 7px 10px 8px;
+}
+.progress__fill {
+  width: var(--v);
+  background: var(--teal);
+  transition: width .25s steps(5);
+}</code></pre></aside>
+      </div>
+    </section>
+    <section id="dialog" class="comp">
+      <header class="comp__head">
+        <h2>Dialog <span class="kind">sóbrio</span></h2>
+        <p>Modal nativo. Esc fecha, o foco volta pro botão que abriu. Spec: <code>components/dialog.md</code></p>
+      </header>
+      <div class="comp__body">
+        <div class="grid"><div class="cell"><span class="tag">ao vivo</span><div class="row"><button class="btn btn--danger" type="button" data-demo="dialog">Apagar conta</button></div></div></div>
+        <aside class="base" aria-label="CSS base"><span class="tag">css base</span><pre><code class="css">.dlg {
+  width: min(520px, 100% - 32px);
+  background: var(--card);
+  border: 3px solid var(--outline);
+  border-radius: 8px 10px 7px 9px / 9px 7px 10px 8px;
+  box-shadow: 8px 8px 0 var(--outline);
+  animation: drop .18s steps(3);
+}
+.dlg::backdrop {
+  background: rgb(36 23 15 / .55);
+}</code></pre></aside>
+      </div>
+    </section>
+    <section id="card" class="comp">
+      <header class="comp__head">
+        <h2>Card <span class="kind">sóbrio</span> <span class="kind kind--cartoon">🎬 variante cartoon</span></h2>
+        <p>Um objeto separado: produto, pessoa, resultado. A versão inclinada é pra destaque. Spec: <code>components/card.md</code></p>
+      </header>
+      <div class="comp__body">
+        <div class="grid"><div class="cell"><span class="tag">sóbrio</span><div class="row"><div class="card"><h4>Reserva</h4><span class="b-meta">meta · dez 2026</span><p>R$ 18.000 de R$ 30.000.</p></div><a class="card" href="#card"><h4>Clicável</h4><span class="b-meta">card inteiro é link</span><p>Levanta no hover.</p></a></div></div><div class="cell"><span class="tag">🎬 inclinado</span><div class="row"><div class="card card--tilted sk"><h4>Destaque</h4><span class="b-meta">em cartaz</span><p>Endireita no hover.</p></div><div class="card card--tilted sk"><h4>Outro</h4><span class="b-meta">alternando</span><p>±0,5°.</p></div></div></div></div>
+        <aside class="base" aria-label="CSS base"><span class="tag">css base</span><pre><code class="css">.card {
+  padding: 20px;
+  background: var(--card);
+  border: 3px solid var(--outline);
+  border-radius: 8px 10px 7px 9px / 9px 7px 10px 8px;
+  box-shadow: 4px 4px 0 var(--outline);
+}
+a.card:hover {
+  transform: translate(-2px, -2px);
+  box-shadow: 6px 6px 0 var(--outline);
+}</code></pre></aside>
+      </div>
+    </section>
+    <section id="tabs" class="comp">
+      <header class="comp__head">
+        <h2>Tabs <span class="kind">sóbrio</span></h2>
+        <p>Setas trocam de aba; Home e End pulam pras pontas. Spec: <code>components/tabs.md</code></p>
+      </header>
+      <div class="comp__body">
+        <div class="grid"><div class="cell"><span class="tag">ao vivo</span><div class="row"><div class="tabs" style="width:100%"><div role="tablist" aria-label="Período"><button role="tab" type="button" aria-selected="true" aria-controls="tp1" id="t1">Mês</button><button role="tab" type="button" aria-selected="false" aria-controls="tp2" id="t2" tabindex="-1">Trimestre</button><button role="tab" type="button" aria-selected="false" aria-controls="tp3" id="t3" tabindex="-1">Ano</button></div><div role="tabpanel" id="tp1" aria-labelledby="t1">Gastos de novembro: R$ 8.150.</div><div role="tabpanel" id="tp2" aria-labelledby="t2" hidden>Gastos do trimestre: R$ 24.300.</div><div role="tabpanel" id="tp3" aria-labelledby="t3" hidden>Gastos do ano: R$ 91.880.</div></div></div></div></div>
+        <aside class="base" aria-label="CSS base"><span class="tag">css base</span><pre><code class="css">[role=&quot;tab&quot;] {
+  padding: 10px 16px;
+  font: 13px &quot;Bevan&quot;;
+  background: var(--card);
+  border: 3px solid var(--outline);
+  border-bottom: 0;
+  border-radius: 6px 6px 0 0;
+}
+[role=&quot;tab&quot;][aria-selected=&quot;true&quot;] {
+  background: var(--text);
+  color: var(--bg);
+}</code></pre></aside>
+      </div>
+    </section>
+    <section id="table" class="comp">
+      <header class="comp__head">
+        <h2>Table <span class="kind">sóbrio</span></h2>
+        <p>Números à direita, em tabular. Sem zebra. Spec: <code>components/table.md</code></p>
+      </header>
+      <div class="comp__body">
+        <div class="grid"><div class="cell"><span class="tag">exemplo</span><div class="row"><div class="tbl-wrap" style="width:100%"><table class="tbl"><thead><tr><th>Data</th><th>Descrição</th><th>Categoria</th><th class="num">Valor</th></tr></thead><tbody><tr><td>12/11</td><td>Feira</td><td><span class="badge">mercado</span></td><td class="num">R$ 186,40</td></tr><tr><td>11/11</td><td>Conta de luz</td><td><span class="badge badge--warn">casa</span></td><td class="num">R$ 243,10</td></tr><tr><td>09/11</td><td>Cinema</td><td><span class="badge">lazer</span></td><td class="num">R$ 64,00</td></tr></tbody></table></div></div></div></div>
+        <aside class="base" aria-label="CSS base"><span class="tag">css base</span><pre><code class="css">.tbl { border: 3px solid var(--outline); }
+.tbl th {
+  padding: 10px 12px;
+  background: var(--text);
+  color: var(--bg);
+  font: 12px &quot;Bevan&quot;;
+  text-transform: uppercase;
+}
+.tbl .num {
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+}</code></pre></aside>
+      </div>
+    </section>
+    <section id="code" class="comp">
+      <header class="comp__head">
+        <h2>Code <span class="kind">sóbrio</span></h2>
+        <p>Bloco e inline em Courier Prime, com o realce da skill. Spec: <code>components/code.md</code></p>
+      </header>
+      <div class="comp__body">
+        <div class="grid"><div class="cell"><span class="tag">bloco</span><div class="row"><div style="width:100%;position:relative"><pre class="code"><code class="css" id="code-demo">.saldo {
+  color: var(--teal);
+  font: 17px "Alegreya";
+}</code></pre><button class="btn btn--neutral btn--flat btn--sm code__copy" type="button" data-demo="copy">Copiar</button></div></div></div><div class="cell"><span class="tag">inline</span><div class="row"><p style="margin:0">Use <code class="inline">aria-busy="true"</code> enquanto carrega.</p></div></div></div>
+        <aside class="base" aria-label="CSS base"><span class="tag">css base</span><pre><code class="css">.code {
+  padding: 16px;
+  background: var(--balloon);
+  border: 3px solid var(--outline);
+  border-radius: 8px 10px 7px 9px / 9px 7px 10px 8px;
+  font: 14px/1.6 &quot;Courier Prime&quot;;
+}</code></pre></aside>
+      </div>
+    </section>
+    <section id="balloon" class="comp">
+      <header class="comp__head">
+        <h2>Balloon <span class="kind kind--cartoon">🎬 cartoon</span></h2>
+        <p>Balões de conversa. Vários balões contam como um tipo cartoon. Spec: <code>components/balloon.md</code></p>
+      </header>
+      <div class="comp__body">
+        <div class="grid"><div class="cell"><span class="tag">ao vivo</span><div class="row"><div class="chat" id="chat-demo" style="width:100%"><p class="balloon sk"><span class="balloon__who">noemi · 08:10</span>Bom dia! Quer revisar o orçamento?</p><p class="balloon sk balloon--user"><span class="balloon__who">você · 08:11</span>Quero, começa pelo mercado.</p></div><button class="btn btn--neutral btn--sm btn--flat" type="button" data-replay="chat">Nova mensagem</button></div></div></div>
+        <aside class="base" aria-label="CSS base"><span class="tag">css base</span><pre><code class="css">.balloon {
+  padding: 12px 16px;
+  background: var(--balloon);
+  border-radius: 16px 20px 14px 18px / 18px 14px 20px 16px;
+  box-shadow: 4px 5px 0 var(--outline);
+}
+.balloon::before {
+  border: 3px solid var(--outline);
+  filter: url(#sketch);
+}
+/* nova mensagem: scale(.85) → 1 em steps(3) */</code></pre></aside>
+      </div>
+    </section>
+    <section id="transitions" class="comp">
+      <header class="comp__head">
+        <h2>Transitions <span class="kind">sóbrio</span> <span class="kind kind--cartoon">🎬 variante cartoon</span></h2>
+        <p>Troca de tela: swap no dia a dia, íris só em momento grande. Spec: <code>components/transitions.md</code></p>
+      </header>
+      <div class="comp__body">
+        <div class="grid"><div class="cell"><span class="tag">ao vivo</span><div class="row"><div class="stage" id="stage" style="width:100%"><div class="stage__view">Tela A</div></div><button class="btn btn--neutral btn--sm btn--flat" type="button" data-replay="swap">Swap</button><button class="btn btn--neutral btn--sm btn--flat" type="button" data-replay="iris">🎬 Íris</button></div></div></div>
+        <aside class="base" aria-label="CSS base"><span class="tag">css base</span><pre><code class="css">/* swap: entra de +8px em steps(3), 150ms */
+.view-in { animation: in .15s steps(3); }
+/* íris: buraco com sombra gigante */
+.iris {
+  border-radius: 50%;
+  box-shadow: 0 0 0 300vmax var(--outline);
+  animation: close .3s steps(6), open .35s steps(7);
+}</code></pre></aside>
+      </div>
+    </section>
+    <section id="film-texture" class="comp">
+      <header class="comp__head">
+        <h2>Film texture <span class="kind kind--cartoon">🎬 cartoon</span></h2>
+        <p>Grão e vinheta pintados uma vez. Opcional; nunca animado em app. Spec: <code>components/film-texture.md</code></p>
+      </header>
+      <div class="comp__body">
+        <div class="grid"><div class="cell"><span class="tag">exemplo</span><div class="row"><div class="film" style="width:100%"><canvas id="grain" width="320" height="200"></canvas>Sessão das 3</div></div></div></div>
+        <aside class="base" aria-label="CSS base"><span class="tag">css base</span><pre><code class="css">.film canvas {
+  position: fixed;
+  inset: 0;
+  opacity: .4;
+  pointer-events: none;
+}
+/* ~2600 pontos cor do texto, alpha ≤ .12, pinta 1x */
+.film::after {
+  background: radial-gradient(transparent 68%,
+    rgb(70 40 15 / .3));
+}</code></pre></aside>
+      </div>
+    </section>
+    <section id="mascot" class="comp">
+      <header class="comp__head">
+        <h2>Mascot <span class="kind kind--cartoon">🎬 cartoon</span></h2>
+        <p>Personagem original de borracha. Só se o dono quiser; animação finita. Spec: <code>components/mascot.md</code></p>
+      </header>
+      <div class="comp__body">
+        <div class="grid"><div class="cell"><span class="tag">ao vivo</span><div class="row"><svg class="mascot" id="mascot" viewBox="0 0 140 150" role="img" aria-label="Mascote: um tinteiro de borracha acenando">
+  <g fill="none" stroke="var(--outline)" stroke-width="3" stroke-linecap="round" filter="url(#sketch)">
+    <path d="M44 128c-6 10-14 14-22 14M96 128c6 10 14 14 22 14"/>
+    <path d="M30 78c-12 4-20 14-22 26"/>
+    <g class="mascot__arm"><path d="M110 78c12-6 18-20 16-34"/></g>
+    <rect x="34" y="48" width="72" height="84" rx="18" fill="var(--mustard)"/>
+    <rect x="48" y="30" width="44" height="20" rx="6" fill="var(--text)"/>
+    <path d="M42 112h56" />
+  </g>
+  <g filter="url(#sketch)">
+    <ellipse cx="58" cy="82" rx="9" ry="13" fill="var(--balloon)" stroke="var(--outline)" stroke-width="3"/>
+    <ellipse cx="82" cy="82" rx="9" ry="13" fill="var(--balloon)" stroke="var(--outline)" stroke-width="3"/>
+    <path d="M58 76v10l5-3zM82 76v10l5-3z" fill="var(--outline)"/>
+    <path d="M60 100q10 9 20 0" fill="none" stroke="var(--outline)" stroke-width="3" stroke-linecap="round"/>
+    <circle cx="8" cy="106" r="9" fill="#FFF8E8" stroke="var(--outline)" stroke-width="3"/>
+    <g class="mascot__arm"><circle cx="126" cy="40" r="9" fill="#FFF8E8" stroke="var(--outline)" stroke-width="3"/></g>
+    <ellipse cx="20" cy="142" rx="12" ry="6" fill="var(--text)"/>
+    <ellipse cx="120" cy="142" rx="12" ry="6" fill="var(--text)"/>
+  </g>
+</svg><button class="btn btn--neutral btn--sm btn--flat" type="button" data-replay="wave">Acenar</button><button class="btn btn--neutral btn--sm btn--flat" type="button" data-replay="jump">Pular</button></div></div></div>
+        <aside class="base" aria-label="CSS base"><span class="tag">css base</span><pre><code class="css">.mascot { width: 140px; }
+/* SVG inline, traço 3px com #sketch */
+.mascot.is-wave .arm {
+  animation: wave .5s steps(2) 3;
+}
+.mascot.is-jump {
+  animation: jump .4s steps(4) 1;
+}</code></pre></aside>
       </div>
     </section>
   </main>
   </div>
+
+  <dialog class="dlg" id="dlg-demo" aria-labelledby="dlg-title">
+    <div class="dlg__head"><h3 id="dlg-title">Apagar conta?</h3><button class="btn btn--neutral btn--flat btn--sm btn--icon" type="button" aria-label="Fechar" data-close><svg viewBox="0 0 20 20" aria-hidden="true"><path d="M5 5l10 10M15 5L5 15" stroke="currentColor" stroke-width="3" stroke-linecap="square"/></svg></button></div>
+    <div class="dlg__body"><p style="margin:0">Some tudo: gastos, metas e histórico. Não dá pra desfazer.</p></div>
+    <div class="dlg__foot"><button class="btn btn--neutral" type="button" data-close autofocus>Cancelar</button><button class="btn btn--danger" type="button" data-close>Apagar</button></div>
+  </dialog>
+  <div class="toasts" id="toasts" role="status" aria-live="polite"></div>
 
   <script src="gallery.js"></script>
 </body>
