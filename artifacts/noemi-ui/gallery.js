@@ -49,7 +49,7 @@ const themeBtn = $("#theme");
 function setTheme(theme) {
   root.dataset.theme = theme;
   themeBtn.textContent = theme === "light" ? "Tema escuro" : "Tema claro";
-  store("bruca-theme", theme);
+  store("noemi-theme", theme);
   applyTokens();
   paintGrain();
 }
@@ -58,7 +58,7 @@ themeBtn.addEventListener("click", () => setTheme(root.dataset.theme === "light"
 /* ---------- playground de cores ---------- */
 const swatches = $$("[data-token]");
 const DEFAULTS = { light: {}, dark: {} };
-const overrides = { light: {}, dark: {}, ...store("bruca-tokens") };
+const overrides = { light: {}, dark: {}, ...store("noemi-tokens") };
 
 function toHex(rgb) {
   const [r, g, b] = rgb.match(/\d+/g).map(Number);
@@ -91,13 +91,13 @@ function applyTokens() {
 swatches.forEach((input) => {
   input.addEventListener("input", () => {
     overrides[root.dataset.theme][input.dataset.token] = input.value.toUpperCase();
-    store("bruca-tokens", overrides);
+    store("noemi-tokens", overrides);
     applyTokens();
   });
 });
 $("#tok-reset").addEventListener("click", () => {
   overrides[root.dataset.theme] = {};
-  store("bruca-tokens", overrides);
+  store("noemi-tokens", overrides);
   applyTokens();
   $("#tok-status").textContent = "Tema restaurado.";
 });
@@ -536,7 +536,7 @@ function renderPager(list, page, total, go) {
 /* ===== calendar ===== */
 /* ---------- calendar: grade do mês (domingo primeiro), padrão grid do WAI-ARIA ---------- */
 // Declaração de função de topo: içada, o date-picker pode chamar mesmo vindo antes.
-function brucaCalendar(el, opts = {}) {
+function noemiCalendar(el, opts = {}) {
   const MESES = ["janeiro", "fevereiro", "março", "abril", "maio", "junho", "julho", "agosto", "setembro", "outubro", "novembro", "dezembro"];
   const DIAS = [["D", "domingo"], ["S", "segunda"], ["T", "terça"], ["Q", "quarta"], ["Q", "quinta"], ["S", "sexta"], ["S", "sábado"]];
   const day0 = (d) => new Date(d.getFullYear(), d.getMonth(), d.getDate());
@@ -701,7 +701,7 @@ function brucaCalendar(el, opts = {}) {
     const marks = Object.fromEntries((el.dataset.marks || "").split(",").filter(Boolean).map((m) => m.split(":")));
     const [y, m] = (el.dataset.month || "").split("-").map(Number);
     const out = $("#cal-b-out");
-    brucaCalendar(el, {
+    noemiCalendar(el, {
       range: el.dataset.cal === "range",
       month: y ? new Date(y, m - 1, 1) : null,
       selected: parse(el.dataset.selected),
@@ -793,11 +793,11 @@ function brucaCalendar(el, opts = {}) {
       btn.setAttribute("aria-expanded", String(!collapsed));
       btn.setAttribute("aria-label", collapsed ? "Expandir menu" : "Recolher menu");
     };
-    set(store("bruca-sbar") === true);
+    set(store("noemi-sbar") === true);
     btn.addEventListener("click", () => {
       const collapsed = !bar.classList.contains("is-collapsed");
       set(collapsed);
-      store("bruca-sbar", collapsed);
+      store("noemi-sbar", collapsed);
     });
   }
 }
@@ -1412,7 +1412,7 @@ function brucaCalendar(el, opts = {}) {
 }
 
 /* ===== date-picker ===== */
-/* ---------- date-picker: digitar com máscara ou escolher no popover (usa brucaCalendar) ---------- */
+/* ---------- date-picker: digitar com máscara ou escolher no popover (usa noemiCalendar) ---------- */
 {
   const br = (d) => d.toLocaleDateString("pt-BR");
   function parseBr(s) {
@@ -1452,7 +1452,7 @@ function brucaCalendar(el, opts = {}) {
     function open() {
       const value = read();
       if (!cal) {
-        cal = brucaCalendar($(".cal", pop), {
+        cal = noemiCalendar($(".cal", pop), {
           range,
           selected: range ? null : value,
           start: range ? value?.start : null,
@@ -2494,5 +2494,5 @@ function brucaCalendar(el, opts = {}) {
 
 /* ---------- início ---------- */
 readDefaults();
-setTheme(store("bruca-theme") || "light");
+setTheme(store("noemi-theme") || "light");
 countUp($("[data-count]"));

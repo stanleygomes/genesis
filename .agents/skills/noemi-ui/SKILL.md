@@ -1,15 +1,15 @@
 ---
-name: bruca-ui
-description: bruca-ui design system (by Noemi; BRUtalism + CArtoon) — website style merging neobrutalism with 1930s rubber-hose cartoons (straight-line grid and color blocks, hand-drawn components, stamps, balloons, telegrams, film grain), with exact fonts, colors, sizes and components, plus optional CRT tube and analog glitch modules that require asking the user first. Use when creating, styling or reviewing a retro, vintage, neobrutalist, cartoon or rubber-hose interface. For clean modern UI, use bento-design.
+name: noemi-ui
+description: noemi-ui design system (by Noemi) — website style merging neobrutalism with 1930s rubber-hose cartoons (straight-line grid and color blocks, hand-drawn components, stamps, balloons, telegrams, film grain), with exact fonts, colors, sizes and components, plus optional CRT tube and analog glitch modules that require asking the user first. Use when creating, styling or reviewing a retro, vintage, neobrutalist, cartoon or rubber-hose interface. For clean modern UI, use bento-design.
 ---
 
-# Skill: bruca-ui (neobrutalism × 1930s cartoon)
+# Skill: noemi-ui (neobrutalism × 1930s cartoon)
 
 **Sober neobrutalist base, cartoon as seasoning.** For websites and apps. Everyday components are straight and quiet; a few cartoon components give the screen its character. Text meant to be read is never under an effect.
 
 ## 0. Before anything
 - **Check the project first.** Look for existing design rules or colors: AGENTS.md/CLAUDE.md/README, theme or token files (`:root` vars, `tailwind.config`, `theme.*`), a design doc, an existing stylesheet. What the project defines **wins**; this skill only fills the gaps. Conflict? Ask before overriding.
-- **Say you are using it.** Tell the user, in one short block, that `bruca-ui` is in use and what was decided: what came from the project, which optional modules were chosen or left out, and what is still pending their answer.
+- **Say you are using it.** Tell the user, in one short block, that `noemi-ui` is in use and what was decided: what came from the project, which optional modules were chosen or left out, and what is still pending their answer.
 
 ## 1. Ask first (decision points)
 Sections 2–7 always apply. **Before using anything in [OPTIONS.md](OPTIONS.md), ask the user**, in one message: list only the options that fit the screen, one line each, with your recommendation first. Never add them by default; never ask again for what was already decided in this project (check its AGENTS.md/README).
