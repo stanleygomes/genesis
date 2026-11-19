@@ -1,0 +1,4 @@
+---
+# @doist/todoist-cli requires Node.js >= 24, provided by the node role.
+dependencies:
+  - role: node

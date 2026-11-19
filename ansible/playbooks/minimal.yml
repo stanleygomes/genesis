@@ -24,6 +24,7 @@
     - oxker
     - terraform
     - gcloud-cli
+    - todoist-cli
     - eza
     - dust
     - zellij

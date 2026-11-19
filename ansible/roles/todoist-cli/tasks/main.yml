@@ -1,0 +1,11 @@
+---
+# Official Todoist CLI (@doist/todoist-cli), exposes the `td` command.
+- name: Install Todoist CLI globally via NPM
+  shell: |
+    bash -c "source {{ ansible_env.HOME }}/.nvm/nvm.sh && npm install -g @doist/todoist-cli@latest"
+  args:
+    executable: /bin/bash
+  become: false
+  register: todoist_cli_install
+  changed_when: "'added' in todoist_cli_install.stdout or 'changed' in todoist_cli_install.stdout or 'removed' in todoist_cli_install.stdout"
+  ignore_errors: "{{ ansible_check_mode }}"

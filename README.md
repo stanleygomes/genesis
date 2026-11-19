@@ -147,6 +147,7 @@ Here is a list of all roles available in this repository:
 | `system`          | Installs GNOME Tweaks and GNOME Extension Manager.                                                                                                            |
 | `starship`        | Installs and configures Starship prompt for Bash and Zsh.                                                                                                     |
 | `terraform`       | Installs Terraform CLI tool from HashiCorp releases.                                                                                                          |
+| `todoist-cli`     | Installs the official Todoist CLI (`td`, `@doist/todoist-cli`) globally via NPM (depends on `node`).                                                           |
 | `tuicr`           | Installs tuicr (Terminal UI for Code Reviews).                                                                                                               |
 | `vlc`             | Installs VLC media player (local media and network streams such as RTSP cameras).                                                                             |
 | `vscode`          | Installs VS Code, syncs user settings/keybindings, and installs extensions.                                                                                   |
@@ -161,7 +162,7 @@ This project organises roles into the following playbooks:
 
 ### 1. Minimal Configuration (`minimal.yml`)
 
-> Target: Lean workstation baseline — Git, Docker, Terraform, Google Cloud CLI, Zsh/Oh My Zsh, CLI tools, Neovim, Herdr, Zellij, Antigravity CLI, Claude CLI, AI Memory, the `diluvio` disk cleanup command, and the `evangelist` biblical verse display.
+> Target: Lean workstation baseline — Git, Docker, Terraform, Google Cloud CLI, Todoist CLI, Zsh/Oh My Zsh, CLI tools, Neovim, Herdr, Zellij, Antigravity CLI, Claude CLI, AI Memory, the `diluvio` disk cleanup command, and the `evangelist` biblical verse display.
 
 ### 2. Desktop Configuration (`desktop.yml`)
 
