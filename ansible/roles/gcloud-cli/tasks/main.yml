@@ -1,0 +1,52 @@
+---
+- name: Check if Google Cloud CLI is installed
+  command: dpkg -s google-cloud-cli
+  register: gcloud_check
+  ignore_errors: true
+  changed_when: false
+  become: false
+
+- name: Install dependencies for Google Cloud CLI
+  apt:
+    name:
+      - apt-transport-https
+      - ca-certificates
+      - gnupg
+      - curl
+    state: present
+  become: true
+  when: gcloud_check.rc != 0
+
+- name: Ensure keyrings directory exists
+  file:
+    path: /etc/apt/keyrings
+    state: directory
+    mode: '0755'
+  become: true
+
+- name: Download Google Cloud GPG key
+  # Always refresh the key so apt update never fails with NO_PUBKEY after rotation.
+  shell: curl -fsSL https://packages.cloud.google.com/apt/doc/apt-key.gpg | gpg --dearmor --yes -o /etc/apt/keyrings/cloud.google.gpg
+  become: true
+  changed_when: false
+
+- name: Add Google Cloud CLI repository
+  apt_repository:
+    repo: "deb [signed-by=/etc/apt/keyrings/cloud.google.gpg] https://packages.cloud.google.com/apt cloud-sdk main"
+    state: present
+    filename: google-cloud-sdk
+    update_cache: no
+  become: true
+
+- name: Update apt cache manually (ignoring unreachable repos)
+  shell: apt-get update || true
+  become: true
+  changed_when: false
+  when: gcloud_check.rc != 0
+
+- name: Install Google Cloud CLI
+  apt:
+    name: google-cloud-cli
+    state: present
+  become: true
+  when: gcloud_check.rc != 0

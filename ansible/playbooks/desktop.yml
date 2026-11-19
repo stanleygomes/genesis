@@ -33,6 +33,7 @@
     - emulation
     - orca
     - terraform
+    - gcloud-cli
     - java
     - python
     - php
