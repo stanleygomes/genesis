@@ -22,6 +22,8 @@
     - diluvio
     - docker
     - oxker
+    - terraform
+    - gcloud-cli
     - eza
     - dust
     - zellij
