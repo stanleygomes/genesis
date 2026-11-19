@@ -37,7 +37,7 @@ This command will install `git`, `ansible`, clone this repository, and run the s
 
 - Manages system packages (Apt, Flatpak, Snap etc).
 - Configures development environments (Node.js with pnpm, Java, Python, Go, PHP).
-- Installs and configures AI tools (Antigravity CLI, GitHub Copilot CLI, Antigravity IDE etc).
+- Installs and configures AI tools (Antigravity CLI, Claude CLI, AI Memory etc).
 - Setups CLI/TUI tools with desktop shortcuts (LazyDocker, etc).
 - Customizes the shell and terminal (Zsh with Oh My Zsh, Bash, aliases, GNOME Terminal settings).
 
@@ -130,7 +130,6 @@ Here is a list of all roles available in this repository:
 | `gcloud-cli`      | Installs Google Cloud CLI (`gcloud`) from Google's official APT repository.                                                                                   |
 | `ghostty`         | Installs Ghostty terminal emulator.                                                                                                                           |
 | `git`             | Installs Git, configures user credentials, and generates/sets GitHub SSH keys.                                                                                |
-| `github-copilot`  | Installs GitHub Copilot CLI globally via NPM.                                                                                                                 |
 | `go`              | Installs Go language runtime and `golangci-lint` to `~/.local/go`.                                                                                            |
 | `google-chrome`   | Installs Google Chrome web browser.                                                                                                                           |
 | `herdr`           | Installs Herdr terminal multiplexer for AI coding agents and configures default settings.                                                                      |
@@ -140,8 +139,6 @@ Here is a list of all roles available in this repository:
 | `neovim`          | Installs latest Neovim editor via its official AppImage (including `libfuse2`), configuring it with `lazy.nvim` and plugins (Gruvbox, Telescope, Treesitter). |
 | `nocturne`        | Installs Nocturne ambient sound and music player application via Flatpak.                                                                                     |
 | `node`            | Installs NVM, Node.js runtime, and the `pnpm` package manager.                                                                                                |
-| `openbot`         | Installs the OpenBot AI agent workspace via AppImage. |
-| `opencode`        | Installs OpenCode AI coding agent CLI (`opencode`) via official installer. |
 | `openspec`        | Installs OpenSpec CLI (`@fission-ai/openspec`) globally via NPM.                                                                                              |
 | `orca`            | Installs Orca via AppImage and clones or updates plugins in `~/.config/orca-plugins`, discarding tracked local changes.                                                                |
 | `oxker`           | Installs oxker TUI binary for Docker container monitoring and aliases `docker ps`.                                                                            |
@@ -168,9 +165,9 @@ This project organises roles into the following playbooks:
 
 ### 2. Desktop Configuration (`desktop.yml`)
 
-> Target: User interfaces, web browsers, IDEs, the VLC media player, game emulators (RetroArch, PPSSPP, PCSX2, ES-DE), desktop entries, agent configurations, OpenBot, and database tools.
+> Target: User interfaces, web browsers, IDEs, the VLC media player, game emulators (RetroArch, PPSSPP, PCSX2, ES-DE), desktop entries, agent configurations, and database tools.
 
 ### 3. Custom Setup 1 (`custom1.yml`)
 
-> Target: Custom bundle containing browsers, Bruno, databases, Nocturne, OpenCode, and OpenBot.
+> Target: Custom bundle containing browsers, Bruno, databases, and Nocturne.
 

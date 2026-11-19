@@ -1,5 +1,0 @@
----
-- name: Reload AppArmor
-  systemd:
-    name: apparmor
-    state: reloaded

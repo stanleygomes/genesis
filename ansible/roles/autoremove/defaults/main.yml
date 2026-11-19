@@ -19,6 +19,7 @@ autoremove_npm_packages:
   - "@anthropic-ai/claude-code"
   - "@anthropic-ai/claude-cli"
   - "claude-code"
+  - "@github/copilot"
 
 # List of desktop shortcut filenames to remove from ~/.local/share/applications/
 autoremove_desktop_entries:
@@ -27,6 +28,8 @@ autoremove_desktop_entries:
   - claude.desktop
   - com.mitchellh.ghostty.desktop
   - ghostty.desktop
+  - openbot.desktop
+  - opencode.desktop
 
 # List of custom paths (directories or files) to remove as superuser (become: true)
 autoremove_custom_paths:
@@ -40,6 +43,7 @@ autoremove_custom_paths:
   - /usr/share/keyrings/claude-desktop-archive-keyring.asc
   - /etc/apt/sources.list.d/debian-griffo-io.list
   - /etc/apt/keyrings/debian-griffo-io.asc
+  - /etc/apparmor.d/openbot
 
 
 # List of user-space paths (directories or files) to remove (become: false)
@@ -54,4 +58,13 @@ autoremove_user_paths:
   - "{{ ansible_env.HOME }}/.config/gideon"
   - "{{ ansible_env.HOME }}/.config/ghostty"
   - "{{ ansible_env.HOME }}/.config/arkflix"
+  - "{{ ansible_env.HOME }}/.local/bin/OpenBot.AppImage"
+  - "{{ ansible_env.HOME }}/.cache/openbot-updater"
+  - "{{ ansible_env.HOME }}/.copilot"
+  - "{{ ansible_env.HOME }}/.cache/copilot"
+  - "{{ ansible_env.HOME }}/.opencode"
+  - "{{ ansible_env.HOME }}/.config/opencode"
+  - "{{ ansible_env.HOME }}/.local/share/opencode"
+  - "{{ ansible_env.HOME }}/.local/state/opencode"
+  - "{{ ansible_env.HOME }}/.cache/opencode"
 
