@@ -145,6 +145,7 @@ Here is a list of all roles available in this repository:
 | `orca`            | Installs Orca via AppImage and clones or updates plugins in `~/.config/orca-plugins`, discarding tracked local changes.                                                                |
 | `oxker`           | Installs oxker TUI binary for Docker container monitoring and aliases `docker ps`.                                                                            |
 | `php`             | Installs PHP runtime, extensions, and Composer package manager.                                                                                               |
+| `playwright`      | Installs Playwright's Chromium (browser + headless shell) for the user and its system libraries (`install-deps`). |
 | `python`          | Installs Python runtime dependencies, Astral `uv` tool, and Python 3.14.                                                                                      |
 | `system`          | Installs GNOME Tweaks and GNOME Extension Manager.                                                                                                            |
 | `starship`        | Installs and configures Starship prompt for Bash and Zsh.                                                                                                     |
@@ -164,7 +165,7 @@ This project organises roles into the following playbooks:
 
 ### 1. Minimal Configuration (`minimal.yml`)
 
-> Target: Lean workstation baseline — Git, GitHub CLI, Docker, Terraform, Google Cloud CLI, Todoist CLI, ffmpeg/rsync, Zsh/Oh My Zsh, CLI tools, Neovim, Herdr, Zellij, Antigravity CLI, Claude CLI, AI Memory, the `diluvio` disk cleanup command, and the `evangelist` biblical verse display.
+> Target: Lean workstation baseline — Git, GitHub CLI, Docker, Terraform, Google Cloud CLI, Todoist CLI, ffmpeg/rsync, Playwright Chromium, Zsh/Oh My Zsh, CLI tools, Neovim, Herdr, Zellij, Antigravity CLI, Claude CLI, AI Memory, the `diluvio` disk cleanup command, and the `evangelist` biblical verse display.
 
 ### 2. Desktop Configuration (`desktop.yml`)
 

@@ -1,0 +1,48 @@
+---
+# Playwright's Chromium for headless scraping and screenshots (scripts and agents use it
+# from the terminal). System libraries are shared (apt, as root); the browser lives in
+# the user's ~/.cache/ms-playwright. A project pinned to another Playwright version may
+# still download its own matching browser (`uv run playwright install chromium`).
+# uvx runs Playwright without a project venv. Only uv itself, not the whole python
+# role (zsh, Python 3.14): the minimal server playbook stays lean.
+- name: Check if uv is installed
+  stat:
+    path: "{{ ansible_env.HOME }}/.local/bin/uv"
+  register: playwright_uv_stat
+  become: false
+
+- name: Install uv via official script
+  shell: curl -LsSf https://astral.sh/uv/install.sh | sh
+  args:
+    executable: /bin/bash
+  become: false
+  when: not playwright_uv_stat.stat.exists
+
+- name: Check Chromium system libraries
+  command: dpkg -s libnss3 libgbm1
+  register: playwright_deps_check
+  ignore_errors: true
+  changed_when: false
+  check_mode: false  # read-only probe: also runs under --check
+  become: false
+
+- name: Install Chromium system libraries
+  command: "{{ ansible_env.HOME }}/.local/bin/uvx --from playwright playwright install-deps chromium"
+  environment:
+    DEBIAN_FRONTEND: noninteractive
+  become: true
+  when: playwright_deps_check.rc != 0
+
+- name: Check Playwright Chromium in the user cache
+  find:
+    paths: "{{ ansible_env.HOME }}/.cache/ms-playwright"
+    patterns: "chromium-*"
+    file_type: directory
+  register: playwright_browser_check
+  check_mode: false
+  become: false
+
+- name: Install Playwright Chromium (browser + headless shell)
+  command: "{{ ansible_env.HOME }}/.local/bin/uvx --from playwright playwright install chromium"
+  become: false
+  when: playwright_browser_check.matched == 0
