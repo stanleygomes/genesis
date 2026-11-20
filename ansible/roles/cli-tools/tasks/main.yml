@@ -1,0 +1,8 @@
+---
+# Everyday command-line packages from APT. The apt module is idempotent: it only
+# installs what is missing, so there is no separate probe task.
+- name: Install CLI tools from APT
+  apt:
+    name: "{{ cli_tools_packages }}"
+    state: present
+  become: true

@@ -1,0 +1,5 @@
+---
+# Plain APT packages that scripts and agents call from the shell.
+cli_tools_packages:
+  - ffmpeg  # audio/video conversion (voice notes, video downloads)
+  - rsync   # file sync over SSH (media server copies)

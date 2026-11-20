@@ -118,6 +118,7 @@ Here is a list of all roles available in this repository:
 | `autoremove`      | Aggregates uninstallation and removal actions (APT, Flatpak, Snap packages, desktop shortcuts, custom paths/files). |
 | `bruno`           | Installs Bruno API client (open-source, Git-friendly alternative to Postman/Insomnia).                                                                        |
 | `claude-cli`      | Installs Anthropic's Claude Code CLI (`claude`) via the official native installer and configures a custom statusLine. |
+| `cli-tools`       | Installs everyday command-line packages from APT (`ffmpeg`, `rsync`; list in `defaults/main.yml`). |
 | `darktable`       | Installs Darktable photography workflow application and RAW developer.                                                                                        |
 | `dbeaver`         | Installs DBeaver Community Edition (SQL database explorer/client).                                                                                            |
 | `diluvio`        | Installs a terminal command for confirmed cleanup of journal, APT cache, temporary files, and the local trash. |
@@ -130,6 +131,7 @@ Here is a list of all roles available in this repository:
 | `gcloud-cli`      | Installs Google Cloud CLI (`gcloud`) from Google's official APT repository.                                                                                   |
 | `ghostty`         | Installs Ghostty terminal emulator.                                                                                                                           |
 | `git`             | Installs Git, configures user credentials, and generates/sets GitHub SSH keys.                                                                                |
+| `github-cli`      | Installs GitHub CLI (`gh`) from GitHub's official APT repository.                                                                                              |
 | `go`              | Installs Go language runtime and `golangci-lint` to `~/.local/go`.                                                                                            |
 | `google-chrome`   | Installs Google Chrome web browser.                                                                                                                           |
 | `herdr`           | Installs Herdr terminal multiplexer for AI coding agents and configures default settings.                                                                      |
@@ -162,7 +164,7 @@ This project organises roles into the following playbooks:
 
 ### 1. Minimal Configuration (`minimal.yml`)
 
-> Target: Lean workstation baseline — Git, Docker, Terraform, Google Cloud CLI, Todoist CLI, Zsh/Oh My Zsh, CLI tools, Neovim, Herdr, Zellij, Antigravity CLI, Claude CLI, AI Memory, the `diluvio` disk cleanup command, and the `evangelist` biblical verse display.
+> Target: Lean workstation baseline — Git, GitHub CLI, Docker, Terraform, Google Cloud CLI, Todoist CLI, ffmpeg/rsync, Zsh/Oh My Zsh, CLI tools, Neovim, Herdr, Zellij, Antigravity CLI, Claude CLI, AI Memory, the `diluvio` disk cleanup command, and the `evangelist` biblical verse display.
 
 ### 2. Desktop Configuration (`desktop.yml`)
 
