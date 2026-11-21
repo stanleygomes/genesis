@@ -1,0 +1,48 @@
+---
+# ArtCraft has no APT repo we can rely on yet, so we install the .deb from the
+# latest GitHub release. Updates are left to the app or a manual rerun.
+- name: Check if ArtCraft is installed
+  command: dpkg -s {{ artcraft_package }}
+  register: artcraft_check
+  ignore_errors: true
+  changed_when: false
+  become: false
+
+- name: Find the latest ArtCraft release
+  uri:
+    url: "https://api.github.com/repos/{{ artcraft_repo }}/releases/latest"
+    return_content: true
+  register: artcraft_release
+  become: false
+  when: artcraft_check.rc != 0
+
+- name: Pick the ArtCraft .deb for this architecture
+  set_fact:
+    artcraft_deb_url: >-
+      {{ artcraft_release.json.assets
+         | selectattr('name', 'match', '.*-linux-' ~ ansible_architecture ~ '\.deb$')
+         | map(attribute='browser_download_url') | first }}
+  when: artcraft_check.rc != 0
+
+- name: Download ArtCraft .deb package
+  get_url:
+    url: "{{ artcraft_deb_url }}"
+    dest: "{{ artcraft_deb_path }}"
+    mode: "0644"
+  become: false
+  when: artcraft_check.rc != 0
+
+- name: Install ArtCraft
+  apt:
+    deb: "{{ artcraft_deb_path }}"
+    state: present
+  become: true
+  when: artcraft_check.rc != 0
+  ignore_errors: "{{ ansible_check_mode }}"
+
+- name: Remove downloaded ArtCraft package
+  file:
+    path: "{{ artcraft_deb_path }}"
+    state: absent
+  become: false
+  when: artcraft_check.rc != 0

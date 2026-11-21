@@ -114,6 +114,7 @@ Here is a list of all roles available in this repository:
 | `agents`          | Syncs local Genesis `.agents` (Skills, rules) into `~/.agents` and `~/.claude`.                                                             |
 | `ai-memory`       | Installs `ai-memory` (akitaonrails/ai-memory) persistent cross-agent memory engine, systemd user service, and wires agent hooks/MCP. |
 | `antigravity-cli` | Installs the Antigravity CLI client tool (`agy`) and configures custom statusLine settings. |
+| `artcraft`       | Installs ArtCraft (AI crafting engine for artists) from the latest GitHub release `.deb`. |
 | `atuin`           | Installs and configures Atuin shell history search.                                                                                                           |
 | `autoremove`      | Aggregates uninstallation and removal actions (APT, Flatpak, Snap packages, desktop shortcuts, custom paths/files). |
 | `bruno`           | Installs Bruno API client (open-source, Git-friendly alternative to Postman/Insomnia).                                                                        |
@@ -168,7 +169,7 @@ This project organises roles into the following playbooks:
 
 ### 2. Desktop Configuration (`desktop.yml`)
 
-> Target: User interfaces, web browsers, IDEs, the VLC media player, game emulators (RetroArch, PPSSPP, PCSX2, ES-DE), desktop entries, agent configurations, and database tools.
+> Target: User interfaces, web browsers, IDEs, ArtCraft, the VLC media player, game emulators (RetroArch, PPSSPP, PCSX2, ES-DE), desktop entries, agent configurations, and database tools.
 
 ### 3. Custom Setup 1 (`custom1.yml`)
 

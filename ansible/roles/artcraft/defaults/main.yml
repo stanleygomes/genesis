@@ -1,0 +1,5 @@
+---
+# Defaults for artcraft role
+artcraft_repo: storytold/artcraft
+artcraft_package: art-craft
+artcraft_deb_path: /tmp/artcraft.deb
