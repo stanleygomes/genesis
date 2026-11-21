@@ -119,7 +119,6 @@ Here is a list of all roles available in this repository:
 | `bruno`           | Installs Bruno API client (open-source, Git-friendly alternative to Postman/Insomnia).                                                                        |
 | `claude-cli`      | Installs Anthropic's Claude Code CLI (`claude`) via the official native installer and configures a custom statusLine. |
 | `cli-tools`       | Installs everyday command-line packages from APT (`ffmpeg`, `rsync`; list in `defaults/main.yml`). |
-| `darktable`       | Installs Darktable RAW developer plus exiftool CR3 thumbnails for Nautilus.                                                                                    |
 | `dbeaver`         | Installs DBeaver Community Edition (SQL database explorer/client).                                                                                            |
 | `diluvio`        | Installs a terminal command for confirmed cleanup of journal, APT cache, temporary files, and the local trash. |
 | `docker`          | Installs Docker Engine, Docker Compose, and sets permissions/user groups.                                                                                     |
@@ -147,7 +146,7 @@ Here is a list of all roles available in this repository:
 | `php`             | Installs PHP runtime, extensions, and Composer package manager.                                                                                               |
 | `playwright`      | Installs Playwright's Chromium (browser + headless shell) for the user and its system libraries (`install-deps`). |
 | `python`          | Installs Python runtime dependencies, Astral `uv` tool, and Python 3.14.                                                                                      |
-| `system`          | Installs GNOME Tweaks and GNOME Extension Manager.                                                                                                            |
+| `system`          | Installs GNOME Tweaks, Extension Manager and exiftool CR3 thumbnails for Nautilus.                                                                   |
 | `starship`        | Installs and configures Starship prompt for Bash and Zsh.                                                                                                     |
 | `terraform`       | Installs Terraform CLI tool from HashiCorp releases.                                                                                                          |
 | `todoist-cli`     | Installs the official Todoist CLI (`td`, `@doist/todoist-cli`) globally via NPM (depends on `node`).                                                           |

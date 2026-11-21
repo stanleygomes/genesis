@@ -6,6 +6,7 @@ autoremove_apt_packages:
   - git-delta
   - claude-desktop
   - ghostty
+  - darktable
 
 
 # List of Flatpak packages to remove
@@ -67,4 +68,6 @@ autoremove_user_paths:
   - "{{ ansible_env.HOME }}/.local/share/opencode"
   - "{{ ansible_env.HOME }}/.local/state/opencode"
   - "{{ ansible_env.HOME }}/.cache/opencode"
+  - "{{ ansible_env.HOME }}/.config/darktable"
+  - "{{ ansible_env.HOME }}/.cache/darktable"
 

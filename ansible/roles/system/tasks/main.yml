@@ -16,3 +16,29 @@
   become: true
   when: gnome_tweaks_check.rc != 0
 
+
+# Nautilus has no RAW thumbnailer; exiftool pulls the JPEG preview the camera
+# already embeds in the CR3, so thumbnails need no RAW decoding.
+- name: Install exiftool for RAW thumbnails
+  apt:
+    name: libimage-exiftool-perl
+    state: present
+  become: true
+
+- name: Ensure ~/.local/share/thumbnailers directory exists
+  file:
+    path: "{{ ansible_env.HOME }}/.local/share/thumbnailers"
+    state: directory
+    mode: "0755"
+  become: false
+
+- name: Register Canon CR3 thumbnailer for Nautilus
+  copy:
+    dest: "{{ ansible_env.HOME }}/.local/share/thumbnailers/cr3.thumbnailer"
+    mode: "0644"
+    content: |
+      [Thumbnailer Entry]
+      TryExec=/usr/bin/exiftool
+      Exec=sh -c "/usr/bin/exiftool -b -PreviewImage %i > %o"
+      MimeType=image/x-canon-cr3;
+  become: false
