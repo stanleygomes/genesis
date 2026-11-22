@@ -1,6 +1,6 @@
 ---
 # Clones (or updates) the Solomon repo into ~/.config/solomon and syncs its .agents
-# (Skills, rules) into ~/.agents and ~/.claude. The Orca role links ~/.orca/bots there.
+# (Skills, rules) into ~/.agents and ~/.claude. The Orca role links each bot's SOUL.md there.
 
 - name: Create ~/.agents directory
   file:

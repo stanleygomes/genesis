@@ -142,7 +142,7 @@ Here is a list of all roles available in this repository:
 | `nocturne`        | Installs Nocturne ambient sound and music player application via Flatpak.                                                                                     |
 | `node`            | Installs NVM, Node.js runtime, and the `pnpm` package manager.                                                                                                |
 | `openspec`        | Installs OpenSpec CLI (`@fission-ai/openspec`) globally via NPM.                                                                                              |
-| `orca`            | Installs Orca via AppImage and clones or updates plugins in `~/.config/orca-plugins`, discarding tracked local changes. Links `~/.orca/bots` to `~/.config/solomon/bots`. |
+| `orca`            | Installs Orca via AppImage and clones or updates plugins in `~/.config/orca-plugins`, discarding tracked local changes. Links each Orca bot's `SOUL.md` to the matching folder in `~/.config/solomon/bots` (create the bot in Orca with that name first). |
 | `oxker`           | Installs oxker TUI binary for Docker container monitoring and aliases `docker ps`.                                                                            |
 | `php`             | Installs PHP runtime, extensions, and Composer package manager.                                                                                               |
 | `playwright`      | Installs Playwright's Chromium (browser + headless shell) for the user and its system libraries (`install-deps`). |
