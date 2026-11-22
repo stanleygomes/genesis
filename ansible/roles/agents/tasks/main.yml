@@ -1,5 +1,6 @@
 ---
-# Syncs local Genesis .agents (Skills, rules) into ~/.agents and ~/.claude.
+# Clones (or updates) the Solomon repo into ~/.config/solomon and syncs its .agents
+# (Skills, rules) into ~/.agents and ~/.claude. The Orca role links ~/.orca/bots there.
 
 - name: Create ~/.agents directory
   file:
@@ -8,19 +9,52 @@
     mode: "0755"
   become: false
 
-- name: Probe repository .agents directory candidates
+- name: Ensure ~/.config exists
+  file:
+    path: "{{ solomon_dir | dirname }}"
+    state: directory
+    mode: "0755"
+  become: false
+
+# Orca bots write MEMORY.md here, so never discard local changes: dirty = skip pull.
+- name: Clone or update Solomon in ~/.config/solomon
+  shell: |
+    set -e
+    if [ ! -d "{{ solomon_dir }}/.git" ]; then
+      git clone -q "{{ solomon_repo }}" "{{ solomon_dir }}" && echo cloned
+    elif [ -n "$(git -C "{{ solomon_dir }}" status --porcelain)" ]; then
+      echo dirty
+    else
+      before="$(git -C "{{ solomon_dir }}" rev-parse HEAD)"
+      git -C "{{ solomon_dir }}" pull -q --ff-only
+      [ "$before" = "$(git -C "{{ solomon_dir }}" rev-parse HEAD)" ] || echo updated
+    fi
+  environment:
+    GIT_SSH_COMMAND: "ssh -o StrictHostKeyChecking=accept-new -o BatchMode=yes"
+  register: solomon_clone
+  changed_when: solomon_clone.stdout in ['cloned', 'updated']
+  failed_when: false
+  become: false
+
+- name: Warn when Solomon could not be cloned or updated
+  debug:
+    msg: >-
+      {{ 'Solomon em ' ~ solomon_dir ~ ' tem mudança local (provavelmente MEMORY.md dos bots
+      do Orca): não atualizei; commite lá e rode de novo.' if solomon_clone.stdout == 'dirty'
+      else 'Não consegui clonar/atualizar o Solomon (' ~ solomon_repo ~ '): confira a chave
+      SSH do GitHub. ' ~ (solomon_clone.stderr | default('')) }}
+  when: solomon_clone.rc != 0 or solomon_clone.stdout == 'dirty'
+  become: false
+
+- name: Check Solomon .agents directory
   stat:
-    path: "{{ item }}"
-  loop:
-    - "{{ playbook_dir }}/../../.agents"
-    - "{{ playbook_dir }}/../.agents"
-    - "{{ playbook_dir }}/.agents"
-  register: repo_agents_candidates
+    path: "{{ solomon_dir }}/.agents"
+  register: solomon_agents
   become: false
 
 - name: Resolve repository .agents directory
   set_fact:
-    resolved_repo_agents_dir: "{{ (repo_agents_candidates.results | selectattr('stat.exists') | map(attribute='item') | first) | default('') }}"
+    resolved_repo_agents_dir: "{{ solomon_dir ~ '/.agents' if solomon_agents.stat.exists else '' }}"
   become: false
 
 - name: Sync skills into ~/.agents/skills

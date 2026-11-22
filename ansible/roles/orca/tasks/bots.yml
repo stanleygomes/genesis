@@ -1,0 +1,31 @@
+---
+# ~/.orca/bots vira symlink (da pasta inteira) pra bots/ do Solomon: a mesma pasta
+# serve os bots da VPS e os do Orca. Pasta real vira backup; link pra outro checkout do
+# Solomon é trocado; link pra qualquer outro lugar fica (aviso).
+- name: Link Orca bots to the Solomon repo
+  shell: |
+    set -e
+    link="{{ orca_bots_link }}" src="{{ orca_bots_src }}"
+    [ -d "$src" ] || { echo "no-src"; exit 0; }
+    mkdir -p "$(dirname "$link")"
+    if [ -L "$link" ]; then
+      target="$(readlink -f "$link")"
+      [ "$target" = "$(readlink -f "$src")" ] && { echo ok; exit 0; }
+      case "$target" in */solomon/bots|*/.solomon/bots) ;; *) echo "foreign:$target"; exit 0;; esac
+      rm "$link"
+    elif [ -e "$link" ]; then
+      mv "$link" "$link.bak-$(date +%Y%m%d-%H%M%S)"
+    fi
+    ln -s "$src" "$link" && echo linked
+  register: orca_bots
+  changed_when: orca_bots.stdout == 'linked'
+  become: false
+
+- name: Warn about Orca bots link
+  debug:
+    msg: >-
+      {{ '~/.orca/bots aponta pra ' ~ orca_bots.stdout[8:] ~ ', fora do Solomon: deixei como está.'
+      if orca_bots.stdout.startswith('foreign:')
+      else 'Sem ' ~ orca_bots_src ~ ' (o role agents clona o Solomon): bots do Orca não ligados.' }}
+  when: orca_bots.stdout.startswith('foreign:') or orca_bots.stdout == 'no-src'
+  become: false

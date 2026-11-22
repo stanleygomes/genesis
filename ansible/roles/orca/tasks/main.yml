@@ -78,3 +78,7 @@
     update: true
     force: true
   become: false
+
+
+- name: Link Orca bots to the Solomon repo
+  include_tasks: bots.yml

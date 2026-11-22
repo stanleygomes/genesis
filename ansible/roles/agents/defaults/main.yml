@@ -1,3 +1,6 @@
 ---
 agents_dir: "{{ ansible_env.HOME | default(lookup('env', 'HOME')) }}/.agents"
 claude_dir: "{{ ansible_env.HOME | default(lookup('env', 'HOME')) }}/.claude"
+# Skills, regras e bots moram no repo do Solomon (privado: precisa da chave SSH do GitHub).
+solomon_repo: "git@github.com:stanleygomes/solomon.git"
+solomon_dir: "{{ ansible_env.HOME | default(lookup('env', 'HOME')) }}/.config/solomon"
