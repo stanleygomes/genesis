@@ -14,6 +14,10 @@
       echo "unlinked"
     fi
     mkdir -p "$dir"
+    if [ -f "$src/.ai-memory.toml" ] && [ ! -L "$dir/.ai-memory.toml" ]; then
+      ln -sfn "$src/.ai-memory.toml" "$dir/.ai-memory.toml"  # ai-memory: projeto orca-bots
+      echo "linked:.ai-memory.toml"
+    fi
     for soul in "$src"/*/SOUL.md; do
       name="$(basename "$(dirname "$soul")")"
       bot="$dir/$name"
