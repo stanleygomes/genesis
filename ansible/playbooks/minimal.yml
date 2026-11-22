@@ -18,6 +18,7 @@
   roles:
     - autoremove
     - git
+    - python
     - github-cli
     - cli-tools
     - playwright
