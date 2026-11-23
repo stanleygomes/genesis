@@ -2,7 +2,7 @@
 # ~/.orca/bots é do Orca (pasta real: ele cria cada bot lá). Do Solomon vem só a alma:
 # pra cada bot do Orca cujo nome (no bot.json) é o de uma pasta de bots/ do Solomon, o
 # SOUL.md vira link pro repo (mudou no Orca, volta pro git). MEMORY.md, memory/,
-# bot.json, AGENTS.md e CLAUDE.md ficam só no Orca. Bot que ainda não existe no Orca:
+# scripts/, bot.json, AGENTS.md e CLAUDE.md ficam só no Orca. Bot que ainda não existe no Orca:
 # crie lá com o nome da pasta e rode o genesis de novo.
 - name: Link Orca bots' SOUL.md to the Solomon repo
   shell: |
@@ -26,6 +26,7 @@
       soul="$src/$name/SOUL.md"
       [ -f "$soul" ] || continue
       seen="$seen$name "
+      mkdir -p "$bot/scripts"  # scripts Python do bot nesta máquina (fora do git)
       [ "$(readlink -f "$bot/SOUL.md")" = "$(readlink -f "$soul")" ] && continue
       [ -e "$bot/SOUL.md" ] && mv "$bot/SOUL.md" "$bot/SOUL.md.bak-$(date +%Y%m%d-%H%M%S)"
       ln -s "$soul" "$bot/SOUL.md"
