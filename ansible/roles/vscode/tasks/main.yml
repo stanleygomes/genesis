@@ -32,6 +32,26 @@
   become: true
   changed_when: false
 
+- name: Find a VS Code repository not written by genesis
+  # O pacote do VS Code (2025+) grava o próprio vscode.sources com outra chave
+  # (/usr/share/keyrings/microsoft.gpg). Os dois juntos = "Conflicting values set for
+  # option Signed-By" e o apt inteiro para. Se já existe um, ele vale e o nosso sai.
+  shell: >-
+    grep -lsE 'packages\.microsoft\.com/repos/(code|vscode)'
+    /etc/apt/sources.list /etc/apt/sources.list.d/*.list /etc/apt/sources.list.d/*.sources
+    | grep -v '/etc/apt/sources.list.d/vscode.list$' || true
+  register: vscode_other_repo
+  changed_when: false
+  check_mode: false
+  become: false
+
+- name: Remove genesis VS Code repository when another one exists
+  file:
+    path: /etc/apt/sources.list.d/vscode.list
+    state: absent
+  become: true
+  when: vscode_other_repo.stdout | length > 0
+
 - name: Add VS Code repository
   apt_repository:
     repo: "deb [arch=amd64,arm64,armhf signed-by=/etc/apt/keyrings/packages.microsoft.gpg] https://packages.microsoft.com/repos/code stable main"
@@ -39,6 +59,7 @@
     filename: vscode
     update_cache: no
   become: true
+  when: vscode_other_repo.stdout | length == 0
 
 - name: Update apt cache manually (ignoring unreachable repos)
   shell: apt-get update || true
