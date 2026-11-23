@@ -5,37 +5,7 @@
 # scripts/, bot.json, AGENTS.md e CLAUDE.md ficam só no Orca. Bot que ainda não existe no Orca:
 # crie lá com o nome da pasta e rode o genesis de novo.
 - name: Link Orca bots' SOUL.md to the Solomon repo
-  shell: |
-    set -e
-    dir="{{ orca_bots_link }}" src="{{ orca_bots_src }}"
-    [ -d "$src" ] || { echo "no-src"; exit 0; }
-    if [ -L "$dir" ]; then  # jeito antigo: a pasta inteira era link pro repo
-      rm "$dir"
-      echo "unlinked"
-    fi
-    mkdir -p "$dir"
-    if [ -f "$src/.ai-memory.toml" ] && [ ! -L "$dir/.ai-memory.toml" ]; then
-      ln -sfn "$src/.ai-memory.toml" "$dir/.ai-memory.toml"  # ai-memory: projeto orca-bots
-      echo "linked:.ai-memory.toml"
-    fi
-    seen=" "
-    for json in "$dir"/*/bot.json; do  # o nome vem do bot.json: a pasta nem sempre bate
-      [ -f "$json" ] || continue
-      bot="$(dirname "$json")"
-      name="$(sed -n 's/.*"name": *"\([^"]*\)".*/\1/p' "$json" | head -1 | tr 'A-Z' 'a-z')"
-      soul="$src/$name/SOUL.md"
-      [ -f "$soul" ] || continue
-      seen="$seen$name "
-      mkdir -p "$bot/scripts"  # scripts Python do bot nesta máquina (fora do git)
-      [ "$(readlink -f "$bot/SOUL.md")" = "$(readlink -f "$soul")" ] && continue
-      [ -e "$bot/SOUL.md" ] && mv "$bot/SOUL.md" "$bot/SOUL.md.bak-$(date +%Y%m%d-%H%M%S)"
-      ln -s "$soul" "$bot/SOUL.md"
-      echo "linked:$name"
-    done
-    for soul in "$src"/*/SOUL.md; do
-      name="$(basename "$(dirname "$soul")")"
-      case "$seen" in *" $name "*) ;; *) echo "missing:$name" ;; esac
-    done
+  script: link-bots.sh "{{ orca_bots_link }}" "{{ orca_bots_src }}"
   register: orca_bots
   changed_when: "'linked:' in orca_bots.stdout"
   become: false
@@ -44,8 +14,8 @@
   debug:
     msg: >-
       {{ 'Sem ' ~ orca_bots_src ~ ' (o role agents clona o Solomon): bots do Orca não ligados.'
-      if orca_bots.stdout == 'no-src'
+      if 'no-src' in orca_bots.stdout_lines
       else 'Crie no Orca (mesmo nome da pasta) e rode o genesis de novo: '
       ~ (orca_bots.stdout_lines | select('match', '^missing:') | map('regex_replace', '^missing:', '') | join(', ')) }}
-  when: orca_bots.stdout == 'no-src' or 'missing:' in orca_bots.stdout
+  when: "'no-src' in orca_bots.stdout_lines or 'missing:' in orca_bots.stdout"
   become: false
