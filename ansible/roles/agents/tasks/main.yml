@@ -16,7 +16,7 @@
     mode: "0755"
   become: false
 
-# Orca bots write MEMORY.md here, so never discard local changes: dirty = skip pull.
+# A bot in Orca may edit its SOUL.md here (symlink): never discard local changes; dirty = skip pull.
 - name: Clone or update Solomon in ~/.config/solomon
   shell: |
     set -e
@@ -39,8 +39,8 @@
 - name: Warn when Solomon could not be cloned or updated
   debug:
     msg: >-
-      {{ 'Solomon em ' ~ solomon_dir ~ ' tem mudança local (provavelmente MEMORY.md dos bots
-      do Orca): não atualizei; commite lá e rode de novo.' if solomon_clone.stdout == 'dirty'
+      {{ 'Solomon em ' ~ solomon_dir ~ ' tem mudança local (provavelmente o SOUL.md editado
+      por um bot do Orca): não atualizei; commite lá e rode de novo.' if solomon_clone.stdout == 'dirty'
       else 'Não consegui clonar/atualizar o Solomon (' ~ solomon_repo ~ '): confira a chave
       SSH do GitHub. ' ~ (solomon_clone.stderr | default('')) }}
   when: solomon_clone.rc != 0 or solomon_clone.stdout == 'dirty'

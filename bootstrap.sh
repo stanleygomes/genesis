@@ -108,7 +108,17 @@ fi
 
 cd "$TARGET_DIR"
 if [ -d ".git" ]; then
-    git pull || true
+    # Esta pasta é do genesis: mudança local aqui não deveria existir. Guarda num stash
+    # (recuperável com `git stash list`) em vez de rodar com a versão velha calado.
+    if [ -n "$(git status --porcelain)" ]; then
+        echo "⚠️  Mudanças locais em $TARGET_DIR: guardadas no git stash."
+        git status --short
+        git stash push -u -m "genesis-bootstrap $(date +%Y%m%d-%H%M%S)" > /dev/null
+    fi
+    if ! git pull --ff-only; then
+        echo "❌ Não consegui atualizar $TARGET_DIR (git pull). Parei pra não rodar a versão velha."
+        exit 1
+    fi
 fi
 
 # 3. Configure temporary passwordless sudo
