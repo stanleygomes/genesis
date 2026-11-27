@@ -1,6 +1,6 @@
 ---
 # Native GNOME appearance without custom GTK themes: Inter interface font,
-# WhiteSur icon theme, and native accent color / typography via gsettings.
+# WhiteSur icon theme, macOS cursor theme, and native accent color / typography via gsettings.
 
 - name: Check if Inter font package is installed
   ansible.builtin.command: dpkg-query -W -f='${Status}' {{ gnome_desktop_font_package }}
@@ -191,6 +191,162 @@
   when:
     - gnome_desktop_icon_theme_needs_install
     - not ansible_check_mode
+
+# Install the macOS cursor theme system-wide in /usr/share/icons so Wayland,
+# XWayland, and sandboxed Snap apps can all resolve the cursor assets.
+- name: Check if macOS cursor theme is installed
+  ansible.builtin.stat:
+    path: "{{ gnome_desktop_cursor_theme_dest }}/{{ gnome_desktop_cursor_theme_name }}/index.theme"
+  register: gnome_desktop_cursor_theme_index_stat
+  check_mode: false
+  become: false
+
+- name: Check if macOS cursor theme release marker exists
+  ansible.builtin.stat:
+    path: "{{ gnome_desktop_cursor_theme_dest }}/{{ gnome_desktop_cursor_theme_name }}/.release-tag"
+  register: gnome_desktop_cursor_theme_marker_stat
+  check_mode: false
+  become: false
+
+- name: Read installed macOS cursor theme release marker
+  ansible.builtin.slurp:
+    src: "{{ gnome_desktop_cursor_theme_dest }}/{{ gnome_desktop_cursor_theme_name }}/.release-tag"
+  register: gnome_desktop_cursor_theme_marker_raw
+  check_mode: false
+  become: false
+  when: gnome_desktop_cursor_theme_marker_stat.stat.exists
+
+- name: Record current macOS cursor theme installation state
+  ansible.builtin.set_fact:
+    gnome_desktop_cursor_theme_is_installed: "{{ gnome_desktop_cursor_theme_index_stat.stat.exists }}"
+    gnome_desktop_cursor_theme_installed_tag: >-
+      {{ (gnome_desktop_cursor_theme_marker_raw.content | b64decode | trim)
+         if (gnome_desktop_cursor_theme_marker_stat.stat.exists
+             and gnome_desktop_cursor_theme_marker_raw.content is defined)
+         else '' }}
+
+- name: Determine whether macOS cursor theme needs to be installed
+  ansible.builtin.set_fact:
+    gnome_desktop_cursor_theme_needs_install: >-
+      {{ (gnome_desktop_cursor_theme_force_reinstall | bool)
+         or (not gnome_desktop_cursor_theme_is_installed)
+         or ((gnome_desktop_cursor_theme_installed_tag | length > 0)
+             and gnome_desktop_cursor_theme_installed_tag != (gnome_desktop_cursor_theme_version | string)) }}
+
+- name: Check if xz is available for extracting macOS cursor theme
+  ansible.builtin.command: which xz
+  register: gnome_desktop_cursor_xz_check
+  failed_when: false
+  changed_when: false
+  check_mode: false
+  become: false
+  when: gnome_desktop_cursor_theme_needs_install
+
+- name: Install xz-utils for extracting macOS cursor theme
+  ansible.builtin.apt:
+    name: xz-utils
+    state: present
+  become: true
+  when:
+    - gnome_desktop_cursor_theme_needs_install
+    - gnome_desktop_cursor_xz_check.rc != 0
+
+- name: Check if system icons directory exists
+  ansible.builtin.stat:
+    path: "{{ gnome_desktop_cursor_theme_dest }}"
+  register: gnome_desktop_cursor_theme_dest_stat
+  check_mode: false
+  become: false
+  when: gnome_desktop_cursor_theme_needs_install
+
+- name: Ensure system icons directory exists
+  ansible.builtin.file:
+    path: "{{ gnome_desktop_cursor_theme_dest }}"
+    state: directory
+    mode: "0755"
+  become: true
+  when:
+    - gnome_desktop_cursor_theme_needs_install
+    - not gnome_desktop_cursor_theme_dest_stat.stat.exists
+
+- name: Download macOS cursor theme archive
+  ansible.builtin.get_url:
+    url: "{{ gnome_desktop_cursor_theme_url }}"
+    dest: "{{ gnome_desktop_cursor_theme_tarball_path }}"
+    checksum: "{{ gnome_desktop_cursor_theme_checksum | default(omit, true) }}"
+    mode: "0644"
+  become: false
+  when: gnome_desktop_cursor_theme_needs_install
+
+# Clear stale cursor files before extracting an upgrade so removed symlinks do not linger.
+- name: Remove previous macOS cursor theme directory before reinstall
+  ansible.builtin.file:
+    path: "{{ gnome_desktop_cursor_theme_dest }}/{{ gnome_desktop_cursor_theme_name }}"
+    state: absent
+  become: true
+  when:
+    - gnome_desktop_cursor_theme_needs_install
+    - gnome_desktop_cursor_theme_is_installed
+    - gnome_desktop_cursor_theme_name | length > 0
+    - not ansible_check_mode
+
+# Extract only the target theme folder (skipping top-level ./LICENSE and sibling variants);
+# in check mode the tarball is not written to disk, so unarchive cannot run.
+- name: Extract macOS cursor theme archive
+  ansible.builtin.unarchive:
+    src: "{{ gnome_desktop_cursor_theme_tarball_path }}"
+    dest: "{{ gnome_desktop_cursor_theme_dest }}"
+    remote_src: true
+    owner: root
+    group: root
+    include:
+      - "./{{ gnome_desktop_cursor_theme_name }}"
+    creates: "{{ gnome_desktop_cursor_theme_dest }}/{{ gnome_desktop_cursor_theme_name }}/index.theme"
+  become: true
+  when:
+    - gnome_desktop_cursor_theme_needs_install
+    - not ansible_check_mode
+
+- name: Record installed macOS cursor theme release tag
+  ansible.builtin.copy:
+    content: "{{ gnome_desktop_cursor_theme_version }}\n"
+    dest: "{{ gnome_desktop_cursor_theme_dest }}/{{ gnome_desktop_cursor_theme_name }}/.release-tag"
+    owner: root
+    group: root
+    mode: "0644"
+  become: true
+  when:
+    - gnome_desktop_cursor_theme_needs_install
+    - not ansible_check_mode
+
+- name: Remove downloaded macOS cursor theme archive
+  ansible.builtin.file:
+    path: "{{ gnome_desktop_cursor_theme_tarball_path }}"
+    state: absent
+  become: false
+  when:
+    - gnome_desktop_cursor_theme_needs_install
+    - not ansible_check_mode
+
+# Set the default cursor theme fallback in ~/.icons/default/index.theme so
+# XWayland and Electron apps that bypass GSettings still inherit the theme.
+- name: Ensure default cursor fallback directory exists
+  ansible.builtin.file:
+    path: "{{ gnome_desktop_cursor_default_dir }}"
+    state: directory
+    mode: "0755"
+  become: false
+
+- name: Configure default cursor theme fallback for XWayland and Electron apps
+  community.general.ini_file:
+    path: "{{ gnome_desktop_cursor_default_dir }}/index.theme"
+    section: Icon Theme
+    option: Inherits
+    value: "{{ gnome_desktop_cursor_theme_name }}"
+    no_extra_spaces: true
+    mode: "0644"
+    create: true
+  become: false
 
 # Probe current GNOME interface settings via gsettings so keys are only written when they drift
 # (and unsupported keys on older GNOME versions, such as accent-color before GNOME 47, skip cleanly).

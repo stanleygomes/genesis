@@ -132,7 +132,7 @@ Here is a list of all roles available in this repository:
 | `ghostty`         | Installs Ghostty terminal emulator.                                                                                                                           |
 | `git`             | Installs Git, configures user credentials, and generates/sets GitHub SSH keys.                                                                                |
 | `github-cli`      | Installs GitHub CLI (`gh`) from GitHub's official APT repository.                                                                                              |
-| `gnome_desktop`   | Consolidates GNOME desktop visual/UX setup: Isle Dynamic Island (`.deb` + `isled`), MacOS Dock extension (with Ubuntu Dock disabled and `gsettings` presets), Inter font (`fonts-inter`), WhiteSur icon theme, and native `org.gnome.desktop.interface` appearance (`accent-color`, fonts, icons). |
+| `gnome_desktop`   | Consolidates GNOME desktop visual/UX setup: Isle Dynamic Island (`.deb` + `isled`), MacOS Dock extension (with Ubuntu Dock disabled and `gsettings` presets), Inter font (`fonts-inter`), WhiteSur icon theme, macOS cursor theme (`ful1e5/apple_cursor` + `~/.icons/default/index.theme` fallback), and native `org.gnome.desktop.interface` appearance (`accent-color`, fonts, icons, cursor). |
 | `go`              | Installs Go language runtime and `golangci-lint` to `~/.local/go`.                                                                                            |
 | `google-chrome`   | Installs Google Chrome web browser.                                                                                                                           |
 | `herdr`           | Installs Herdr terminal multiplexer for AI coding agents and configures default settings.                                                                      |
@@ -170,7 +170,7 @@ This project organises roles into the following playbooks:
 
 ### 2. Desktop Configuration (`desktop.yml`)
 
-> Target: User interfaces, consolidated GNOME desktop UX (`gnome_desktop`: Isle, MacOS Dock, Inter font, blue accent color, and WhiteSur icon theme), web browsers, IDEs, ArtCraft, the VLC media player, game emulators (RetroArch, PPSSPP, PCSX2, ES-DE), desktop entries, agent configurations, and database tools.
+> Target: User interfaces, consolidated GNOME desktop UX (`gnome_desktop`: Isle, MacOS Dock, Inter font, blue accent color, WhiteSur icon theme, and macOS cursor theme), web browsers, IDEs, ArtCraft, the VLC media player, game emulators (RetroArch, PPSSPP, PCSX2, ES-DE), desktop entries, agent configurations, and database tools.
 
 ### 3. Custom Setup 1 (`custom1.yml`)
 
