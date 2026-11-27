@@ -1,0 +1,233 @@
+---
+# Isle publishes official system-wide .deb packages on GitHub Releases (x86_64/amd64)
+# containing isled, helpers, systemd/D-Bus units, and the GNOME Shell extension.
+# Probe dpkg status and version first to keep reruns fast and idempotent.
+- name: Check if Isle package is installed
+  ansible.builtin.command: dpkg-query -W -f='${Status}|${Version}' {{ gnome_desktop_isle_package }}
+  register: gnome_desktop_isle_dpkg_check
+  failed_when: false
+  changed_when: false
+  check_mode: false
+  become: false
+
+- name: Record current Isle installation state
+  ansible.builtin.set_fact:
+    gnome_desktop_isle_is_installed: >-
+      {{ gnome_desktop_isle_dpkg_check.rc == 0
+         and ('install ok installed' in gnome_desktop_isle_dpkg_check.stdout) }}
+    gnome_desktop_isle_installed_version: >-
+      {{ (gnome_desktop_isle_dpkg_check.stdout.split('|')[1] | default(''))
+         if (gnome_desktop_isle_dpkg_check.rc == 0
+             and ('install ok installed' in gnome_desktop_isle_dpkg_check.stdout))
+         else '' }}
+
+- name: Determine whether Isle package needs to be installed
+  ansible.builtin.set_fact:
+    gnome_desktop_isle_needs_install: >-
+      {{ (not gnome_desktop_isle_is_installed)
+         or (gnome_desktop_isle_version != 'latest'
+             and gnome_desktop_isle_installed_version != (gnome_desktop_isle_version | regex_replace('^v', ''))) }}
+
+- name: Verify architecture is supported by Isle releases
+  ansible.builtin.assert:
+    that:
+      - ansible_architecture == 'x86_64'
+    fail_msg: >-
+      Isle official .deb releases only support x86_64 (amd64);
+      detected {{ ansible_architecture }}.
+  when: gnome_desktop_isle_needs_install
+
+- name: Find Isle GitHub release metadata
+  ansible.builtin.uri:
+    url: >-
+      https://api.github.com/repos/{{ gnome_desktop_isle_repo }}/releases/{{
+        'latest' if gnome_desktop_isle_version == 'latest'
+        else 'tags/v' ~ (gnome_desktop_isle_version | regex_replace('^v', ''))
+      }}
+    return_content: true
+  register: gnome_desktop_isle_release
+  check_mode: false
+  become: false
+  when: gnome_desktop_isle_needs_install
+
+- name: Pick Isle amd64 .deb assets from release
+  ansible.builtin.set_fact:
+    gnome_desktop_isle_deb_asset: >-
+      {{ gnome_desktop_isle_release.json.assets
+         | selectattr('name', 'match', '^isle_.*_amd64\.deb$')
+         | first }}
+    gnome_desktop_isle_deb_sha256_asset: >-
+      {{ gnome_desktop_isle_release.json.assets
+         | selectattr('name', 'match', '^isle_.*_amd64\.deb\.sha256$')
+         | first | default({}) }}
+  when: gnome_desktop_isle_needs_install
+
+- name: Fetch Isle .deb SHA-256 checksum
+  ansible.builtin.uri:
+    url: "{{ gnome_desktop_isle_deb_sha256_asset.browser_download_url }}"
+    return_content: true
+  register: gnome_desktop_isle_sha256_response
+  check_mode: false
+  become: false
+  when:
+    - gnome_desktop_isle_needs_install
+    - gnome_desktop_isle_deb_sha256_asset.browser_download_url is defined
+
+- name: Set expected Isle .deb checksum
+  ansible.builtin.set_fact:
+    gnome_desktop_isle_deb_checksum: >-
+      {{ 'sha256:' ~ (gnome_desktop_isle_sha256_response.content | trim).split()[0]
+         if (gnome_desktop_isle_sha256_response is defined and gnome_desktop_isle_sha256_response.content is defined)
+         else (gnome_desktop_isle_deb_asset.digest | default(omit)) }}
+  when: gnome_desktop_isle_needs_install
+
+- name: Download Isle .deb package
+  ansible.builtin.get_url:
+    url: "{{ gnome_desktop_isle_deb_asset.browser_download_url }}"
+    dest: "{{ gnome_desktop_isle_deb_path }}"
+    checksum: "{{ gnome_desktop_isle_deb_checksum }}"
+    mode: "0644"
+  become: false
+  when: gnome_desktop_isle_needs_install
+
+# In check mode the .deb is not downloaded to disk, so apt cannot inspect it.
+- name: Install Isle .deb package
+  ansible.builtin.apt:
+    deb: "{{ gnome_desktop_isle_deb_path }}"
+    state: present
+  become: true
+  when:
+    - gnome_desktop_isle_needs_install
+    - not ansible_check_mode
+
+- name: Remove downloaded Isle .deb package
+  ansible.builtin.file:
+    path: "{{ gnome_desktop_isle_deb_path }}"
+    state: absent
+  become: false
+  when:
+    - gnome_desktop_isle_needs_install
+    - not ansible_check_mode
+
+# Enable isled user service so the daemon starts with the graphical session
+# (D-Bus activation also starts it on demand when the extension connects).
+- name: Enable isled systemd user service
+  ansible.builtin.systemd_service:
+    name: isled.service
+    scope: user
+    daemon_reload: true
+    enabled: true
+  become: false
+  when:
+    - gnome_desktop_isle_enable_service | bool
+    - ansible_env.XDG_RUNTIME_DIR is defined
+    - not ansible_check_mode or gnome_desktop_isle_is_installed
+
+# Reading via gsettings preserves distro default extensions (e.g. Ubuntu Dock)
+# even when /org/gnome/shell/enabled-extensions has never been written to dconf.
+- name: Read GNOME Shell enabled extensions for Isle
+  ansible.builtin.command: gsettings get org.gnome.shell enabled-extensions
+  register: gnome_desktop_isle_enabled_extensions_raw
+  failed_when: false
+  changed_when: false
+  check_mode: false
+  become: false
+  when:
+    - gnome_desktop_isle_enable_extension | bool
+    - gnome_desktop_gnome_tools_check.rc == 0
+
+- name: Read GNOME Shell disabled extensions for Isle
+  ansible.builtin.command: gsettings get org.gnome.shell disabled-extensions
+  register: gnome_desktop_isle_disabled_extensions_raw
+  failed_when: false
+  changed_when: false
+  check_mode: false
+  become: false
+  when:
+    - gnome_desktop_isle_enable_extension | bool
+    - gnome_desktop_gnome_tools_check.rc == 0
+
+- name: Read GNOME Shell disable-user-extensions setting for Isle
+  ansible.builtin.command: gsettings get org.gnome.shell disable-user-extensions
+  register: gnome_desktop_isle_disable_user_extensions_raw
+  failed_when: false
+  changed_when: false
+  check_mode: false
+  become: false
+  when:
+    - gnome_desktop_isle_enable_extension | bool
+    - gnome_desktop_gnome_tools_check.rc == 0
+
+- name: Parse GNOME Shell extension lists for Isle
+  ansible.builtin.set_fact:
+    gnome_desktop_isle_enabled_extensions: >-
+      {{ (gnome_desktop_isle_enabled_extensions_raw.stdout | trim | from_yaml)
+         if (gnome_desktop_isle_enabled_extensions_raw.rc == 0
+             and (gnome_desktop_isle_enabled_extensions_raw.stdout | trim | length > 0)
+             and not (gnome_desktop_isle_enabled_extensions_raw.stdout | trim).startswith('@as'))
+         else [] }}
+    gnome_desktop_isle_disabled_extensions: >-
+      {{ (gnome_desktop_isle_disabled_extensions_raw.stdout | trim | from_yaml)
+         if (gnome_desktop_isle_disabled_extensions_raw.rc == 0
+             and (gnome_desktop_isle_disabled_extensions_raw.stdout | trim | length > 0)
+             and not (gnome_desktop_isle_disabled_extensions_raw.stdout | trim).startswith('@as'))
+         else [] }}
+  when:
+    - gnome_desktop_isle_enable_extension | bool
+    - gnome_desktop_gnome_tools_check.rc == 0
+
+# Write extension state directly via dconf instead of gnome-extensions enable:
+# on Wayland, a running GNOME Shell does not discover newly installed extensions
+# until the next login, so gnome-extensions enable would fail before logout.
+- name: Remove Isle from GNOME Shell disabled extensions
+  community.general.dconf:
+    key: /org/gnome/shell/disabled-extensions
+    value: >-
+      {%- set updated = gnome_desktop_isle_disabled_extensions
+          | reject('equalto', gnome_desktop_isle_extension_uuid) | list -%}
+      {{ '[' ~ (updated | map('to_json') | join(', ') | replace('"', "'")) ~ ']'
+         if updated | length > 0 else '@as []' }}
+    state: present
+  become: false
+  when:
+    - gnome_desktop_isle_enable_extension | bool
+    - gnome_desktop_gnome_tools_check.rc == 0
+    - gnome_desktop_isle_disabled_extensions_raw.rc == 0
+    - ansible_env.DBUS_SESSION_BUS_ADDRESS is defined
+    - gnome_desktop_isle_extension_uuid in gnome_desktop_isle_disabled_extensions
+
+- name: Enable Isle GNOME Shell extension
+  community.general.dconf:
+    key: /org/gnome/shell/enabled-extensions
+    value: >-
+      {{ '[' ~ (((gnome_desktop_isle_enabled_extensions + [gnome_desktop_isle_extension_uuid]) | unique)
+         | map('to_json') | join(', ') | replace('"', "'")) ~ ']' }}
+    state: present
+  become: false
+  when:
+    - gnome_desktop_isle_enable_extension | bool
+    - gnome_desktop_gnome_tools_check.rc == 0
+    - gnome_desktop_isle_enabled_extensions_raw.rc == 0
+    - ansible_env.DBUS_SESSION_BUS_ADDRESS is defined
+    - gnome_desktop_isle_extension_uuid not in gnome_desktop_isle_enabled_extensions
+
+- name: Ensure GNOME Shell user extensions are allowed for Isle
+  community.general.dconf:
+    key: /org/gnome/shell/disable-user-extensions
+    value: "false"
+    state: present
+  become: false
+  when:
+    - gnome_desktop_isle_enable_extension | bool
+    - gnome_desktop_gnome_tools_check.rc == 0
+    - gnome_desktop_isle_disable_user_extensions_raw.rc == 0
+    - ansible_env.DBUS_SESSION_BUS_ADDRESS is defined
+    - (gnome_desktop_isle_disable_user_extensions_raw.stdout | trim) == 'true'
+
+- name: Remind user to log out and back in for Isle on Wayland
+  ansible.builtin.debug:
+    msg: >-
+      Isle ({{ gnome_desktop_isle_extension_uuid }}) was installed and configured.
+      GNOME Shell on Wayland only loads newly installed extensions at login —
+      log out and back in for the island to appear.
+  when: gnome_desktop_isle_needs_install

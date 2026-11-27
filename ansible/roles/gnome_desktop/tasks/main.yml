@@ -1,0 +1,50 @@
+---
+# Check for GNOME tooling once so headless or non-GNOME hosts skip GNOME config cleanly.
+- name: Check if gsettings and dconf are available
+  ansible.builtin.command: which gsettings dconf
+  register: gnome_desktop_gnome_tools_check
+  failed_when: false
+  changed_when: false
+  check_mode: false
+  become: false
+  tags:
+    - gnome_desktop
+    - isle
+    - dock
+    - macos_dock
+    - appearance
+
+- name: Configure Isle Dynamic Island
+  ansible.builtin.include_tasks:
+    file: isle.yml
+    apply:
+      tags:
+        - gnome_desktop
+        - isle
+  tags:
+    - gnome_desktop
+    - isle
+
+- name: Configure MacOS Dock extension
+  ansible.builtin.include_tasks:
+    file: dock.yml
+    apply:
+      tags:
+        - gnome_desktop
+        - dock
+        - macos_dock
+  tags:
+    - gnome_desktop
+    - dock
+    - macos_dock
+
+- name: Configure native GNOME appearance
+  ansible.builtin.include_tasks:
+    file: appearance.yml
+    apply:
+      tags:
+        - gnome_desktop
+        - appearance
+  tags:
+    - gnome_desktop
+    - appearance

@@ -1,0 +1,58 @@
+---
+# Defaults for gnome_desktop role
+
+# Isle (Dynamic Island / notch for GNOME Shell + isled daemon)
+gnome_desktop_isle_repo: zickrian/isle
+gnome_desktop_isle_version: latest
+gnome_desktop_isle_package: isle
+gnome_desktop_isle_extension_uuid: isle@zickrian.github.io
+gnome_desktop_isle_deb_path: /tmp/isle.deb
+gnome_desktop_isle_enable_extension: true
+gnome_desktop_isle_enable_service: true
+
+# MacOS Dock GNOME Shell extension
+gnome_desktop_dock_repo: vinnytherobot/MacOSDock
+gnome_desktop_dock_version: latest
+gnome_desktop_dock_extension_uuid: macos-dock@vinnytherobot.github.io
+gnome_desktop_dock_schema_id: org.gnome.shell.extensions.macosdock
+gnome_desktop_dock_extensions_dir: "{{ ansible_env.HOME }}/.local/share/gnome-shell/extensions"
+gnome_desktop_dock_extension_dir: "{{ gnome_desktop_dock_extensions_dir }}/{{ gnome_desktop_dock_extension_uuid }}"
+gnome_desktop_dock_zip_path: /tmp/macos-dock.zip
+gnome_desktop_dock_enable_extension: true
+gnome_desktop_dock_disable_ubuntu_dock: true
+gnome_desktop_dock_ubuntu_dock_uuid: ubuntu-dock@ubuntu.com
+gnome_desktop_dock_settings:
+  auto-hide: false
+  dock-blur-enabled: true
+  dock-opacity: 35
+  dock-border-radius: 20
+  icon-size: 44
+  magnification-enabled: true
+  magnification-scale: 1.5
+  magnification-falloff: 120
+  running-indicator-style: 0
+
+# Native GNOME appearance (zero GTK theme overhead)
+gnome_desktop_font_package: fonts-inter
+gnome_desktop_accent_color: blue
+gnome_desktop_font_name: Inter 10.5
+gnome_desktop_document_font_name: Inter 10.5
+
+# WhiteSur icon theme (icons only, no GTK theme)
+gnome_desktop_icon_theme_repo: vinceliuice/WhiteSur-icon-theme
+gnome_desktop_icon_theme_version: "2026-09-10"
+gnome_desktop_icon_theme_dest: "{{ ansible_env.HOME }}/.local/share/icons"
+gnome_desktop_icon_theme_name: WhiteSur-dark
+gnome_desktop_icon_theme_variant: default
+gnome_desktop_icon_theme_alternative: true
+gnome_desktop_icon_theme_checksum: ""
+gnome_desktop_icon_theme_force_reinstall: false
+gnome_desktop_icon_theme_tarball_path: /tmp/whitesur-icon-theme.tar.gz
+gnome_desktop_icon_theme_extract_dir: /tmp/whitesur-icon-theme-src
+
+gnome_desktop_interface_schema_id: org.gnome.desktop.interface
+gnome_desktop_interface_settings:
+  accent-color: "{{ gnome_desktop_accent_color }}"
+  font-name: "{{ gnome_desktop_font_name }}"
+  document-font-name: "{{ gnome_desktop_document_font_name }}"
+  icon-theme: "{{ gnome_desktop_icon_theme_name }}"
