@@ -135,6 +135,7 @@ Here is a list of all roles available in this repository:
 | `go`              | Installs Go language runtime and `golangci-lint` to `~/.local/go`.                                                                                            |
 | `google-chrome`   | Installs Google Chrome web browser.                                                                                                                           |
 | `herdr`           | Installs Herdr terminal multiplexer for AI coding agents and configures default settings.                                                                      |
+| `isle`            | Installs Isle (Dynamic Island / notch for GNOME Shell + `isled` daemon) from the latest GitHub release `.deb` and enables the `isle@zickrian.github.io` extension. |
 | `java`            | Installs SDKMAN and configures Java development dependencies.                                                                                                 |
 | `mongodb-compass` | Installs MongoDB Compass GUI client.                                                                                                                          |
 | `mongosh`         | Installs MongoDB Shell (`mongosh`) and configures `mongo-connect` credential management script.                                                               |
@@ -169,7 +170,7 @@ This project organises roles into the following playbooks:
 
 ### 2. Desktop Configuration (`desktop.yml`)
 
-> Target: User interfaces, web browsers, IDEs, ArtCraft, the VLC media player, game emulators (RetroArch, PPSSPP, PCSX2, ES-DE), desktop entries, agent configurations, and database tools.
+> Target: User interfaces, GNOME Shell enhancements (Isle), web browsers, IDEs, ArtCraft, the VLC media player, game emulators (RetroArch, PPSSPP, PCSX2, ES-DE), desktop entries, agent configurations, and database tools.
 
 ### 3. Custom Setup 1 (`custom1.yml`)
 

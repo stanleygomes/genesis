@@ -1,0 +1,9 @@
+---
+# Defaults for isle role
+isle_repo: zickrian/isle
+isle_version: latest
+isle_package: isle
+isle_extension_uuid: isle@zickrian.github.io
+isle_deb_path: /tmp/isle.deb
+isle_enable_extension: true
+isle_enable_service: true
