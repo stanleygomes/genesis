@@ -22,6 +22,9 @@
     - role: isle
       tags:
         - isle
+    - role: macos_dock
+      tags:
+        - macos_dock
     - google-chrome
     - dbeaver
     - vscode
