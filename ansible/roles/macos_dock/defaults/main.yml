@@ -1,0 +1,22 @@
+---
+# Defaults for macos_dock role
+macos_dock_repo: vinnytherobot/MacOSDock
+macos_dock_version: latest
+macos_dock_extension_uuid: macos-dock@vinnytherobot.github.io
+macos_dock_schema_id: org.gnome.shell.extensions.macosdock
+macos_dock_extensions_dir: "{{ ansible_env.HOME }}/.local/share/gnome-shell/extensions"
+macos_dock_extension_dir: "{{ macos_dock_extensions_dir }}/{{ macos_dock_extension_uuid }}"
+macos_dock_zip_path: /tmp/macos-dock.zip
+macos_dock_enable_extension: true
+macos_dock_disable_ubuntu_dock: true
+macos_dock_ubuntu_dock_uuid: ubuntu-dock@ubuntu.com
+macos_dock_settings:
+  auto-hide: false
+  dock-blur-enabled: true
+  dock-opacity: 35
+  dock-border-radius: 20
+  icon-size: 44
+  magnification-enabled: true
+  magnification-scale: 1.5
+  magnification-falloff: 120
+  running-indicator-style: 0

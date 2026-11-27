@@ -1,0 +1,397 @@
+---
+# MacOS Dock distributes GNOME Shell extension archives on GitHub Releases.
+# Probe the local metadata and release marker first to keep reruns fast and idempotent.
+- name: Check if MacOS Dock metadata file exists
+  ansible.builtin.stat:
+    path: "{{ macos_dock_extension_dir }}/metadata.json"
+  register: macos_dock_metadata_stat
+  check_mode: false
+  become: false
+
+- name: Read installed MacOS Dock metadata
+  ansible.builtin.slurp:
+    src: "{{ macos_dock_extension_dir }}/metadata.json"
+  register: macos_dock_metadata_raw
+  check_mode: false
+  become: false
+  when: macos_dock_metadata_stat.stat.exists
+
+- name: Check if MacOS Dock release marker exists
+  ansible.builtin.stat:
+    path: "{{ macos_dock_extension_dir }}/.release-tag"
+  register: macos_dock_release_marker_stat
+  check_mode: false
+  become: false
+
+- name: Read installed MacOS Dock release marker
+  ansible.builtin.slurp:
+    src: "{{ macos_dock_extension_dir }}/.release-tag"
+  register: macos_dock_release_marker_raw
+  check_mode: false
+  become: false
+  when: macos_dock_release_marker_stat.stat.exists
+
+- name: Record current MacOS Dock installation state
+  ansible.builtin.set_fact:
+    macos_dock_metadata: >-
+      {{ (macos_dock_metadata_raw.content | b64decode | from_json)
+         if (macos_dock_metadata_stat.stat.exists and macos_dock_metadata_raw.content is defined)
+         else {} }}
+    macos_dock_installed_release_tag: >-
+      {{ (macos_dock_release_marker_raw.content | b64decode | trim)
+         if (macos_dock_release_marker_stat.stat.exists and macos_dock_release_marker_raw.content is defined)
+         else '' }}
+
+- name: Determine whether MacOS Dock needs to be installed
+  ansible.builtin.set_fact:
+    macos_dock_is_installed: >-
+      {{ macos_dock_metadata_stat.stat.exists
+         and (macos_dock_metadata.uuid | default('') == macos_dock_extension_uuid) }}
+    macos_dock_desired_tag: >-
+      {{ 'latest' if macos_dock_version == 'latest'
+         else 'v' ~ (macos_dock_version | string | regex_replace('^v', '')) }}
+
+- name: Set MacOS Dock installation flag
+  ansible.builtin.set_fact:
+    macos_dock_needs_install: >-
+      {{ (not macos_dock_is_installed)
+         or (macos_dock_version != 'latest'
+             and macos_dock_installed_release_tag != macos_dock_desired_tag
+             and (macos_dock_metadata.version | default('') | string) != (macos_dock_version | string)) }}
+
+- name: Find MacOS Dock GitHub release metadata
+  ansible.builtin.uri:
+    url: >-
+      https://api.github.com/repos/{{ macos_dock_repo }}/releases/{{
+        'latest' if macos_dock_version == 'latest'
+        else 'tags/' ~ macos_dock_desired_tag
+      }}
+    return_content: true
+  register: macos_dock_release
+  check_mode: false
+  become: false
+  when: macos_dock_needs_install
+
+- name: Pick MacOS Dock zip asset from release
+  ansible.builtin.set_fact:
+    macos_dock_zip_asset: >-
+      {{ (macos_dock_release.json.assets
+          | selectattr('name', 'match', '^' ~ (macos_dock_extension_uuid | regex_escape) ~ '.*\.zip$')
+          | list | first)
+         | default(macos_dock_release.json.assets
+                   | selectattr('name', 'match', '\.zip$')
+                   | first) }}
+    macos_dock_release_tag: "{{ macos_dock_release.json.tag_name }}"
+  when: macos_dock_needs_install
+
+- name: Set expected MacOS Dock archive checksum
+  ansible.builtin.set_fact:
+    macos_dock_zip_checksum: >-
+      {{ macos_dock_zip_asset.digest
+         if (macos_dock_zip_asset.digest is defined and (macos_dock_zip_asset.digest | length > 0))
+         else omit }}
+  when: macos_dock_needs_install
+
+- name: Check if unzip is available
+  ansible.builtin.command: which unzip
+  register: macos_dock_unzip_check
+  failed_when: false
+  changed_when: false
+  check_mode: false
+  become: false
+  when: macos_dock_needs_install
+
+- name: Install unzip package for extracting MacOS Dock archive
+  ansible.builtin.apt:
+    name: unzip
+    state: present
+  become: true
+  when:
+    - macos_dock_needs_install
+    - macos_dock_unzip_check.rc != 0
+
+- name: Download MacOS Dock extension archive
+  ansible.builtin.get_url:
+    url: "{{ macos_dock_zip_asset.browser_download_url }}"
+    dest: "{{ macos_dock_zip_path }}"
+    checksum: "{{ macos_dock_zip_checksum }}"
+    mode: "0644"
+  become: false
+  when: macos_dock_needs_install
+
+# Clear stale extension files before extracting an upgrade so removed assets do not linger.
+- name: Remove previous MacOS Dock extension directory before upgrade
+  ansible.builtin.file:
+    path: "{{ macos_dock_extension_dir }}"
+    state: absent
+  become: false
+  when:
+    - macos_dock_needs_install
+    - macos_dock_is_installed
+    - not ansible_check_mode
+
+- name: Ensure MacOS Dock extension directory exists
+  ansible.builtin.file:
+    path: "{{ macos_dock_extension_dir }}"
+    state: directory
+    mode: "0755"
+  become: false
+  when: macos_dock_needs_install
+
+# In check mode the archive is not downloaded to disk, so unarchive cannot extract it.
+- name: Extract MacOS Dock extension archive
+  ansible.builtin.unarchive:
+    src: "{{ macos_dock_zip_path }}"
+    dest: "{{ macos_dock_extension_dir }}"
+    remote_src: true
+  become: false
+  when:
+    - macos_dock_needs_install
+    - not ansible_check_mode
+
+- name: Record installed MacOS Dock release tag
+  ansible.builtin.copy:
+    content: "{{ macos_dock_release_tag }}\n"
+    dest: "{{ macos_dock_extension_dir }}/.release-tag"
+    mode: "0644"
+  become: false
+  when:
+    - macos_dock_needs_install
+    - not ansible_check_mode
+
+- name: Remove downloaded MacOS Dock archive
+  ansible.builtin.file:
+    path: "{{ macos_dock_zip_path }}"
+    state: absent
+  become: false
+  when:
+    - macos_dock_needs_install
+    - not ansible_check_mode
+
+# Upstream release zips ship the XML schema without gschemas.compiled;
+# compile it so gsettings and GNOME Shell can read extension keys.
+- name: Check if MacOS Dock schemas directory exists
+  ansible.builtin.stat:
+    path: "{{ macos_dock_extension_dir }}/schemas"
+  register: macos_dock_schemas_dir_stat
+  check_mode: false
+  become: false
+
+- name: Check if glib-compile-schemas is available
+  ansible.builtin.command: which glib-compile-schemas
+  register: macos_dock_glib_compile_check
+  failed_when: false
+  changed_when: false
+  check_mode: false
+  become: false
+
+- name: Compile MacOS Dock GSettings schemas
+  ansible.builtin.command:
+    argv:
+      - glib-compile-schemas
+      - "{{ macos_dock_extension_dir }}/schemas"
+    creates: "{{ macos_dock_extension_dir }}/schemas/gschemas.compiled"
+  become: false
+  when:
+    - macos_dock_glib_compile_check.rc == 0
+    - macos_dock_schemas_dir_stat.stat.exists or (macos_dock_needs_install and not ansible_check_mode)
+
+- name: Check if compiled MacOS Dock schema exists
+  ansible.builtin.stat:
+    path: "{{ macos_dock_extension_dir }}/schemas/gschemas.compiled"
+  register: macos_dock_compiled_schema_stat
+  check_mode: false
+  become: false
+
+# Check for GNOME tooling so headless or non-GNOME hosts skip extension config cleanly.
+- name: Check if gsettings and dconf are available
+  ansible.builtin.command: which gsettings dconf
+  register: macos_dock_gnome_tools_check
+  failed_when: false
+  changed_when: false
+  check_mode: false
+  become: false
+
+# Reading via gsettings preserves distro default extensions even when
+# /org/gnome/shell/enabled-extensions has never been written to dconf.
+- name: Read GNOME Shell enabled extensions
+  ansible.builtin.command: gsettings get org.gnome.shell enabled-extensions
+  register: macos_dock_enabled_extensions_raw
+  failed_when: false
+  changed_when: false
+  check_mode: false
+  become: false
+  when:
+    - macos_dock_gnome_tools_check.rc == 0
+    - macos_dock_enable_extension | bool or macos_dock_disable_ubuntu_dock | bool
+
+- name: Read GNOME Shell disabled extensions
+  ansible.builtin.command: gsettings get org.gnome.shell disabled-extensions
+  register: macos_dock_disabled_extensions_raw
+  failed_when: false
+  changed_when: false
+  check_mode: false
+  become: false
+  when:
+    - macos_dock_gnome_tools_check.rc == 0
+    - macos_dock_enable_extension | bool or macos_dock_disable_ubuntu_dock | bool
+
+- name: Read GNOME Shell disable-user-extensions setting
+  ansible.builtin.command: gsettings get org.gnome.shell disable-user-extensions
+  register: macos_dock_disable_user_extensions_raw
+  failed_when: false
+  changed_when: false
+  check_mode: false
+  become: false
+  when:
+    - macos_dock_gnome_tools_check.rc == 0
+    - macos_dock_enable_extension | bool
+
+- name: Parse GNOME Shell extension lists
+  ansible.builtin.set_fact:
+    macos_dock_enabled_extensions: >-
+      {{ (macos_dock_enabled_extensions_raw.stdout | trim | from_yaml)
+         if (macos_dock_enabled_extensions_raw.rc == 0
+             and (macos_dock_enabled_extensions_raw.stdout | trim | length > 0)
+             and not (macos_dock_enabled_extensions_raw.stdout | trim).startswith('@as'))
+         else [] }}
+    macos_dock_disabled_extensions: >-
+      {{ (macos_dock_disabled_extensions_raw.stdout | trim | from_yaml)
+         if (macos_dock_disabled_extensions_raw.rc == 0
+             and (macos_dock_disabled_extensions_raw.stdout | trim | length > 0)
+             and not (macos_dock_disabled_extensions_raw.stdout | trim).startswith('@as'))
+         else [] }}
+  when:
+    - macos_dock_gnome_tools_check.rc == 0
+    - macos_dock_enable_extension | bool or macos_dock_disable_ubuntu_dock | bool
+
+- name: Compute desired GNOME Shell extension lists
+  ansible.builtin.set_fact:
+    macos_dock_desired_enabled_extensions: >-
+      {%- set items = macos_dock_enabled_extensions -%}
+      {%- if macos_dock_disable_ubuntu_dock | bool -%}
+        {%- set items = items | reject('equalto', macos_dock_ubuntu_dock_uuid) | list -%}
+      {%- endif -%}
+      {%- if macos_dock_enable_extension | bool -%}
+        {%- set items = (items + [macos_dock_extension_uuid]) | unique | list -%}
+      {%- endif -%}
+      {{ items }}
+    macos_dock_desired_disabled_extensions: >-
+      {%- set items = macos_dock_disabled_extensions -%}
+      {%- if macos_dock_enable_extension | bool -%}
+        {%- set items = items | reject('equalto', macos_dock_extension_uuid) | list -%}
+      {%- endif -%}
+      {%- if macos_dock_disable_ubuntu_dock | bool -%}
+        {%- set items = (items + [macos_dock_ubuntu_dock_uuid]) | unique | list -%}
+      {%- endif -%}
+      {{ items }}
+  when:
+    - macos_dock_gnome_tools_check.rc == 0
+    - macos_dock_enable_extension | bool or macos_dock_disable_ubuntu_dock | bool
+
+# Write extension state directly via dconf instead of gnome-extensions enable:
+# on Wayland, a running GNOME Shell does not discover newly installed extensions
+# until the next login, so gnome-extensions enable would fail before logout.
+- name: Update GNOME Shell disabled extensions
+  community.general.dconf:
+    key: /org/gnome/shell/disabled-extensions
+    value: >-
+      {{ '[' ~ (macos_dock_desired_disabled_extensions | map('to_json') | join(', ') | replace('"', "'")) ~ ']'
+         if macos_dock_desired_disabled_extensions | length > 0 else '@as []' }}
+    state: present
+  become: false
+  when:
+    - macos_dock_gnome_tools_check.rc == 0
+    - macos_dock_enable_extension | bool or macos_dock_disable_ubuntu_dock | bool
+    - macos_dock_disabled_extensions_raw.rc == 0
+    - ansible_env.DBUS_SESSION_BUS_ADDRESS is defined
+    - macos_dock_desired_disabled_extensions != macos_dock_disabled_extensions
+
+- name: Update GNOME Shell enabled extensions
+  community.general.dconf:
+    key: /org/gnome/shell/enabled-extensions
+    value: >-
+      {{ '[' ~ (macos_dock_desired_enabled_extensions | map('to_json') | join(', ') | replace('"', "'")) ~ ']'
+         if macos_dock_desired_enabled_extensions | length > 0 else '@as []' }}
+    state: present
+  become: false
+  when:
+    - macos_dock_gnome_tools_check.rc == 0
+    - macos_dock_enable_extension | bool or macos_dock_disable_ubuntu_dock | bool
+    - macos_dock_enabled_extensions_raw.rc == 0
+    - ansible_env.DBUS_SESSION_BUS_ADDRESS is defined
+    - macos_dock_desired_enabled_extensions != macos_dock_enabled_extensions
+
+- name: Ensure GNOME Shell user extensions are allowed
+  community.general.dconf:
+    key: /org/gnome/shell/disable-user-extensions
+    value: "false"
+    state: present
+  become: false
+  when:
+    - macos_dock_enable_extension | bool
+    - macos_dock_gnome_tools_check.rc == 0
+    - macos_dock_disable_user_extensions_raw.rc == 0
+    - ansible_env.DBUS_SESSION_BUS_ADDRESS is defined
+    - (macos_dock_disable_user_extensions_raw.stdout | trim) == 'true'
+
+# Probe current schema values via gsettings so settings are only written when they drift.
+- name: Read current MacOS Dock extension settings
+  ansible.builtin.command:
+    argv:
+      - gsettings
+      - --schemadir
+      - "{{ macos_dock_extension_dir }}/schemas"
+      - get
+      - "{{ macos_dock_schema_id }}"
+      - "{{ item.key }}"
+  loop: "{{ macos_dock_settings | dict2items }}"
+  loop_control:
+    label: "{{ item.key }}"
+  register: macos_dock_current_settings
+  failed_when: false
+  changed_when: false
+  check_mode: false
+  become: false
+  when:
+    - macos_dock_gnome_tools_check.rc == 0
+    - macos_dock_compiled_schema_stat.stat.exists
+    - macos_dock_settings | length > 0
+
+- name: Apply MacOS Dock extension settings
+  ansible.builtin.command:
+    argv:
+      - gsettings
+      - --schemadir
+      - "{{ macos_dock_extension_dir }}/schemas"
+      - set
+      - "{{ macos_dock_schema_id }}"
+      - "{{ item.item.key }}"
+      - >-
+        {{ (item.item.value | string | lower)
+           if (item.item.value is boolean)
+           else (item.item.value | string) }}
+  loop: "{{ macos_dock_current_settings.results | default([]) }}"
+  loop_control:
+    label: "{{ item.item.key }}"
+  changed_when: true
+  become: false
+  when:
+    - macos_dock_gnome_tools_check.rc == 0
+    - macos_dock_compiled_schema_stat.stat.exists
+    - ansible_env.DBUS_SESSION_BUS_ADDRESS is defined
+    - item.rc is defined
+    - item.rc == 0
+    - >-
+      (item.stdout | trim | regex_replace("^'(.*)'$", '\1'))
+      != ((item.item.value | string | lower)
+          if (item.item.value is boolean)
+          else (item.item.value | string))
+
+- name: Remind user to log out and back in on Wayland
+  ansible.builtin.debug:
+    msg: >-
+      MacOS Dock ({{ macos_dock_extension_uuid }}) was installed and configured.
+      GNOME Shell on Wayland only loads newly installed extensions at login —
+      log out and back in for the dock to appear.
+  when: macos_dock_needs_install
