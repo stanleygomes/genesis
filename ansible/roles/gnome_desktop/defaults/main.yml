@@ -50,9 +50,25 @@ gnome_desktop_icon_theme_force_reinstall: false
 gnome_desktop_icon_theme_tarball_path: /tmp/whitesur-icon-theme.tar.gz
 gnome_desktop_icon_theme_extract_dir: /tmp/whitesur-icon-theme-src
 
+# macOS cursor theme (ful1e5/apple_cursor)
+gnome_desktop_cursor_theme_repo: ful1e5/apple_cursor
+gnome_desktop_cursor_theme_version: v2.0.1
+gnome_desktop_cursor_theme_asset: macOS.tar.xz
+gnome_desktop_cursor_theme_url: >-
+  https://github.com/{{ gnome_desktop_cursor_theme_repo }}/releases/download/{{
+    gnome_desktop_cursor_theme_version
+  }}/{{ gnome_desktop_cursor_theme_asset }}
+gnome_desktop_cursor_theme_checksum: "sha256:9c6e5e13b068ce51a9e90a9abd6ce232ec7d25d4ceb05aa8ac76efbb99c76762"
+gnome_desktop_cursor_theme_name: macOS
+gnome_desktop_cursor_theme_dest: /usr/share/icons
+gnome_desktop_cursor_theme_force_reinstall: false
+gnome_desktop_cursor_theme_tarball_path: /tmp/apple-cursor-macos.tar.xz
+gnome_desktop_cursor_default_dir: "{{ ansible_env.HOME }}/.icons/default"
+
 gnome_desktop_interface_schema_id: org.gnome.desktop.interface
 gnome_desktop_interface_settings:
   accent-color: "{{ gnome_desktop_accent_color }}"
   font-name: "{{ gnome_desktop_font_name }}"
   document-font-name: "{{ gnome_desktop_document_font_name }}"
   icon-theme: "{{ gnome_desktop_icon_theme_name }}"
+  cursor-theme: "{{ gnome_desktop_cursor_theme_name }}"
