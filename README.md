@@ -174,5 +174,5 @@ This project organises roles into the following playbooks:
 
 ### 3. Custom Setup 1 (`custom1.yml`)
 
-> Target: Custom bundle containing GNOME Shell enhancements (Isle), browsers, Bruno, databases, and Nocturne.
+> Target: Custom bundle containing browsers, Bruno, databases, and Nocturne.
 
