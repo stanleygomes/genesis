@@ -19,12 +19,9 @@
   roles:
     - autoremove
     - system
-    - role: isle
+    - role: gnome_desktop
       tags:
-        - isle
-    - role: macos_dock
-      tags:
-        - macos_dock
+        - gnome_desktop
     - google-chrome
     - dbeaver
     - vscode

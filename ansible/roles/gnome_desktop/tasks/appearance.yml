@@ -1,0 +1,241 @@
+---
+# Native GNOME appearance without custom GTK themes: Inter interface font,
+# WhiteSur icon theme, and native accent color / typography via gsettings.
+
+- name: Check if Inter font package is installed
+  ansible.builtin.command: dpkg-query -W -f='${Status}' {{ gnome_desktop_font_package }}
+  register: gnome_desktop_font_dpkg_check
+  failed_when: false
+  changed_when: false
+  check_mode: false
+  become: false
+
+- name: Install Inter font package
+  ansible.builtin.apt:
+    name: "{{ gnome_desktop_font_package }}"
+    state: present
+  become: true
+  when: >-
+    gnome_desktop_font_dpkg_check.rc != 0
+    or ('install ok installed' not in gnome_desktop_font_dpkg_check.stdout)
+
+# Probe local WhiteSur icon theme index and release marker so reruns stay fast and idempotent.
+- name: Check if WhiteSur icon theme is installed
+  ansible.builtin.stat:
+    path: "{{ gnome_desktop_icon_theme_dest }}/{{ gnome_desktop_icon_theme_name }}/index.theme"
+  register: gnome_desktop_icon_theme_index_stat
+  check_mode: false
+  become: false
+
+- name: Check if WhiteSur icon theme release marker exists
+  ansible.builtin.stat:
+    path: "{{ gnome_desktop_icon_theme_dest }}/{{ gnome_desktop_icon_theme_name }}/.release-tag"
+  register: gnome_desktop_icon_theme_marker_stat
+  check_mode: false
+  become: false
+
+- name: Read installed WhiteSur icon theme release marker
+  ansible.builtin.slurp:
+    src: "{{ gnome_desktop_icon_theme_dest }}/{{ gnome_desktop_icon_theme_name }}/.release-tag"
+  register: gnome_desktop_icon_theme_marker_raw
+  check_mode: false
+  become: false
+  when: gnome_desktop_icon_theme_marker_stat.stat.exists
+
+- name: Record current WhiteSur icon theme installation state
+  ansible.builtin.set_fact:
+    gnome_desktop_icon_theme_is_installed: "{{ gnome_desktop_icon_theme_index_stat.stat.exists }}"
+    gnome_desktop_icon_theme_installed_tag: >-
+      {{ (gnome_desktop_icon_theme_marker_raw.content | b64decode | trim)
+         if (gnome_desktop_icon_theme_marker_stat.stat.exists
+             and gnome_desktop_icon_theme_marker_raw.content is defined)
+         else '' }}
+
+- name: Determine whether WhiteSur icon theme needs to be installed
+  ansible.builtin.set_fact:
+    gnome_desktop_icon_theme_needs_install: >-
+      {{ (gnome_desktop_icon_theme_force_reinstall | bool)
+         or (not gnome_desktop_icon_theme_is_installed)
+         or (gnome_desktop_icon_theme_version != 'latest'
+             and (gnome_desktop_icon_theme_installed_tag | length > 0)
+             and gnome_desktop_icon_theme_installed_tag != (gnome_desktop_icon_theme_version | string)) }}
+
+- name: Find latest WhiteSur icon theme GitHub release metadata
+  ansible.builtin.uri:
+    url: "https://api.github.com/repos/{{ gnome_desktop_icon_theme_repo }}/releases/latest"
+    return_content: true
+  register: gnome_desktop_icon_theme_release
+  check_mode: false
+  become: false
+  when:
+    - gnome_desktop_icon_theme_needs_install
+    - gnome_desktop_icon_theme_version == 'latest'
+
+- name: Set WhiteSur icon theme target release tag and archive URL
+  ansible.builtin.set_fact:
+    gnome_desktop_icon_theme_target_tag: >-
+      {{ gnome_desktop_icon_theme_release.json.tag_name
+         if gnome_desktop_icon_theme_version == 'latest'
+         else (gnome_desktop_icon_theme_version | string) }}
+    gnome_desktop_icon_theme_tarball_url: >-
+      https://github.com/{{ gnome_desktop_icon_theme_repo }}/archive/refs/tags/{{
+        gnome_desktop_icon_theme_release.json.tag_name
+        if gnome_desktop_icon_theme_version == 'latest'
+        else (gnome_desktop_icon_theme_version | string)
+      }}.tar.gz
+  when: gnome_desktop_icon_theme_needs_install
+
+- name: Check if gtk-update-icon-cache is available
+  ansible.builtin.command: which gtk-update-icon-cache
+  register: gnome_desktop_gtk_icon_cache_check
+  failed_when: false
+  changed_when: false
+  check_mode: false
+  become: false
+  when: gnome_desktop_icon_theme_needs_install
+
+- name: Install gtk-update-icon-cache for WhiteSur icon theme installation
+  ansible.builtin.apt:
+    name: gtk-update-icon-cache
+    state: present
+  become: true
+  when:
+    - gnome_desktop_icon_theme_needs_install
+    - gnome_desktop_gtk_icon_cache_check.rc != 0
+
+- name: Ensure local icon themes directory exists
+  ansible.builtin.file:
+    path: "{{ gnome_desktop_icon_theme_dest }}"
+    state: directory
+    mode: "0755"
+  become: false
+  when: gnome_desktop_icon_theme_needs_install
+
+- name: Download WhiteSur icon theme archive
+  ansible.builtin.get_url:
+    url: "{{ gnome_desktop_icon_theme_tarball_url }}"
+    dest: "{{ gnome_desktop_icon_theme_tarball_path }}"
+    checksum: "{{ gnome_desktop_icon_theme_checksum | default(omit, true) }}"
+    mode: "0644"
+  become: false
+  when: gnome_desktop_icon_theme_needs_install
+
+# In check mode the tarball is not downloaded to disk, so extraction and install.sh cannot run.
+- name: Clean previous WhiteSur icon theme extraction directory
+  ansible.builtin.file:
+    path: "{{ gnome_desktop_icon_theme_extract_dir }}"
+    state: absent
+  become: false
+  when:
+    - gnome_desktop_icon_theme_needs_install
+    - not ansible_check_mode
+
+- name: Create WhiteSur icon theme extraction directory
+  ansible.builtin.file:
+    path: "{{ gnome_desktop_icon_theme_extract_dir }}"
+    state: directory
+    mode: "0755"
+  become: false
+  when:
+    - gnome_desktop_icon_theme_needs_install
+    - not ansible_check_mode
+
+- name: Extract WhiteSur icon theme archive
+  ansible.builtin.unarchive:
+    src: "{{ gnome_desktop_icon_theme_tarball_path }}"
+    dest: "{{ gnome_desktop_icon_theme_extract_dir }}"
+    remote_src: true
+    extra_opts:
+      - --strip-components=1
+  become: false
+  when:
+    - gnome_desktop_icon_theme_needs_install
+    - not ansible_check_mode
+
+- name: Run WhiteSur icon theme installer
+  ansible.builtin.command:
+    argv: >-
+      {{ ['./install.sh', '-d', gnome_desktop_icon_theme_dest, '-t', gnome_desktop_icon_theme_variant]
+         + (['-a'] if (gnome_desktop_icon_theme_alternative | bool) else []) }}
+    chdir: "{{ gnome_desktop_icon_theme_extract_dir }}"
+  changed_when: true
+  become: false
+  when:
+    - gnome_desktop_icon_theme_needs_install
+    - not ansible_check_mode
+
+- name: Record installed WhiteSur icon theme release tag
+  ansible.builtin.copy:
+    content: "{{ gnome_desktop_icon_theme_target_tag }}\n"
+    dest: "{{ gnome_desktop_icon_theme_dest }}/{{ gnome_desktop_icon_theme_name }}/.release-tag"
+    mode: "0644"
+  become: false
+  when:
+    - gnome_desktop_icon_theme_needs_install
+    - not ansible_check_mode
+
+- name: Remove temporary WhiteSur icon theme extraction directory
+  ansible.builtin.file:
+    path: "{{ gnome_desktop_icon_theme_extract_dir }}"
+    state: absent
+  become: false
+  when:
+    - gnome_desktop_icon_theme_needs_install
+    - not ansible_check_mode
+
+- name: Remove downloaded WhiteSur icon theme archive
+  ansible.builtin.file:
+    path: "{{ gnome_desktop_icon_theme_tarball_path }}"
+    state: absent
+  become: false
+  when:
+    - gnome_desktop_icon_theme_needs_install
+    - not ansible_check_mode
+
+# Probe current GNOME interface settings via gsettings so keys are only written when they drift
+# (and unsupported keys on older GNOME versions, such as accent-color before GNOME 47, skip cleanly).
+- name: Read current GNOME interface settings
+  ansible.builtin.command:
+    argv:
+      - gsettings
+      - get
+      - "{{ gnome_desktop_interface_schema_id }}"
+      - "{{ item.key }}"
+  loop: "{{ gnome_desktop_interface_settings | dict2items }}"
+  loop_control:
+    label: "{{ item.key }}"
+  register: gnome_desktop_current_interface_settings
+  failed_when: false
+  changed_when: false
+  check_mode: false
+  become: false
+  when:
+    - gnome_desktop_gnome_tools_check.rc == 0
+    - gnome_desktop_interface_settings | length > 0
+
+- name: Apply GNOME interface settings
+  ansible.builtin.command:
+    argv:
+      - gsettings
+      - set
+      - "{{ gnome_desktop_interface_schema_id }}"
+      - "{{ item.item.key }}"
+      - >-
+        {{ (item.item.value | string | lower)
+           if (item.item.value is boolean)
+           else (item.item.value | string) }}
+  loop: "{{ gnome_desktop_current_interface_settings.results | default([]) }}"
+  loop_control:
+    label: "{{ item.item.key }}"
+  changed_when: true
+  become: false
+  when:
+    - gnome_desktop_gnome_tools_check.rc == 0
+    - ansible_env.DBUS_SESSION_BUS_ADDRESS is defined
+    - item.rc is defined
+    - item.rc == 0
+    - >-
+      (item.stdout | trim | regex_replace("^'(.*)'$", '\1'))
+      != ((item.item.value | string | lower)
+          if (item.item.value is boolean)
+          else (item.item.value | string))
