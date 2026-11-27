@@ -37,6 +37,7 @@ gnome_desktop_font_package: fonts-inter
 gnome_desktop_accent_color: blue
 gnome_desktop_font_name: Inter 10.5
 gnome_desktop_document_font_name: Inter 10.5
+gnome_desktop_enable_hot_corners: false
 
 # WhiteSur icon theme (icons only, no GTK theme)
 gnome_desktop_icon_theme_repo: vinceliuice/WhiteSur-icon-theme
@@ -72,3 +73,16 @@ gnome_desktop_interface_settings:
   document-font-name: "{{ gnome_desktop_document_font_name }}"
   icon-theme: "{{ gnome_desktop_icon_theme_name }}"
   cursor-theme: "{{ gnome_desktop_cursor_theme_name }}"
+  enable-hot-corners: "{{ gnome_desktop_enable_hot_corners | bool }}"
+
+# Just Perfection GNOME Shell extension preferences (applied only when extension schemas exist)
+gnome_desktop_just_perfection_extension_uuid: just-perfection-desktop@just-perfection
+gnome_desktop_just_perfection_schema_id: org.gnome.shell.extensions.just-perfection
+gnome_desktop_just_perfection_schemas_dir: >-
+  {{ ansible_env.HOME }}/.local/share/gnome-shell/extensions/{{
+    gnome_desktop_just_perfection_extension_uuid
+  }}/schemas
+gnome_desktop_just_perfection_settings:
+  startup-status: 0
+  # Value 4 maps to 0.6x animation speed in Just Perfection's Manager.js (faster while keeping smoothness)
+  animation: 4
