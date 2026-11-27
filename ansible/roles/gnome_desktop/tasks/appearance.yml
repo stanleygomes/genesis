@@ -1,6 +1,7 @@
 ---
-# Native GNOME appearance without custom GTK themes: Inter interface font,
-# WhiteSur icon theme, macOS cursor theme, and native accent color / typography via gsettings.
+# Native GNOME appearance and UX preferences without custom GTK themes: Inter interface font,
+# WhiteSur icon theme, macOS cursor theme, native org.gnome.desktop.interface settings,
+# and optional Just Perfection extension preferences via gsettings.
 
 - name: Check if Inter font package is installed
   ansible.builtin.command: dpkg-query -W -f='${Status}' {{ gnome_desktop_font_package }}
@@ -392,6 +393,69 @@
     - item.rc == 0
     - >-
       (item.stdout | trim | regex_replace("^'(.*)'$", '\1'))
+      != ((item.item.value | string | lower)
+          if (item.item.value is boolean)
+          else (item.item.value | string))
+
+# Just Perfection is an optional user-installed extension; check for its schemas directory first
+# so clean hosts without the extension skip these preferences gracefully without failing the role.
+- name: Check if Just Perfection extension schemas directory exists
+  ansible.builtin.stat:
+    path: "{{ gnome_desktop_just_perfection_schemas_dir }}"
+  register: gnome_desktop_just_perfection_schemas_stat
+  check_mode: false
+  become: false
+
+- name: Read current Just Perfection extension settings
+  ansible.builtin.command:
+    argv:
+      - gsettings
+      - --schemadir
+      - "{{ gnome_desktop_just_perfection_schemas_dir }}"
+      - get
+      - "{{ gnome_desktop_just_perfection_schema_id }}"
+      - "{{ item.key }}"
+  loop: "{{ gnome_desktop_just_perfection_settings | dict2items }}"
+  loop_control:
+    label: "{{ item.key }}"
+  register: gnome_desktop_just_perfection_current_settings
+  failed_when: false
+  changed_when: false
+  check_mode: false
+  become: false
+  when:
+    - gnome_desktop_gnome_tools_check.rc == 0
+    - gnome_desktop_just_perfection_schemas_stat.stat.exists
+    - gnome_desktop_just_perfection_schemas_stat.stat.isdir | default(false)
+    - gnome_desktop_just_perfection_settings | length > 0
+
+- name: Apply Just Perfection extension settings
+  ansible.builtin.command:
+    argv:
+      - gsettings
+      - --schemadir
+      - "{{ gnome_desktop_just_perfection_schemas_dir }}"
+      - set
+      - "{{ gnome_desktop_just_perfection_schema_id }}"
+      - "{{ item.item.key }}"
+      - >-
+        {{ (item.item.value | string | lower)
+           if (item.item.value is boolean)
+           else (item.item.value | string) }}
+  loop: "{{ gnome_desktop_just_perfection_current_settings.results | default([]) }}"
+  loop_control:
+    label: "{{ item.item.key }}"
+  changed_when: true
+  become: false
+  when:
+    - gnome_desktop_gnome_tools_check.rc == 0
+    - gnome_desktop_just_perfection_schemas_stat.stat.exists
+    - gnome_desktop_just_perfection_schemas_stat.stat.isdir | default(false)
+    - ansible_env.DBUS_SESSION_BUS_ADDRESS is defined
+    - item.rc is defined
+    - item.rc == 0
+    - >-
+      (item.stdout | trim | regex_replace("^'(.*)'$", '\\1'))
       != ((item.item.value | string | lower)
           if (item.item.value is boolean)
           else (item.item.value | string))
