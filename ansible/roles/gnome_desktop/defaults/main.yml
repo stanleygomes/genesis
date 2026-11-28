@@ -1,15 +1,6 @@
 ---
 # Defaults for gnome_desktop role
 
-# Isle (Dynamic Island / notch for GNOME Shell + isled daemon)
-gnome_desktop_isle_repo: zickrian/isle
-gnome_desktop_isle_version: latest
-gnome_desktop_isle_package: isle
-gnome_desktop_isle_extension_uuid: isle@zickrian.github.io
-gnome_desktop_isle_deb_path: /tmp/isle.deb
-gnome_desktop_isle_enable_extension: true
-gnome_desktop_isle_enable_service: true
-
 # MacOS Dock GNOME Shell extension
 gnome_desktop_dock_repo: vinnytherobot/MacOSDock
 gnome_desktop_dock_version: latest

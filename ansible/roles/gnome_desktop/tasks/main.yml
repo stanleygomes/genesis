@@ -9,21 +9,9 @@
   become: false
   tags:
     - gnome_desktop
-    - isle
     - dock
     - macos_dock
     - appearance
-
-- name: Configure Isle Dynamic Island
-  ansible.builtin.include_tasks:
-    file: isle.yml
-    apply:
-      tags:
-        - gnome_desktop
-        - isle
-  tags:
-    - gnome_desktop
-    - isle
 
 - name: Configure MacOS Dock extension
   ansible.builtin.include_tasks:
