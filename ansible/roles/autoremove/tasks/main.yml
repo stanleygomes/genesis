@@ -338,3 +338,12 @@
     state: absent
   become: false
   when: autoremove_zshrc_stat.stat.exists
+
+# Same marker the removed rust role used to add ~/.cargo to PATH.
+- name: Clean up obsolete Rust PATH configuration from .zshrc
+  ansible.builtin.blockinfile:
+    path: "{{ ansible_env.HOME }}/.zshrc"
+    marker: "# {mark} RUST CONFIGURATION"
+    state: absent
+  become: false
+  when: autoremove_zshrc_stat.stat.exists

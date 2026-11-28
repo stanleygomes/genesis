@@ -105,6 +105,9 @@ autoremove_user_paths:
   - >-
     {{ ansible_env.HOME ~ '/.mozilla/'
        ~ 'native-messaging-hosts/com.vicinae.vicinae.json' }}
+  # Rust toolchain installed by the removed rust role (rustup in user space).
+  - "{{ ansible_env.HOME }}/.rustup"
+  - "{{ ansible_env.HOME }}/.cargo"
 
 # List of user-space search patterns to find and remove (become: false)
 autoremove_user_file_patterns:

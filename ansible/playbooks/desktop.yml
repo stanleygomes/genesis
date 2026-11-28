@@ -41,6 +41,3 @@
     - python
     - php
     - go
-    - role: rust
-      tags:
-        - rust
