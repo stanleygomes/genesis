@@ -1,6 +1,24 @@
 ---
 # Defaults for gnome_desktop role
 
+# Isle (Dynamic Island / notch for GNOME Shell + isled daemon)
+gnome_desktop_isle_repo: zickrian/isle
+gnome_desktop_isle_version: latest
+gnome_desktop_isle_package: isle
+gnome_desktop_isle_extension_uuid: isle@zickrian.github.io
+gnome_desktop_isle_deb_path: /tmp/isle.deb
+gnome_desktop_isle_enable_extension: true
+gnome_desktop_isle_enable_service: true
+# Migration off the Patmos fork (genesis#24): a ~/.local copy whose extension
+# metadata contains this marker is replaced by the official release tarball.
+gnome_desktop_isle_fork_marker: stanleygomes/patmos
+gnome_desktop_isle_home_extension_dir: >-
+  {{ ansible_env.HOME }}/.local/share/gnome-shell/extensions/{{
+  gnome_desktop_isle_extension_uuid }}
+gnome_desktop_isle_home_tarball_dir: /tmp/isle-home
+gnome_desktop_isle_fork_stamp_file: >-
+  {{ ansible_env.HOME }}/.local/state/genesis/patmos.fingerprint
+
 # MacOS Dock GNOME Shell extension
 gnome_desktop_dock_repo: vinnytherobot/MacOSDock
 gnome_desktop_dock_version: latest
