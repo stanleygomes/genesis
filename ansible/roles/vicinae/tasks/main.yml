@@ -1,0 +1,303 @@
+---
+# === VICINAE ===
+# `vicinae version` prints e.g. "Version v0.30.1 (commit ...)"; comparing it
+# with the pinned tag keeps reruns from reinstalling the same release.
+- name: Check installed Vicinae version
+  ansible.builtin.command:
+    argv:
+      - "{{ vicinae_bin }}"
+      - version
+  register: vicinae_version_check
+  failed_when: false
+  changed_when: false
+  check_mode: false
+  become: false
+
+- name: Determine whether Vicinae needs to be installed
+  ansible.builtin.set_fact:
+    vicinae_is_installed: "{{ vicinae_version_check.rc == 0 }}"
+    vicinae_needs_install: >-
+      {{ vicinae_version_check.rc != 0
+         or (vicinae_version_check.stdout
+             | regex_search('[0-9]+\.[0-9]+\.[0-9]+') | default('', true))
+            != (vicinae_version | regex_replace('^v', '')) }}
+
+- name: Verify architecture is supported by the Vicinae AppImage
+  ansible.builtin.assert:
+    that:
+      - ansible_architecture == 'x86_64'
+    fail_msg: >-
+      genesis pins the x86_64 Vicinae AppImage; detected
+      {{ ansible_architecture }}.
+  when: vicinae_needs_install
+
+- name: Download Vicinae install script
+  ansible.builtin.get_url:
+    url: "{{ vicinae_install_script_url }}"
+    dest: "{{ vicinae_install_script_path }}"
+    checksum: "{{ vicinae_install_script_checksum }}"
+    mode: "0755"
+  become: false
+  when: vicinae_needs_install
+
+- name: Download Vicinae AppImage
+  ansible.builtin.get_url:
+    url: "{{ vicinae_appimage_url }}"
+    dest: "{{ vicinae_appimage_path }}"
+    checksum: "{{ vicinae_appimage_checksum }}"
+    mode: "0755"
+  become: false
+  when: vicinae_needs_install
+
+# The upstream script is reused (with a local AppImage, so it never asks
+# GitHub for "latest") because it also rewrites ExecStart in vicinae.service
+# to the absolute binary path. It is run as the user with a ~/.local prefix,
+# so it skips the root-only bits (uinput setcap) and never calls sudo.
+# TERM is forced because the script calls `tput cols` under `set -e`.
+- name: Install Vicinae into the user prefix
+  ansible.builtin.command:
+    argv:
+      - bash
+      - "{{ vicinae_install_script_path }}"
+      - --prefix
+      - "{{ vicinae_prefix }}"
+      - --appimage
+      - "{{ vicinae_appimage_path }}"
+  environment:
+    TERM: dumb
+  changed_when: true
+  become: false
+  when:
+    - vicinae_needs_install
+    - not ansible_check_mode
+
+- name: Remove Vicinae installer downloads
+  ansible.builtin.file:
+    path: "{{ item }}"
+    state: absent
+  loop:
+    - "{{ vicinae_install_script_path }}"
+    - "{{ vicinae_appimage_path }}"
+  become: false
+  when:
+    - vicinae_needs_install
+    - not ansible_check_mode
+
+# ~/.config/vicinae is never written here: the server creates its default
+# settings on first start, and an existing user config is left untouched.
+- name: Enable and start Vicinae server user service
+  ansible.builtin.systemd_service:
+    name: vicinae.service
+    scope: user
+    daemon_reload: true
+    enabled: true
+    state: started
+  become: false
+  when:
+    - vicinae_enable_service | bool
+    - ansible_env.XDG_RUNTIME_DIR is defined
+    - not ansible_check_mode or vicinae_is_installed
+
+# === GNOME SHELL EXTENSIONS ===
+- name: Check if gsettings and dconf are available for Vicinae
+  ansible.builtin.command: which gsettings dconf glib-compile-schemas
+  register: vicinae_gnome_tools_check
+  failed_when: false
+  changed_when: false
+  check_mode: false
+  become: false
+
+# An extension already present (user or system wide) is kept as is, so a
+# version the user upgraded by hand is never downgraded.
+- name: Check for installed Vicinae GNOME Shell extensions
+  ansible.builtin.find:
+    paths:
+      - "{{ vicinae_gnome_extensions_dir }}/{{ item.uuid }}"
+      - "/usr/share/gnome-shell/extensions/{{ item.uuid }}"
+    patterns: metadata.json
+  loop: "{{ vicinae_gnome_extensions | selectattr('enabled', 'truthy') | list }}"
+  loop_control:
+    label: "{{ item.uuid }}"
+  register: vicinae_extension_probe
+  become: false
+  when: vicinae_gnome_tools_check.rc == 0
+
+- name: Select missing Vicinae GNOME Shell extensions
+  ansible.builtin.set_fact:
+    vicinae_missing_extensions: >-
+      {{ vicinae_extension_probe.results
+         | selectattr('matched', 'defined')
+         | selectattr('matched', 'equalto', 0)
+         | map(attribute='item') | list }}
+  when: vicinae_gnome_tools_check.rc == 0
+
+- name: Create GNOME Shell extension directories for Vicinae
+  ansible.builtin.file:
+    path: "{{ vicinae_gnome_extensions_dir }}/{{ item.uuid }}"
+    state: directory
+    mode: "0755"
+  loop: "{{ vicinae_missing_extensions | default([]) }}"
+  loop_control:
+    label: "{{ item.uuid }}"
+  become: false
+
+- name: Download GNOME Shell extensions for Vicinae
+  ansible.builtin.get_url:
+    url: >-
+      https://extensions.gnome.org/extension-data/{{
+        item.uuid | replace('@', '') }}.v{{ item.version }}.shell-extension.zip
+    dest: "/tmp/{{ item.uuid }}.shell-extension.zip"
+    checksum: "{{ item.checksum }}"
+    mode: "0644"
+  loop: "{{ vicinae_missing_extensions | default([]) }}"
+  loop_control:
+    label: "{{ item.uuid }}"
+  become: false
+
+- name: Unpack GNOME Shell extensions for Vicinae
+  ansible.builtin.unarchive:
+    src: "/tmp/{{ item.uuid }}.shell-extension.zip"
+    dest: "{{ vicinae_gnome_extensions_dir }}/{{ item.uuid }}"
+    remote_src: true
+    creates: "{{ vicinae_gnome_extensions_dir }}/{{ item.uuid }}/metadata.json"
+  loop: "{{ vicinae_missing_extensions | default([]) }}"
+  loop_control:
+    label: "{{ item.uuid }}"
+  become: false
+  when: not ansible_check_mode
+
+# Some extensions.gnome.org zips ship only the schema XML; GNOME Shell needs
+# gschemas.compiled to load the extension settings.
+- name: Compile GNOME Shell extension schemas for Vicinae
+  ansible.builtin.command:
+    argv:
+      - glib-compile-schemas
+      - "{{ vicinae_gnome_extensions_dir }}/{{ item.uuid }}/schemas"
+    creates: "{{ vicinae_gnome_extensions_dir }}/{{ item.uuid }}/schemas/gschemas.compiled"
+  loop: "{{ vicinae_missing_extensions | default([]) }}"
+  loop_control:
+    label: "{{ item.uuid }}"
+  become: false
+  when: not ansible_check_mode
+
+- name: Remove downloaded GNOME Shell extension archives for Vicinae
+  ansible.builtin.file:
+    path: "/tmp/{{ item.uuid }}.shell-extension.zip"
+    state: absent
+  loop: "{{ vicinae_missing_extensions | default([]) }}"
+  loop_control:
+    label: "{{ item.uuid }}"
+  become: false
+  when: not ansible_check_mode
+
+# Reading via gsettings preserves distro default extensions even when
+# /org/gnome/shell/enabled-extensions has never been written to dconf.
+- name: Read GNOME Shell extension lists for Vicinae
+  ansible.builtin.command:
+    argv:
+      - gsettings
+      - get
+      - org.gnome.shell
+      - "{{ item }}"
+  loop:
+    - enabled-extensions
+    - disabled-extensions
+  register: vicinae_extension_lists_raw
+  failed_when: false
+  changed_when: false
+  check_mode: false
+  become: false
+  when: vicinae_gnome_tools_check.rc == 0
+
+- name: Compute GNOME Shell extension lists for Vicinae
+  ansible.builtin.set_fact:
+    vicinae_extension_lists: >-
+      {{ dict(vicinae_extension_lists_raw.results | map(attribute='item')
+         | zip(vicinae_extension_lists_raw.results
+               | map(attribute='stdout') | map('trim')
+               | map('regex_replace', '^@as ', '') | map('from_yaml'))) }}
+    vicinae_wanted_extensions: >-
+      {{ vicinae_gnome_extensions | selectattr('enabled', 'truthy')
+         | map(attribute='uuid') | list }}
+  when:
+    - vicinae_gnome_tools_check.rc == 0
+    - vicinae_extension_lists_raw.results | selectattr('rc', 'ne', 0) | list | length == 0
+
+# Write extension state via dconf instead of gnome-extensions enable: on
+# Wayland a running Shell only discovers new extensions at the next login.
+- name: Remove Vicinae extensions from GNOME Shell disabled extensions
+  community.general.dconf:
+    key: /org/gnome/shell/disabled-extensions
+    value: >-
+      {%- set updated = vicinae_extension_lists['disabled-extensions']
+          | reject('in', vicinae_wanted_extensions) | list -%}
+      {{ '[' ~ (updated | map('to_json') | join(', ') | replace('"', "'")) ~ ']'
+         if updated | length > 0 else '@as []' }}
+    state: present
+  become: false
+  when:
+    - vicinae_extension_lists is defined
+    - ansible_env.DBUS_SESSION_BUS_ADDRESS is defined
+    - vicinae_extension_lists['disabled-extensions'] | select('in', vicinae_wanted_extensions) | list | length > 0
+
+- name: Enable Vicinae GNOME Shell extensions
+  community.general.dconf:
+    key: /org/gnome/shell/enabled-extensions
+    value: >-
+      {{ '[' ~ ((vicinae_extension_lists['enabled-extensions'] + vicinae_wanted_extensions) | unique
+         | map('to_json') | join(', ') | replace('"', "'")) ~ ']' }}
+    state: present
+  become: false
+  when:
+    - vicinae_extension_lists is defined
+    - ansible_env.DBUS_SESSION_BUS_ADDRESS is defined
+    - vicinae_wanted_extensions | reject('in', vicinae_extension_lists['enabled-extensions']) | list | length > 0
+
+# === SUPER KEY ===
+# Super Key hijacks mutter's overlay-key signal, so the overlay key must stay
+# on Super; tapping it then runs the command below instead of the Overview.
+# The command uses the absolute path because GNOME Shell's PATH may not
+# include ~/.local/bin.
+- name: Read mutter overlay key
+  ansible.builtin.command: gsettings get org.gnome.mutter overlay-key
+  register: vicinae_overlay_key_raw
+  failed_when: false
+  changed_when: false
+  check_mode: false
+  become: false
+  when:
+    - vicinae_super_key | bool
+    - vicinae_gnome_tools_check.rc == 0
+
+- name: Keep mutter overlay key on Super
+  community.general.dconf:
+    key: /org/gnome/mutter/overlay-key
+    value: "'Super'"
+    state: present
+  become: false
+  when:
+    - vicinae_super_key | bool
+    - vicinae_gnome_tools_check.rc == 0
+    - ansible_env.DBUS_SESSION_BUS_ADDRESS is defined
+    - vicinae_overlay_key_raw.rc == 0
+    - (vicinae_overlay_key_raw.stdout | trim) != "'Super'"
+
+- name: Point the Super key at the Vicinae toggle
+  community.general.dconf:
+    key: /org/gnome/shell/extensions/super-key/overlay-key-action
+    value: "'{{ vicinae_super_key_command }}'"
+    state: present
+  become: false
+  when:
+    - vicinae_super_key | bool
+    - vicinae_gnome_tools_check.rc == 0
+    - ansible_env.DBUS_SESSION_BUS_ADDRESS is defined
+
+- name: Remind user to log out and back in for Vicinae extensions
+  ansible.builtin.debug:
+    msg: >-
+      Installed GNOME Shell extensions
+      {{ vicinae_missing_extensions | map(attribute='uuid') | join(', ') }}.
+      GNOME Shell on Wayland only loads new extensions at login, so log out
+      and back in for them to take effect.
+  when: vicinae_missing_extensions | default([]) | length > 0

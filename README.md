@@ -104,6 +104,16 @@ On Wayland, log out and back in to load the replaced extension.
 
 **Rollback:** `git revert` the commit that restored the official Isle (it re-adds the `patmos` role, which needs the `~/projects/patmos` checkout). To reinstall the official home-folder copy by hand (settings are kept): `curl -fsSL https://raw.githubusercontent.com/zickrian/isle/main/get.sh | bash`.
 
+### 5. Vicinae on the Super key
+
+The `vicinae` role installs [Vicinae](https://docs.vicinae.com) in `~/.local` (no sudo), enables `vicinae.service` (the server) and points the Super Key extension at `~/.local/bin/vicinae toggle`, so tapping Super opens/closes Vicinae instead of the Overview. Super shortcuts (Super+Tab, Super+arrows) keep working. `~/.config/vicinae` is never written.
+
+```bash
+cd ansible && ansible-playbook -i inventory playbooks/desktop.yml --tags vicinae
+```
+
+Log out and back in when the run reports newly installed GNOME extensions. Snippet expansion/paste need `sudo setcap cap_dac_override=ep ~/.local/lib/vicinae/usr/libexec/vicinae/vicinae-input-server` (optional, not done by genesis).
+
 ## Project Structure
 
 ```text
@@ -168,6 +178,7 @@ Here is a list of all roles available in this repository:
 | `terraform`       | Installs Terraform CLI tool from HashiCorp releases.                                                                                                          |
 | `todoist-cli`     | Installs the official Todoist CLI (`td`, `@doist/todoist-cli`) globally via NPM (depends on `node`).                                                           |
 | `tuicr`           | Installs tuicr (Terminal UI for Code Reviews).                                                                                                               |
+| `vicinae`         | Installs the Vicinae launcher in `~/.local` (pinned AppImage via the upstream install script, no sudo), enables its `vicinae.service` user unit, installs/enables the `super-key@tommimon.github.com` and `vicinae@dagimg-dot` GNOME extensions when missing, and makes a Super tap run `vicinae toggle` (`~/.config/vicinae` is never touched). |
 | `vlc`             | Installs VLC media player (local media and network streams such as RTSP cameras).                                                                             |
 | `vscode`          | Installs VS Code, syncs user settings/keybindings, and installs extensions.                                                                                   |
 | `zellij`          | Installs Zellij terminal multiplexer binary and configures shell integration.                                                                                 |
@@ -185,7 +196,7 @@ This project organises roles into the following playbooks:
 
 ### 2. Desktop Configuration (`desktop.yml`)
 
-> Target: User interfaces, consolidated GNOME desktop UX (`gnome_desktop`: Isle, stock Ubuntu Dock, Inter font, blue accent color, WhiteSur icon theme, macOS cursor theme, hot-corners disabled, and optional Just Perfection presets), web browsers, IDEs, ArtCraft, the VLC media player, game emulators (RetroArch, PPSSPP, PCSX2, ES-DE), desktop entries, agent configurations, language toolchains (Node.js, Java, Python, PHP, Go), and database tools.
+> Target: User interfaces, consolidated GNOME desktop UX (`gnome_desktop`: Isle, stock Ubuntu Dock, Inter font, blue accent color, WhiteSur icon theme, macOS cursor theme, hot-corners disabled, and optional Just Perfection presets), the Vicinae launcher on the Super key, web browsers, IDEs, ArtCraft, the VLC media player, game emulators (RetroArch, PPSSPP, PCSX2, ES-DE), desktop entries, agent configurations, language toolchains (Node.js, Java, Python, PHP, Go), and database tools.
 
 ### 3. Custom Setup 1 (`custom1.yml`)
 

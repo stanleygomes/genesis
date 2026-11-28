@@ -24,6 +24,9 @@
     - role: gnome_desktop
       tags:
         - gnome_desktop
+    - role: vicinae
+      tags:
+        - vicinae
     - google-chrome
     - dbeaver
     - vscode
