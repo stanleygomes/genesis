@@ -26,6 +26,10 @@
     - java
     - python
     - openspec
-    - agents
+    - role: agents
+      tags:
+        - agents
     - flameshot
-    - orca
+    - role: orca
+      tags:
+        - orca

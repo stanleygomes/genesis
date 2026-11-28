@@ -80,5 +80,12 @@
   become: false
 
 
+# Tag of its own: relinking the bots needs no sudo (--tags agents,orca_bots).
 - name: Link Orca bots to the Solomon repo
-  include_tasks: bots.yml
+  include_tasks:
+    file: bots.yml
+    apply:
+      tags:
+        - orca_bots
+  tags:
+    - orca_bots

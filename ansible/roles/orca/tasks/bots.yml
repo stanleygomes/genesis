@@ -17,5 +17,8 @@
       if 'no-src' in orca_bots.stdout_lines
       else 'Crie no Orca (mesmo nome da pasta) e rode o genesis de novo: '
       ~ (orca_bots.stdout_lines | select('match', '^missing:') | map('regex_replace', '^missing:', '') | join(', ')) }}
-  when: "'no-src' in orca_bots.stdout_lines or 'missing:' in orca_bots.stdout"
+  # Em --check o script não roda (sem stdout): sem aviso, em vez de quebrar o make check.
+  when:
+    - orca_bots.stdout is defined
+    - "'no-src' in orca_bots.stdout_lines or 'missing:' in orca_bots.stdout"
   become: false

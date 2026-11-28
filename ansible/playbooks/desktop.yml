@@ -30,13 +30,17 @@
     - node
     - antigravity-cli
     - openspec
-    - agents
+    - role: agents
+      tags:
+        - agents
     - herdr
     - nocturne
     - artcraft
     - vlc
     - emulation
-    - orca
+    - role: orca
+      tags:
+        - orca
     - java
     - python
     - php

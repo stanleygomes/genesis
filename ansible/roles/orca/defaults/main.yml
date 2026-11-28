@@ -4,6 +4,6 @@ orca_icon_url: "https://raw.githubusercontent.com/stablyai/orca/main/resources/i
 orca_bin_path: "/usr/local/bin/orca"
 orca_plugins_repo: "https://github.com/stanleygomes/orca-plugins.git"
 orca_plugins_path: "{{ ansible_env.HOME }}/.config/orca-plugins"
-# Bots do Orca versionados no Solomon (o role agents clona em ~/.config/solomon).
+# Bots do Orca versionados no Solomon (o role agents clona em solomon_dir, ver group_vars).
 orca_bots_link: "{{ ansible_env.HOME }}/.orca/bots"
-orca_bots_src: "{{ ansible_env.HOME }}/.config/solomon/bots"
+orca_bots_src: "{{ solomon_dir }}/bots"
