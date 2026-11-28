@@ -1,0 +1,190 @@
+---
+# Install and configure the Rust toolchain via rustup in user space (avoiding
+# distro apt rustc/cargo packages that can lag behind or conflict with rustup).
+- name: Check if rustup is installed
+  ansible.builtin.stat:
+    path: "{{ rust_rustup_bin }}"
+  register: rust_rustup_stat
+  become: false
+
+- name: Download rustup installer script
+  ansible.builtin.get_url:
+    url: "{{ rust_installer_url }}"
+    dest: "{{ rust_installer_path }}"
+    mode: "0700"
+  become: false
+  when: not rust_rustup_stat.stat.exists
+
+# Pass --no-modify-path so Genesis manages PATH idempotently via blockinfile
+# instead of letting rustup append unmanaged lines across shell rc files.
+- name: Install rustup and default Rust toolchain
+  ansible.builtin.command:
+    argv:
+      - /bin/sh
+      - "{{ rust_installer_path }}"
+      - -y
+      - --no-modify-path
+      - --default-toolchain
+      - "{{ rust_toolchain }}"
+      - --profile
+      - "{{ rust_profile }}"
+    creates: "{{ rust_rustup_bin }}"
+  environment:
+    CARGO_HOME: "{{ rust_cargo_home }}"
+    RUSTUP_HOME: "{{ rust_rustup_home }}"
+  become: false
+  when: not rust_rustup_stat.stat.exists
+
+- name: Remove downloaded rustup installer script
+  ansible.builtin.file:
+    path: "{{ rust_installer_path }}"
+    state: absent
+  become: false
+  when:
+    - not rust_rustup_stat.stat.exists
+    - not ansible_check_mode
+
+# Probe toolchains after installation so reruns stay idempotent and also cover
+# hosts where rustup already exists with another toolchain or minimal profile.
+- name: List installed Rust toolchains
+  ansible.builtin.command:
+    argv:
+      - "{{ rust_rustup_bin }}"
+      - toolchain
+      - list
+  environment:
+    CARGO_HOME: "{{ rust_cargo_home }}"
+    RUSTUP_HOME: "{{ rust_rustup_home }}"
+  register: rust_toolchain_list
+  changed_when: false
+  check_mode: false
+  become: false
+  when: rust_rustup_stat.stat.exists or not ansible_check_mode
+
+- name: Record Rust toolchain state
+  ansible.builtin.set_fact:
+    rust_toolchain_installed: >-
+      {{ (rust_toolchain_list.stdout_lines | default([])
+          | select('match', '^' ~ (rust_toolchain | regex_escape) ~ '(-|\\s|$)')
+          | list | length) > 0 }}
+    rust_toolchain_is_default: >-
+      {{ (rust_toolchain_list.stdout_lines | default([])
+          | select(
+              'match',
+              '^' ~ (rust_toolchain | regex_escape) ~ '(-|\\s).*default'
+            )
+          | list | length) > 0 }}
+  when: rust_rustup_stat.stat.exists or not ansible_check_mode
+
+- name: Ensure configured Rust toolchain is installed
+  ansible.builtin.command:
+    argv:
+      - "{{ rust_rustup_bin }}"
+      - toolchain
+      - install
+      - "{{ rust_toolchain }}"
+      - --profile
+      - "{{ rust_profile }}"
+  environment:
+    CARGO_HOME: "{{ rust_cargo_home }}"
+    RUSTUP_HOME: "{{ rust_rustup_home }}"
+  register: rust_toolchain_install_result
+  changed_when: true
+  become: false
+  when:
+    - rust_rustup_stat.stat.exists or not ansible_check_mode
+    - not (rust_toolchain_installed | default(false))
+
+- name: Ensure configured Rust toolchain is the default
+  ansible.builtin.command:
+    argv:
+      - "{{ rust_rustup_bin }}"
+      - default
+      - "{{ rust_toolchain }}"
+  environment:
+    CARGO_HOME: "{{ rust_cargo_home }}"
+    RUSTUP_HOME: "{{ rust_rustup_home }}"
+  register: rust_toolchain_default_result
+  changed_when: true
+  become: false
+  when:
+    - rust_rustup_stat.stat.exists or not ansible_check_mode
+    - not (rust_toolchain_is_default | default(false))
+
+- name: List installed Rust components for toolchain
+  ansible.builtin.command:
+    argv:
+      - "{{ rust_rustup_bin }}"
+      - component
+      - list
+      - --installed
+      - --toolchain
+      - "{{ rust_toolchain }}"
+  environment:
+    CARGO_HOME: "{{ rust_cargo_home }}"
+    RUSTUP_HOME: "{{ rust_rustup_home }}"
+  register: rust_installed_components
+  changed_when: false
+  check_mode: false
+  become: false
+  when:
+    - rust_components | length > 0
+    - >-
+      (rust_rustup_stat.stat.exists
+       and (rust_toolchain_installed | default(false)))
+      or not ansible_check_mode
+
+- name: Ensure required Rust components are installed
+  ansible.builtin.command:
+    argv:
+      - "{{ rust_rustup_bin }}"
+      - component
+      - add
+      - --toolchain
+      - "{{ rust_toolchain }}"
+      - "{{ item }}"
+  environment:
+    CARGO_HOME: "{{ rust_cargo_home }}"
+    RUSTUP_HOME: "{{ rust_rustup_home }}"
+  loop: "{{ rust_components }}"
+  register: rust_component_add_result
+  changed_when: true
+  become: false
+  when:
+    - >-
+      (rust_rustup_stat.stat.exists
+       and (rust_toolchain_installed | default(false)))
+      or not ansible_check_mode
+    - (rust_installed_components.stdout_lines | default([])
+       | select('match', '^' ~ (item | regex_escape) ~ '(-|$)')
+       | list | length) == 0
+
+- name: Check if shell rc file exists for Rust PATH setup
+  ansible.builtin.stat:
+    path: "{{ rust_shell_rc_path }}"
+  register: rust_shell_rc_stat
+  become: false
+
+# Create the shell rc file only when absent so existing permissions
+# (e.g. 0600 on ~/.zshrc) are preserved.
+- name: Create shell rc file if missing before adding Rust PATH
+  ansible.builtin.copy:
+    content: ""
+    dest: "{{ rust_shell_rc_path }}"
+    mode: "0644"
+  become: false
+  when: not rust_shell_rc_stat.stat.exists
+
+- name: Ensure Rust toolchain is in PATH via zshrc
+  ansible.builtin.blockinfile:
+    path: "{{ rust_shell_rc_path }}"
+    marker: "# {mark} RUST CONFIGURATION"
+    block: |
+      if [ -f "{{ rust_cargo_home }}/env" ]; then
+        . "{{ rust_cargo_home }}/env"
+      elif [ -d "{{ rust_cargo_home }}/bin" ]; then
+        export PATH="{{ rust_cargo_home }}/bin:$PATH"
+      fi
+    state: present
+  become: false
+  when: rust_shell_rc_stat.stat.exists or not ansible_check_mode
