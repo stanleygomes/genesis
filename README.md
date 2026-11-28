@@ -89,28 +89,20 @@ make run CONFIG="minimal desktop"
 make check CONFIG="desktop"
 ```
 
-### 4. Patmos (Isle fork) from a local checkout
+### 4. Isle (official)
 
-The `patmos` role builds [Patmos](https://github.com/stanleygomes/patmos) (the owner's fork of Isle: `isled` daemon + GNOME Shell extension) from `~/projects/patmos` and installs it into `~/.local` with the fork's own `install.sh`. The official Isle `.deb` is purged by `autoremove`; settings (`dconf` `/org/gnome/shell/extensions/isle/`) and data (`~/.local/share/isle`) are kept.
+`gnome_desktop` installs the official [Isle](https://github.com/zickrian/isle) `.deb` (`isled` + GNOME Shell extension) and enables it. Settings (`dconf` `/org/gnome/shell/extensions/isle/`) and data (`~/.local/share/isle`) are never touched.
 
-```bash
-# First time: installs build deps (sudo), purges the official .deb, installs the fork
-make run CONFIG=desktop
-
-# After each change in ~/projects/patmos (no sudo): rebuild + reinstall
-make patmos            # skips when HEAD + uncommitted changes are unchanged
-make patmos FORCE=1    # rebuild anyway
-make patmos-check      # dry-run
-```
-
-`isled` restarts on reinstall; on Wayland, log out and back in to load the updated extension.
-
-**Rollback to the official Isle:** remove the `patmos` role from `desktop.yml` and `isle` from `autoremove_apt_packages`, then reinstall upstream in `~/.local` (it overwrites the fork's files and keeps your settings):
+The Patmos fork is no longer installed. If the home folder still holds the fork's copy (extension `url` pointing at `stanleygomes/patmos`), the role replaces it in place with the official release tarball (no sudo) and deletes `~/.local/state/genesis/patmos.fingerprint`. The copy stays in `~/.local` because the Claude Code/Codex hooks call `~/.local/bin/isled` by absolute path.
 
 ```bash
-curl -fsSL https://raw.githubusercontent.com/zickrian/isle/main/get.sh | bash
-rm -f ~/.local/state/genesis/patmos.fingerprint
+make run CONFIG=desktop                                                       # .deb (sudo) + fork migration
+cd ansible && ansible-playbook -i inventory playbooks/desktop.yml --tags isle --check  # dry-run
 ```
+
+On Wayland, log out and back in to load the replaced extension.
+
+**Rollback:** `git revert` the commit that restored the official Isle (it re-adds the `patmos` role, which needs the `~/projects/patmos` checkout). To reinstall the official home-folder copy by hand (settings are kept): `curl -fsSL https://raw.githubusercontent.com/zickrian/isle/main/get.sh | bash`.
 
 ## Project Structure
 
@@ -155,7 +147,7 @@ Here is a list of all roles available in this repository:
 | `ghostty`         | Installs Ghostty terminal emulator.                                                                                                                           |
 | `git`             | Installs Git, configures user credentials, and generates/sets GitHub SSH keys.                                                                                |
 | `github-cli`      | Installs GitHub CLI (`gh`) from GitHub's official APT repository.                                                                                              |
-| `gnome_desktop`   | Consolidates GNOME desktop visual/UX setup: MacOS Dock extension (with Ubuntu Dock disabled and `gsettings` presets), Inter font (`fonts-inter`), WhiteSur icon theme, macOS cursor theme (`ful1e5/apple_cursor` + `~/.icons/default/index.theme` fallback), native `org.gnome.desktop.interface` settings (`accent-color`, fonts, icons, cursor, `enable-hot-corners`), and optional `Just Perfection` preferences (`startup-status`, `animation` when installed). |
+| `gnome_desktop`   | Consolidates GNOME desktop visual/UX setup: Isle Dynamic Island (`.deb` + `isled`; replaces a leftover Patmos fork copy in `~/.local` with the official release), MacOS Dock extension (with Ubuntu Dock disabled and `gsettings` presets), Inter font (`fonts-inter`), WhiteSur icon theme, macOS cursor theme (`ful1e5/apple_cursor` + `~/.icons/default/index.theme` fallback), native `org.gnome.desktop.interface` settings (`accent-color`, fonts, icons, cursor, `enable-hot-corners`), and optional `Just Perfection` preferences (`startup-status`, `animation` when installed). |
 | `go`              | Installs Go language runtime and `golangci-lint` to `~/.local/go`.                                                                                            |
 | `google-chrome`   | Installs Google Chrome web browser.                                                                                                                           |
 | `herdr`           | Installs Herdr terminal multiplexer for AI coding agents and configures default settings.                                                                      |
@@ -168,7 +160,6 @@ Here is a list of all roles available in this repository:
 | `openspec`        | Installs OpenSpec CLI (`@fission-ai/openspec`) globally via NPM.                                                                                              |
 | `orca`            | Installs Orca via AppImage and clones or updates plugins in `~/.config/orca-plugins`, discarding tracked local changes. Links each Orca bot's `SOUL.md` to the matching folder in `~/.config/solomon/bots` (create the bot in Orca with that name first). |
 | `oxker`           | Installs oxker TUI binary for Docker container monitoring and aliases `docker ps`.                                                                            |
-| `patmos`          | Builds Patmos (Isle fork: `isled` + GNOME Shell extension) from `~/projects/patmos` and installs it in `~/.local`; rebuilds only when the checkout changes (`make patmos`). |
 | `php`             | Installs PHP runtime, extensions, and Composer package manager.                                                                                               |
 | `playwright`      | Installs Playwright's Chromium (browser + headless shell) for the user and its system libraries (`install-deps`). |
 | `python`          | Installs Python runtime dependencies, Astral `uv` tool, and Python 3.14.                                                                                      |
@@ -195,7 +186,7 @@ This project organises roles into the following playbooks:
 
 ### 2. Desktop Configuration (`desktop.yml`)
 
-> Target: User interfaces, consolidated GNOME desktop UX (`gnome_desktop`: MacOS Dock, Inter font, blue accent color, WhiteSur icon theme, macOS cursor theme, hot-corners disabled, and optional Just Perfection presets), web browsers, IDEs, ArtCraft, the VLC media player, game emulators (RetroArch, PPSSPP, PCSX2, ES-DE), desktop entries, agent configurations, language toolchains (Node.js, Java, Python, PHP, Go, Rust), Patmos (Isle fork built from `~/projects/patmos`), and database tools.
+> Target: User interfaces, consolidated GNOME desktop UX (`gnome_desktop`: Isle, MacOS Dock, Inter font, blue accent color, WhiteSur icon theme, macOS cursor theme, hot-corners disabled, and optional Just Perfection presets), web browsers, IDEs, ArtCraft, the VLC media player, game emulators (RetroArch, PPSSPP, PCSX2, ES-DE), desktop entries, agent configurations, language toolchains (Node.js, Java, Python, PHP, Go, Rust), and database tools.
 
 ### 3. Custom Setup 1 (`custom1.yml`)
 

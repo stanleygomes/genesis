@@ -1,0 +1,108 @@
+---
+# Migration off the Patmos fork (genesis#24): its install.sh put a copy in
+# ~/.local that takes precedence over the .deb. Claude Code/Codex hooks call
+# ~/.local/bin/isled by absolute path, so deleting that copy would break them;
+# instead the official release tarball's install.sh (no sudo) overwrites it in
+# place. It runs as an update: dconf settings and ~/.local/share/isle are kept.
+- name: Read Isle extension metadata installed in the home folder
+  ansible.builtin.slurp:
+    src: "{{ gnome_desktop_isle_home_extension_dir }}/metadata.json"
+  register: gnome_desktop_isle_home_metadata
+  failed_when: false
+  become: false
+
+- name: Record whether the home folder runs the Patmos fork of Isle
+  ansible.builtin.set_fact:
+    gnome_desktop_isle_fork_installed: >-
+      {{ (gnome_desktop_isle_home_metadata.content | default('') | b64decode)
+         is search(gnome_desktop_isle_fork_marker) }}
+
+- name: Find Isle GitHub release metadata for the home folder install
+  ansible.builtin.uri:
+    url: >-
+      https://api.github.com/repos/{{ gnome_desktop_isle_repo }}/releases/{{
+        'latest' if gnome_desktop_isle_version == 'latest'
+        else 'tags/v' ~ (gnome_desktop_isle_version | regex_replace('^v', ''))
+      }}
+    return_content: true
+  register: gnome_desktop_isle_home_release
+  check_mode: false
+  become: false
+  when: gnome_desktop_isle_fork_installed | bool
+
+- name: Pick Isle x86_64 tarball assets from release
+  ansible.builtin.set_fact:
+    gnome_desktop_isle_tarball_asset: >-
+      {{ gnome_desktop_isle_home_release.json.assets
+         | selectattr('name', 'match', '^isle-.*-x86_64-linux\.tar\.gz$')
+         | first }}
+    gnome_desktop_isle_tarball_sha256_asset: >-
+      {{ gnome_desktop_isle_home_release.json.assets
+         | selectattr('name', 'match', '^isle-.*-x86_64-linux\.tar\.gz\.sha256$')
+         | first }}
+  when: gnome_desktop_isle_fork_installed | bool
+
+- name: Fetch Isle tarball SHA-256 checksum
+  ansible.builtin.uri:
+    url: "{{ gnome_desktop_isle_tarball_sha256_asset.browser_download_url }}"
+    return_content: true
+  register: gnome_desktop_isle_tarball_sha256
+  check_mode: false
+  become: false
+  when: gnome_desktop_isle_fork_installed | bool
+
+- name: Create Isle tarball work directory
+  ansible.builtin.file:
+    path: "{{ gnome_desktop_isle_home_tarball_dir }}"
+    state: directory
+    mode: "0700"
+  become: false
+  when: gnome_desktop_isle_fork_installed | bool
+
+- name: Download Isle release tarball
+  ansible.builtin.get_url:
+    url: "{{ gnome_desktop_isle_tarball_asset.browser_download_url }}"
+    dest: "{{ gnome_desktop_isle_home_tarball_dir }}/isle.tar.gz"
+    checksum: >-
+      sha256:{{ (gnome_desktop_isle_tarball_sha256.content | trim).split()[0] }}
+    mode: "0644"
+  become: false
+  # The work directory is not created in check mode, so nothing to download to.
+  when:
+    - gnome_desktop_isle_fork_installed | bool
+    - not ansible_check_mode
+
+- name: Extract Isle release tarball
+  ansible.builtin.unarchive:
+    src: "{{ gnome_desktop_isle_home_tarball_dir }}/isle.tar.gz"
+    dest: "{{ gnome_desktop_isle_home_tarball_dir }}"
+    remote_src: true
+  become: false
+  when:
+    - gnome_desktop_isle_fork_installed | bool
+    - not ansible_check_mode
+
+# install.sh restarts isled from ~/.local/bin and keeps the extension enabled.
+- name: Replace the Patmos fork with the official Isle in the home folder
+  ansible.builtin.shell: bash ./isle-*-x86_64-linux/install.sh
+  args:
+    chdir: "{{ gnome_desktop_isle_home_tarball_dir }}"
+  register: gnome_desktop_isle_home_install
+  changed_when: true
+  become: false
+  when:
+    - gnome_desktop_isle_fork_installed | bool
+    - not ansible_check_mode
+
+- name: Remove Isle tarball work directory
+  ansible.builtin.file:
+    path: "{{ gnome_desktop_isle_home_tarball_dir }}"
+    state: absent
+  become: false
+  when: gnome_desktop_isle_fork_installed | bool
+
+- name: Remove leftover Patmos rebuild fingerprint
+  ansible.builtin.file:
+    path: "{{ gnome_desktop_isle_fork_stamp_file }}"
+    state: absent
+  become: false

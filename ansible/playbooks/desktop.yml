@@ -44,6 +44,3 @@
     - role: rust
       tags:
         - rust
-    - role: patmos
-      tags:
-        - patmos

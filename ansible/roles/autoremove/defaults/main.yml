@@ -7,9 +7,6 @@ autoremove_apt_packages:
   - claude-desktop
   - ghostty
   - darktable
-  # Official Isle .deb, replaced by the Patmos fork (patmos role). Purge only
-  # touches /usr; settings in dconf and data in ~/.local/share/isle are kept.
-  - isle
 
 
 # List of Flatpak packages to remove
