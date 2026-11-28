@@ -147,7 +147,7 @@ Here is a list of all roles available in this repository:
 | `ghostty`         | Installs Ghostty terminal emulator.                                                                                                                           |
 | `git`             | Installs Git, configures user credentials, and generates/sets GitHub SSH keys.                                                                                |
 | `github-cli`      | Installs GitHub CLI (`gh`) from GitHub's official APT repository.                                                                                              |
-| `gnome_desktop`   | Consolidates GNOME desktop visual/UX setup: Isle Dynamic Island (`.deb` + `isled`; replaces a leftover Patmos fork copy in `~/.local` with the official release), MacOS Dock extension (with Ubuntu Dock disabled and `gsettings` presets), Inter font (`fonts-inter`), WhiteSur icon theme, macOS cursor theme (`ful1e5/apple_cursor` + `~/.icons/default/index.theme` fallback), native `org.gnome.desktop.interface` settings (`accent-color`, fonts, icons, cursor, `enable-hot-corners`), and optional `Just Perfection` preferences (`startup-status`, `animation` when installed). |
+| `gnome_desktop`   | Consolidates GNOME desktop visual/UX setup: Isle Dynamic Island (`.deb` + `isled`; replaces a leftover Patmos fork copy in `~/.local` with the official release), stock Ubuntu Dock (re-enables `ubuntu-dock@ubuntu.com` and removes the legacy MacOS Dock extension and its `macosdock` dconf keys), Inter font (`fonts-inter`), WhiteSur icon theme, macOS cursor theme (`ful1e5/apple_cursor` + `~/.icons/default/index.theme` fallback), native `org.gnome.desktop.interface` settings (`accent-color`, fonts, icons, cursor, `enable-hot-corners`), and optional `Just Perfection` preferences (`startup-status`, `animation` when installed). |
 | `go`              | Installs Go language runtime and `golangci-lint` to `~/.local/go`.                                                                                            |
 | `google-chrome`   | Installs Google Chrome web browser.                                                                                                                           |
 | `herdr`           | Installs Herdr terminal multiplexer for AI coding agents and configures default settings.                                                                      |
@@ -186,7 +186,7 @@ This project organises roles into the following playbooks:
 
 ### 2. Desktop Configuration (`desktop.yml`)
 
-> Target: User interfaces, consolidated GNOME desktop UX (`gnome_desktop`: Isle, MacOS Dock, Inter font, blue accent color, WhiteSur icon theme, macOS cursor theme, hot-corners disabled, and optional Just Perfection presets), web browsers, IDEs, ArtCraft, the VLC media player, game emulators (RetroArch, PPSSPP, PCSX2, ES-DE), desktop entries, agent configurations, language toolchains (Node.js, Java, Python, PHP, Go, Rust), and database tools.
+> Target: User interfaces, consolidated GNOME desktop UX (`gnome_desktop`: Isle, stock Ubuntu Dock, Inter font, blue accent color, WhiteSur icon theme, macOS cursor theme, hot-corners disabled, and optional Just Perfection presets), web browsers, IDEs, ArtCraft, the VLC media player, game emulators (RetroArch, PPSSPP, PCSX2, ES-DE), desktop entries, agent configurations, language toolchains (Node.js, Java, Python, PHP, Go, Rust), and database tools.
 
 ### 3. Custom Setup 1 (`custom1.yml`)
 

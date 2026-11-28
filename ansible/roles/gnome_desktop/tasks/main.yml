@@ -11,7 +11,6 @@
     - gnome_desktop
     - isle
     - dock
-    - macos_dock
     - appearance
 
 - name: Configure Isle Dynamic Island
@@ -25,18 +24,16 @@
     - gnome_desktop
     - isle
 
-- name: Configure MacOS Dock extension
+- name: Restore Ubuntu Dock and clean up MacOS Dock
   ansible.builtin.include_tasks:
     file: dock.yml
     apply:
       tags:
         - gnome_desktop
         - dock
-        - macos_dock
   tags:
     - gnome_desktop
     - dock
-    - macos_dock
 
 - name: Configure native GNOME appearance
   ansible.builtin.include_tasks:
