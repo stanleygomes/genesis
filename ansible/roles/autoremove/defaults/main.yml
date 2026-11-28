@@ -22,6 +22,14 @@ autoremove_npm_packages:
   - "claude-code"
   - "@github/copilot"
 
+# List of systemd user services to stop and disable (become: false)
+autoremove_user_systemd_services:
+  - vicinae.service
+
+# List of GNOME Shell extension UUIDs to disable and remove (become: false)
+autoremove_gnome_extensions:
+  - vicinae@dagimg-dot
+
 # List of desktop shortcut filenames to remove from ~/.local/share/applications/
 autoremove_desktop_entries:
   - antigravity-ide.desktop
@@ -31,11 +39,20 @@ autoremove_desktop_entries:
   - ghostty.desktop
   - openbot.desktop
   - opencode.desktop
+  - vicinae.desktop
+  - vicinae-url-handler.desktop
 
-# List of custom paths (directories or files) to remove as superuser (become: true)
+# List of custom system paths (dirs or files) to remove with become: true
 autoremove_custom_paths:
   - /usr/local/bin/xh
   - /usr/local/bin/lazydocker
+  - /usr/local/bin/vicinae
+  - /usr/local/lib/vicinae
+  - /usr/local/share/vicinae
+  - /usr/local/share/systemd/user/vicinae.service
+  - /usr/local/share/applications/vicinae.desktop
+  - /usr/local/share/applications/vicinae-url-handler.desktop
+  - /usr/local/share/icons/hicolor/512x512/apps/vicinae.png
   - /usr/share/antigravity-ide
   - /usr/bin/antigravity-ide
   - /usr/bin/antigravity
@@ -45,7 +62,6 @@ autoremove_custom_paths:
   - /etc/apt/sources.list.d/debian-griffo-io.list
   - /etc/apt/keyrings/debian-griffo-io.asc
   - /etc/apparmor.d/openbot
-
 
 # List of user-space paths (directories or files) to remove (become: false)
 autoremove_user_paths:
@@ -70,4 +86,33 @@ autoremove_user_paths:
   - "{{ ansible_env.HOME }}/.cache/opencode"
   - "{{ ansible_env.HOME }}/.config/darktable"
   - "{{ ansible_env.HOME }}/.cache/darktable"
+  - "{{ ansible_env.HOME }}/.local/bin/vicinae"
+  - "{{ ansible_env.HOME }}/.local/lib/vicinae"
+  - "{{ ansible_env.HOME }}/.local/share/vicinae"
+  - "{{ ansible_env.HOME }}/.local/state/vicinae"
+  - "{{ ansible_env.HOME }}/.config/vicinae"
+  - "{{ ansible_env.HOME }}/.cache/vicinae"
+  - "{{ ansible_env.HOME }}/.local/share/systemd/user/vicinae.service"
+  - >-
+    {{ ansible_env.HOME ~ '/.config/systemd/user/'
+       ~ 'graphical-session.target.wants/vicinae.service' }}
+  - >-
+    {{ ansible_env.HOME ~ '/.config/google-chrome/'
+       ~ 'NativeMessagingHosts/com.vicinae.vicinae.json' }}
+  - >-
+    {{ ansible_env.HOME ~ '/.config/mozilla/'
+       ~ 'native-messaging-hosts/com.vicinae.vicinae.json' }}
+  - >-
+    {{ ansible_env.HOME ~ '/.mozilla/'
+       ~ 'native-messaging-hosts/com.vicinae.vicinae.json' }}
 
+# List of user-space search patterns to find and remove (become: false)
+autoremove_user_file_patterns:
+  - path: "{{ ansible_env.HOME }}/.local/share/applications"
+    patterns:
+      - "vicinae*.desktop"
+    recurse: false
+  - path: "{{ ansible_env.HOME }}/.local/share/icons/hicolor"
+    patterns:
+      - "vicinae.png"
+    recurse: true

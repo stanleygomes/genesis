@@ -116,7 +116,7 @@ Here is a list of all roles available in this repository:
 | `antigravity-cli` | Installs the Antigravity CLI client tool (`agy`) and configures custom statusLine settings. |
 | `artcraft`       | Installs ArtCraft (AI crafting engine for artists) from the latest GitHub release `.deb`. |
 | `atuin`           | Installs and configures Atuin shell history search.                                                                                                           |
-| `autoremove`      | Aggregates uninstallation and removal actions (APT, Flatpak, Snap packages, desktop shortcuts, custom paths/files). |
+| `autoremove`      | Aggregates uninstallation and removal actions (APT, Flatpak, Snap, and global NPM packages, systemd user services, GNOME Shell extensions, desktop shortcuts, and custom/user paths). |
 | `bruno`           | Installs Bruno API client (open-source, Git-friendly alternative to Postman/Insomnia).                                                                        |
 | `claude-cli`      | Installs Anthropic's Claude Code CLI (`claude`) via the official native installer and configures a custom statusLine. |
 | `cli-tools`       | Installs everyday command-line packages from APT (`ffmpeg`, `rsync`; list in `defaults/main.yml`). |

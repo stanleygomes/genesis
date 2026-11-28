@@ -1,7 +1,7 @@
 ---
 # === APT PACKAGES ===
 - name: Remove APT packages
-  apt:
+  ansible.builtin.apt:
     name: "{{ autoremove_apt_packages }}"
     state: absent
     purge: true
@@ -9,7 +9,7 @@
   when: autoremove_apt_packages | default([]) | length > 0
 
 - name: Autoremove unused APT dependencies
-  apt:
+  ansible.builtin.apt:
     autoremove: true
     purge: true
   become: true
@@ -35,16 +35,18 @@
 
 # === NPM PACKAGES ===
 - name: Remove global NPM packages
-  shell: |
+  ansible.builtin.shell: |
     if [ -f "{{ ansible_env.HOME }}/.nvm/nvm.sh" ]; then
       source "{{ ansible_env.HOME }}/.nvm/nvm.sh"
     fi
     removed=0
-    if command -v npm >/dev/null 2>&1 && npm list -g --depth=0 "{{ item }}" >/dev/null 2>&1; then
+    if command -v npm >/dev/null 2>&1 \
+      && npm list -g --depth=0 "{{ item }}" >/dev/null 2>&1; then
       npm uninstall -g "{{ item }}"
       removed=1
     fi
-    if command -v pnpm >/dev/null 2>&1 && pnpm list -g --depth=0 "{{ item }}" >/dev/null 2>&1; then
+    if command -v pnpm >/dev/null 2>&1 \
+      && pnpm list -g --depth=0 "{{ item }}" >/dev/null 2>&1; then
       pnpm remove -g "{{ item }}"
       removed=1
     fi
@@ -53,15 +55,170 @@
     fi
   args:
     executable: /bin/bash
-  register: npm_uninstall_result
-  changed_when: "'uninstalled' in npm_uninstall_result.stdout"
+  register: autoremove_npm_uninstall_result
+  changed_when: "'uninstalled' in autoremove_npm_uninstall_result.stdout"
   loop: "{{ autoremove_npm_packages | default([]) }}"
   become: false
   when: autoremove_npm_packages | default([]) | length > 0
 
+# === SYSTEMD USER SERVICES ===
+- name: Check if systemctl is available
+  ansible.builtin.command: which systemctl
+  register: autoremove_systemctl_check
+  failed_when: false
+  changed_when: false
+  check_mode: false
+  become: false
+  when: autoremove_user_systemd_services | default([]) | length > 0
+
+# Probe unit state before acting so missing units or headless hosts without a
+# user bus never fail and reruns remain idempotent.
+- name: Probe systemd user services targeted for removal
+  ansible.builtin.command:
+    argv:
+      - systemctl
+      - --user
+      - show
+      - --property=LoadState,ActiveState,UnitFileState
+      - --value
+      - "{{ item }}"
+  loop: "{{ autoremove_user_systemd_services | default([]) }}"
+  register: autoremove_user_systemd_probe
+  failed_when: false
+  changed_when: false
+  check_mode: false
+  become: false
+  when:
+    - autoremove_user_systemd_services | default([]) | length > 0
+    - autoremove_systemctl_check.rc == 0
+    - ansible_env.XDG_RUNTIME_DIR is defined
+
+- name: Stop and disable systemd user services
+  ansible.builtin.systemd_service:
+    name: "{{ item.item }}"
+    scope: user
+    state: stopped
+    enabled: false
+  loop: "{{ autoremove_user_systemd_probe.results | default([]) }}"
+  loop_control:
+    label: "{{ item.item }}"
+  register: autoremove_user_systemd_stop_result
+  become: false
+  when:
+    - not (item.skipped | default(false))
+    - item.rc == 0
+    - >-
+      ((item.stdout_lines[1] | default(''))
+        not in ['inactive', 'dead', ''])
+      or ((item.stdout_lines[2] | default(''))
+        in ['enabled', 'enabled-runtime', 'linked', 'linked-runtime'])
+
+# === GNOME SHELL EXTENSIONS ===
+- name: Check if gsettings and dconf are available
+  ansible.builtin.command: which gsettings dconf
+  register: autoremove_gnome_tools_check
+  failed_when: false
+  changed_when: false
+  check_mode: false
+  become: false
+  when: autoremove_gnome_extensions | default([]) | length > 0
+
+- name: Read GNOME Shell enabled extensions for cleanup
+  ansible.builtin.command: gsettings get org.gnome.shell enabled-extensions
+  register: autoremove_gnome_enabled_extensions_raw
+  failed_when: false
+  changed_when: false
+  check_mode: false
+  become: false
+  when:
+    - autoremove_gnome_extensions | default([]) | length > 0
+    - autoremove_gnome_tools_check.rc == 0
+
+- name: Read GNOME Shell disabled extensions for cleanup
+  ansible.builtin.command: gsettings get org.gnome.shell disabled-extensions
+  register: autoremove_gnome_disabled_extensions_raw
+  failed_when: false
+  changed_when: false
+  check_mode: false
+  become: false
+  when:
+    - autoremove_gnome_extensions | default([]) | length > 0
+    - autoremove_gnome_tools_check.rc == 0
+
+- name: Parse GNOME Shell extension lists for cleanup
+  ansible.builtin.set_fact:
+    autoremove_gnome_enabled_extensions: >-
+      {{ (autoremove_gnome_enabled_extensions_raw.stdout | trim | from_yaml)
+         if (autoremove_gnome_enabled_extensions_raw.rc == 0
+             and (autoremove_gnome_enabled_extensions_raw.stdout
+                  | trim | length > 0)
+             and not (autoremove_gnome_enabled_extensions_raw.stdout
+                      | trim).startswith('@as'))
+         else [] }}
+    autoremove_gnome_disabled_extensions: >-
+      {{ (autoremove_gnome_disabled_extensions_raw.stdout | trim | from_yaml)
+         if (autoremove_gnome_disabled_extensions_raw.rc == 0
+             and (autoremove_gnome_disabled_extensions_raw.stdout
+                  | trim | length > 0)
+             and not (autoremove_gnome_disabled_extensions_raw.stdout
+                      | trim).startswith('@as'))
+         else [] }}
+  when:
+    - autoremove_gnome_extensions | default([]) | length > 0
+    - autoremove_gnome_tools_check.rc == 0
+
+# Update extension lists directly in dconf (matching gnome_desktop) so cleanup
+# works reliably on Wayland even when GNOME Shell has not reloaded yet.
+- name: Remove obsolete GNOME Shell extensions from enabled-extensions
+  community.general.dconf:
+    key: /org/gnome/shell/enabled-extensions
+    value: >-
+      {%- set updated = autoremove_gnome_enabled_extensions
+          | reject('in', autoremove_gnome_extensions) | list -%}
+      {{ '[' ~ (updated | map('to_json') | join(', ') | replace('"', "'"))
+         ~ ']' if updated | length > 0 else '@as []' }}
+    state: present
+  become: false
+  when:
+    - autoremove_gnome_extensions | default([]) | length > 0
+    - autoremove_gnome_tools_check.rc == 0
+    - autoremove_gnome_enabled_extensions_raw.rc == 0
+    - ansible_env.DBUS_SESSION_BUS_ADDRESS is defined
+    - >-
+      (autoremove_gnome_enabled_extensions
+       | select('in', autoremove_gnome_extensions) | list | length) > 0
+
+- name: Remove obsolete GNOME Shell extensions from disabled-extensions
+  community.general.dconf:
+    key: /org/gnome/shell/disabled-extensions
+    value: >-
+      {%- set updated = autoremove_gnome_disabled_extensions
+          | reject('in', autoremove_gnome_extensions) | list -%}
+      {{ '[' ~ (updated | map('to_json') | join(', ') | replace('"', "'"))
+         ~ ']' if updated | length > 0 else '@as []' }}
+    state: present
+  become: false
+  when:
+    - autoremove_gnome_extensions | default([]) | length > 0
+    - autoremove_gnome_tools_check.rc == 0
+    - autoremove_gnome_disabled_extensions_raw.rc == 0
+    - ansible_env.DBUS_SESSION_BUS_ADDRESS is defined
+    - >-
+      (autoremove_gnome_disabled_extensions
+       | select('in', autoremove_gnome_extensions) | list | length) > 0
+
+- name: Remove obsolete GNOME Shell extension directories
+  ansible.builtin.file:
+    path: >-
+      {{ ansible_env.HOME }}/.local/share/gnome-shell/extensions/{{ item }}
+    state: absent
+  loop: "{{ autoremove_gnome_extensions | default([]) }}"
+  become: false
+  when: autoremove_gnome_extensions | default([]) | length > 0
+
 # === DESKTOP ENTRIES & SHORTCUTS ===
 - name: Remove desktop entries
-  file:
+  ansible.builtin.file:
     path: "{{ ansible_env.HOME }}/.local/share/applications/{{ item }}"
     state: absent
   loop: "{{ autoremove_desktop_entries | default([]) }}"
@@ -70,31 +227,104 @@
 
 # === CUSTOM SYSTEM PATHS & FILES (sudo) ===
 - name: Remove custom system directories and files
-  file:
+  ansible.builtin.file:
     path: "{{ item }}"
     state: absent
   loop: "{{ autoremove_custom_paths | default([]) }}"
+  register: autoremove_custom_paths_result
   become: true
   when: autoremove_custom_paths | default([]) | length > 0
 
 # === USER PATHS & FILES (normal user) ===
 - name: Remove user directories and files
-  file:
+  ansible.builtin.file:
     path: "{{ item }}"
     state: absent
   loop: "{{ autoremove_user_paths | default([]) }}"
+  register: autoremove_user_paths_result
   become: false
   when: autoremove_user_paths | default([]) | length > 0
 
+# === PATTERN-BASED USER FILE CLEANUP ===
+- name: Check user directories for pattern-based file cleanup
+  ansible.builtin.stat:
+    path: "{{ item.path }}"
+  loop: "{{ autoremove_user_file_patterns | default([]) }}"
+  loop_control:
+    label: "{{ item.path }}"
+  register: autoremove_user_pattern_dirs
+  become: false
+  when: autoremove_user_file_patterns | default([]) | length > 0
+
+- name: Find matching user files for cleanup
+  ansible.builtin.find:
+    paths: "{{ item.item.path }}"
+    patterns: "{{ item.item.patterns }}"
+    recurse: "{{ item.item.recurse | default(false) }}"
+    file_type: any
+  loop: "{{ autoremove_user_pattern_dirs.results | default([]) }}"
+  loop_control:
+    label: "{{ item.item.path }}"
+  register: autoremove_user_pattern_matches
+  check_mode: false
+  become: false
+  when:
+    - not (item.skipped | default(false))
+    - item.stat.exists
+    - item.stat.isdir
+
+- name: Remove matching user files
+  ansible.builtin.file:
+    path: "{{ item }}"
+    state: absent
+  loop: >-
+    {{ autoremove_user_pattern_matches.results | default([])
+       | map(attribute='files', default=[])
+       | flatten
+       | map(attribute='path')
+       | unique
+       | list }}
+  become: false
+  when: autoremove_user_file_patterns | default([]) | length > 0
+
+# Reload user systemd only after stopping/disabling a unit or deleting unit
+# files so reruns do not trigger unnecessary daemon reloads.
+- name: Reload systemd user daemon after unit cleanup
+  ansible.builtin.systemd_service:
+    scope: user
+    daemon_reload: true
+  become: false
+  when:
+    - autoremove_user_systemd_services | default([]) | length > 0
+    - autoremove_systemctl_check.rc == 0
+    - ansible_env.XDG_RUNTIME_DIR is defined
+    - >-
+      (autoremove_user_systemd_probe.results | default([])
+       | selectattr('rc', 'defined')
+       | selectattr('rc', 'equalto', 0)
+       | list | length) > 0
+    - >-
+      (autoremove_user_systemd_stop_result.changed | default(false))
+      or ((autoremove_user_paths_result.results | default([])
+           | selectattr('changed', 'defined')
+           | selectattr('changed')
+           | selectattr('item', 'search', 'systemd/user')
+           | list | length) > 0)
+      or ((autoremove_custom_paths_result.results | default([])
+           | selectattr('changed', 'defined')
+           | selectattr('changed')
+           | selectattr('item', 'search', 'systemd/user')
+           | list | length) > 0)
+
 # === SHELL CONFIGURATION CLEANUP ===
 - name: Check if .zshrc exists
-  stat:
+  ansible.builtin.stat:
     path: "{{ ansible_env.HOME }}/.zshrc"
   register: autoremove_zshrc_stat
   become: false
 
 - name: Clean up obsolete Gideon function from .zshrc
-  blockinfile:
+  ansible.builtin.blockinfile:
     path: "{{ ansible_env.HOME }}/.zshrc"
     marker: "# {mark} GIDEON CLI FUNCTION"
     state: absent
@@ -102,10 +332,9 @@
   when: autoremove_zshrc_stat.stat.exists
 
 - name: Clean up obsolete Arkflix CLI function from .zshrc
-  blockinfile:
+  ansible.builtin.blockinfile:
     path: "{{ ansible_env.HOME }}/.zshrc"
     marker: "# {mark} ARKFLIX CLI FUNCTION"
     state: absent
   become: false
   when: autoremove_zshrc_stat.stat.exists
-

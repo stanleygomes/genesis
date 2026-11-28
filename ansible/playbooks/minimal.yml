@@ -9,6 +9,8 @@
     - name: Gather facts as normal user to set ansible_env correctly
       setup:
       become: false
+      tags:
+        - always
 
     - name: Update apt cache (ignoring unreachable repos)
       shell: apt-get update || true
@@ -16,7 +18,9 @@
       changed_when: false
 
   roles:
-    - autoremove
+    - role: autoremove
+      tags:
+        - autoremove
     - git
     - python
     - github-cli
@@ -41,4 +45,3 @@
     - agents
     - herdr
     - ai-memory
-
