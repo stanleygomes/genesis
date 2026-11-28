@@ -1,4 +1,4 @@
-.PHONY: run check syntax explain help
+.PHONY: run check syntax explain help patmos patmos-check
 
 # Variables
 CONFIG ?= desktop
@@ -16,6 +16,8 @@ help:
 	@echo "make list     - List all tasks"
 	@echo "make explain  - Show hosts and mapped variables"
 	@echo "make bootstrap - Run the bootstrap script"
+	@echo "make patmos   - Rebuild and reinstall Patmos (Isle fork) from"
+	@echo "                ~/projects/patmos; FORCE=1 rebuilds unchanged trees"
 
 EXTRA_ARGS ?= --ask-become-pass
 
@@ -37,3 +39,15 @@ list:
 
 explain:
 	cd ansible && ansible-inventory --list -y
+
+# Patmos (Isle fork): rebuilds from the local checkout without sudo. Build
+# dependencies (patmos_deps) are installed by `make run CONFIG=desktop`.
+PATMOS_ARGS = $(PLAYBOOKS_DIR)/desktop.yml --tags patmos --skip-tags patmos_deps
+FORCE ?= 0
+
+patmos:
+	cd ansible && ansible-playbook -i $(INVENTORY) $(PATMOS_ARGS) \
+		-e patmos_force_reinstall=$(if $(filter 1,$(FORCE)),true,false)
+
+patmos-check:
+	cd ansible && ansible-playbook -i $(INVENTORY) $(PATMOS_ARGS) --check --diff
