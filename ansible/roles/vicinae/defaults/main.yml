@@ -1,0 +1,43 @@
+---
+# Vicinae launcher, installed in user space (~/.local) so no sudo is needed.
+vicinae_repo: vicinaehq/vicinae
+vicinae_version: v0.30.1
+vicinae_prefix: "{{ ansible_env.HOME }}/.local"
+vicinae_bin: "{{ vicinae_prefix }}/bin/vicinae"
+
+# Official AppImage and the upstream install script from the same tag, both
+# pinned by checksum. The script unpacks the AppImage into
+# <prefix>/lib/vicinae and installs the binary link, desktop files, icon,
+# themes and the vicinae.service user unit.
+vicinae_appimage_url: >-
+  https://github.com/{{ vicinae_repo }}/releases/download/{{
+    vicinae_version }}/Vicinae-x86_64.AppImage
+vicinae_appimage_checksum: "sha256:9f573dd04389693a1b70653dd4cc3886a1623fc159d50e207486162e6ae91ab2"
+vicinae_appimage_path: /tmp/genesis-vicinae.AppImage
+vicinae_install_script_url: >-
+  https://raw.githubusercontent.com/{{ vicinae_repo }}/{{
+    vicinae_version }}/scripts/install.sh
+vicinae_install_script_checksum: "sha256:481ed1287e0b79655d81a09e1fd1fddef4cb454461da47d610e52bdc5c9997fd"
+vicinae_install_script_path: /tmp/genesis-vicinae-install.sh
+
+# Start the Vicinae server with the graphical session (systemd user unit).
+vicinae_enable_service: true
+
+# Tapping Super toggles the Vicinae window through the Super Key extension.
+vicinae_super_key: true
+vicinae_super_key_extension_uuid: super-key@tommimon.github.com
+vicinae_super_key_command: "{{ vicinae_bin }} toggle"
+
+# GNOME Shell extensions installed from extensions.gnome.org when missing.
+# vicinae@dagimg-dot is the companion extension recommended by the Vicinae
+# GNOME quickstart (clipboard, window management, floating launcher window).
+vicinae_gnome_extensions_dir: "{{ ansible_env.HOME }}/.local/share/gnome-shell/extensions"
+vicinae_gnome_extensions:
+  - uuid: super-key@tommimon.github.com
+    version: 11
+    checksum: "sha256:585f1b9a042e5174aee6fa424b71676d51b19e96f5bba28f244746fe4fc4325a"
+    enabled: "{{ vicinae_super_key | bool }}"
+  - uuid: vicinae@dagimg-dot
+    version: 14
+    checksum: "sha256:f8fd8d7b256b54e0818108e35951130275a885cb7bbf87bf2ea28bd5189ec6ea"
+    enabled: true
