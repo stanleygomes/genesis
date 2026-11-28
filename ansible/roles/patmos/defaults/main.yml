@@ -1,0 +1,29 @@
+---
+# Patmos: the owner's fork of Isle (isled daemon + GNOME Shell extension),
+# built from a local checkout and installed into ~/.local by its install.sh.
+patmos_repo_url: https://github.com/stanleygomes/patmos.git
+# Branch checked out only when cloning on a fresh machine.
+patmos_version: main
+patmos_src_dir: "{{ ansible_env.HOME }}/projects/patmos"
+patmos_cargo_bin_dir: "{{ ansible_env.HOME }}/.cargo/bin"
+patmos_extension_uuid: isle@zickrian.github.io
+patmos_extension_dir: >-
+  {{ ansible_env.HOME }}/.local/share/gnome-shell/extensions/{{
+  patmos_extension_uuid }}
+patmos_isled_bin: "{{ ansible_env.HOME }}/.local/bin/isled"
+# Fingerprint of the last source tree installed (HEAD + uncommitted changes).
+patmos_stamp_file: >-
+  {{ ansible_env.HOME }}/.local/state/genesis/patmos.fingerprint
+# Set to true (or `make patmos FORCE=1`) to rebuild even when nothing changed.
+patmos_force_reinstall: false
+
+# APT packages for the optional helpers built by install.sh:
+# isle-shelf (GTK 4) and isle-whisper (whisper.cpp via cmake/libclang/Vulkan).
+patmos_build_packages:
+  - pkg-config
+  - cmake
+  - g++
+  - libgtk-4-dev
+  - libclang-dev
+  - libvulkan-dev
+  - glslc
