@@ -17,7 +17,9 @@
       become: true
       changed_when: false
   roles:
-    - autoremove
+    - role: autoremove
+      tags:
+        - autoremove
     - system
     - role: gnome_desktop
       tags:
