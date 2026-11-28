@@ -1,5 +1,5 @@
 ---
-# Clones (or updates) the Solomon repo into ~/.config/solomon and syncs its .agents
+# Clones (or updates) the Solomon repo into solomon_dir (~/projects/solomon) and syncs its .agents
 # (Skills, rules) into ~/.agents and ~/.claude. The Orca role links each bot's SOUL.md there.
 
 - name: Create ~/.agents directory
@@ -9,7 +9,7 @@
     mode: "0755"
   become: false
 
-- name: Ensure ~/.config exists
+- name: Ensure Solomon parent directory exists
   file:
     path: "{{ solomon_dir | dirname }}"
     state: directory
@@ -17,7 +17,7 @@
   become: false
 
 # A bot in Orca may edit its SOUL.md here (symlink): never discard local changes; dirty = skip pull.
-- name: Clone or update Solomon in ~/.config/solomon
+- name: Clone or update Solomon in {{ solomon_dir }}
   shell: |
     set -e
     if [ ! -d "{{ solomon_dir }}/.git" ]; then

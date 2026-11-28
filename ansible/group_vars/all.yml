@@ -14,6 +14,11 @@ golangci_lint_version: "v2.11.4"
 java_version: "25.0.1-zulu"
 
 # ------------------------------------------------------------------------------
+# Solomon (skills, regras e bots): um clone só na máquina, o mesmo que o Orca usa
+# ------------------------------------------------------------------------------
+solomon_dir: "{{ ansible_env.HOME | default(lookup('env', 'HOME')) }}/projects/solomon"
+
+# ------------------------------------------------------------------------------
 # Docker Configuration
 # ------------------------------------------------------------------------------
 docker_user: "{{ ansible_user_id }}"

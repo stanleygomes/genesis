@@ -126,7 +126,7 @@ Here is a list of all roles available in this repository:
 
 | Role              | Description                                                                                                                                                   |
 | :---------------- | :------------------------------------------------------------------------------------------------------------------------------------------------------------ |
-| `agents`          | Clones/updates the Solomon repo into `~/.config/solomon` and syncs its `.agents` (Skills, rules) into `~/.agents` and `~/.claude`. |
+| `agents`          | Clones/updates the Solomon repo into `~/projects/solomon` and syncs its `.agents` (Skills, rules) into `~/.agents` and `~/.claude`. |
 | `ai-memory`       | Installs `ai-memory` (akitaonrails/ai-memory) persistent cross-agent memory engine, systemd user service, and wires agent hooks/MCP. |
 | `antigravity-cli` | Installs the Antigravity CLI client tool (`agy`) and configures custom statusLine settings. |
 | `artcraft`       | Installs ArtCraft (AI crafting engine for artists) from the latest GitHub release `.deb`. |
@@ -158,7 +158,7 @@ Here is a list of all roles available in this repository:
 | `nocturne`        | Installs Nocturne ambient sound and music player application via Flatpak.                                                                                     |
 | `node`            | Installs NVM, Node.js runtime, and the `pnpm` package manager.                                                                                                |
 | `openspec`        | Installs OpenSpec CLI (`@fission-ai/openspec`) globally via NPM.                                                                                              |
-| `orca`            | Installs Orca via AppImage and clones or updates plugins in `~/.config/orca-plugins`, discarding tracked local changes. Links each Orca bot's `SOUL.md` to the matching folder in `~/.config/solomon/bots` (create the bot in Orca with that name first). |
+| `orca`            | Installs Orca via AppImage and clones or updates plugins in `~/.config/orca-plugins`, discarding tracked local changes. Links each Orca bot's `SOUL.md` to the matching folder in `~/projects/solomon/bots` (create the bot in Orca with that name first). |
 | `oxker`           | Installs oxker TUI binary for Docker container monitoring and aliases `docker ps`.                                                                            |
 | `php`             | Installs PHP runtime, extensions, and Composer package manager.                                                                                               |
 | `playwright`      | Installs Playwright's Chromium (browser + headless shell) for the user and its system libraries (`install-deps`). |

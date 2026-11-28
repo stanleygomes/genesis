@@ -42,6 +42,8 @@
     - neovim
     - antigravity-cli
     - claude-cli
-    - agents
+    - role: agents
+      tags:
+        - agents
     - herdr
     - ai-memory
