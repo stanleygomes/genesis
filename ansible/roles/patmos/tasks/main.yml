@@ -14,6 +14,7 @@
   ansible.builtin.git:
     repo: "{{ patmos_repo_url }}"
     dest: "{{ patmos_src_dir }}"
+    version: "{{ patmos_version }}"
     update: false
   become: false
   when: not patmos_src_stat.stat.exists
@@ -150,14 +151,12 @@
     - patmos_needs_install | bool
     - patmos_fingerprint.stdout is defined
 
-- name: Show Patmos install output
-  ansible.builtin.debug:
-    msg: "{{ patmos_install_result.stdout_lines | default([]) }}"
-  when: patmos_install_result is changed
-
-- name: Remind user to log out and back in for Patmos on Wayland
+- name: Show Patmos install output and logout reminder
   ansible.builtin.debug:
     msg: >-
-      Patmos was built and installed (isled restarted). GNOME Shell on Wayland
-      only loads the updated extension after logging out and back in.
-  when: patmos_install_result is changed
+      {{ patmos_install_result.stdout_lines | default([])
+         + ['GNOME Shell on Wayland only loads the updated extension after '
+            ~ 'logging out and back in (isled was already restarted).'] }}
+  when:
+    - patmos_needs_install | bool
+    - not ansible_check_mode
