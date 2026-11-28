@@ -36,7 +36,7 @@ This command will install `git`, `ansible`, clone this repository, and run the s
 ### What does this project do?
 
 - Manages system packages (Apt, Flatpak, Snap etc).
-- Configures development environments (Node.js with pnpm, Java, Python, Go, Rust, PHP).
+- Configures development environments (Node.js with pnpm, Java, Python, Go, PHP).
 - Installs and configures AI tools (Antigravity CLI, Claude CLI, AI Memory etc).
 - Setups CLI/TUI tools with desktop shortcuts (LazyDocker, etc).
 - Customizes the shell and terminal (Zsh with Oh My Zsh, Bash, aliases, GNOME Terminal settings).
@@ -163,7 +163,6 @@ Here is a list of all roles available in this repository:
 | `php`             | Installs PHP runtime, extensions, and Composer package manager.                                                                                               |
 | `playwright`      | Installs Playwright's Chromium (browser + headless shell) for the user and its system libraries (`install-deps`). |
 | `python`          | Installs Python runtime dependencies, Astral `uv` tool, and Python 3.14.                                                                                      |
-| `rust`            | Installs the Rust toolchain (`stable`) via `rustup` in user space with `clippy` and `rustfmt`, and configures PATH in `~/.zshrc`.                             |
 | `system`          | Installs GNOME Tweaks, Extension Manager and exiftool CR3 thumbnails for Nautilus.                                                                   |
 | `starship`        | Installs and configures Starship prompt for Bash and Zsh.                                                                                                     |
 | `terraform`       | Installs Terraform CLI tool from HashiCorp releases.                                                                                                          |
@@ -186,7 +185,7 @@ This project organises roles into the following playbooks:
 
 ### 2. Desktop Configuration (`desktop.yml`)
 
-> Target: User interfaces, consolidated GNOME desktop UX (`gnome_desktop`: Isle, stock Ubuntu Dock, Inter font, blue accent color, WhiteSur icon theme, macOS cursor theme, hot-corners disabled, and optional Just Perfection presets), web browsers, IDEs, ArtCraft, the VLC media player, game emulators (RetroArch, PPSSPP, PCSX2, ES-DE), desktop entries, agent configurations, language toolchains (Node.js, Java, Python, PHP, Go, Rust), and database tools.
+> Target: User interfaces, consolidated GNOME desktop UX (`gnome_desktop`: Isle, stock Ubuntu Dock, Inter font, blue accent color, WhiteSur icon theme, macOS cursor theme, hot-corners disabled, and optional Just Perfection presets), web browsers, IDEs, ArtCraft, the VLC media player, game emulators (RetroArch, PPSSPP, PCSX2, ES-DE), desktop entries, agent configurations, language toolchains (Node.js, Java, Python, PHP, Go), and database tools.
 
 ### 3. Custom Setup 1 (`custom1.yml`)
 
